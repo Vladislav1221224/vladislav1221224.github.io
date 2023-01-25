@@ -1,0 +1,23 @@
+#main-block{
+	width: 60%;
+	margin: 20px;
+	padding: 5px;
+	color: rgb(150, 197, 255);
+}
+#header-name{
+	text-shadow: 2px 2px 3px black;
+}
+#rules-list{
+	background:rgb(37, 88, 146);
+	border-radius: 5px;
+	box-shadow: 5px 0px 5px black;
+	padding:25px;
+	padding-left: 50px;
+}
+#rules-list li{
+	list-style-type: disc;
+}
+#footer-block{
+	float: left;
+	position: relative;
+}
