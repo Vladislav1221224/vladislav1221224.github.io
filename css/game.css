@@ -4,7 +4,7 @@
 	width: 60%;
 	text-align: center;
 }
-#chess-board{
+.chess-board{
 	width: 50vw;
 	max-width: 560px;
 	height: 50vw;

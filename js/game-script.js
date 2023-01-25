@@ -53,7 +53,7 @@ class Pawn{
 					let pawn = document.createElement('img');
 					pawn.src='images/piecesPNG/' + side + 'p.png';
 					pawn.className = "piece";
-					square[i][j].appendChild(pawn);
+					squareHTMLMassive[i][j].appendChild(pawn);
 				}
 			}
 		}
@@ -74,7 +74,7 @@ class King{
 					let king = document.createElement('img');
 					king.src='images/piecesPNG/' + side + 'k.png';
 					king.className = "piece";
-					square[i][j].appendChild(king);
+					squareHTMLMassive[i][j].appendChild(king);
 				}
 			}
 		}
@@ -97,7 +97,7 @@ class Queen{
 					let queen = document.createElement('img');
 					queen.src='images/piecesPNG/' + side + 'q.png';
 					queen.className = "piece";
-					square[i][j].appendChild(queen);
+					squareHTMLMassive[i][j].appendChild(queen);
 				}
 			}
 		}
@@ -120,7 +120,7 @@ class Rook{
 					let rook = document.createElement('img');
 					rook.src='images/piecesPNG/'+ side +'r.png';
 					rook.className = "piece";
-					square[i][j].appendChild(rook);
+					squareHTMLMassive[i][j].appendChild(rook);
 				}
 			}
 		}
@@ -143,7 +143,7 @@ class Bishop{
 					let bishop = document.createElement('img');
 					bishop.src='images/piecesPNG/'+ side +'b.png';
 					bishop.className = "piece";
-					square[i][j].appendChild(bishop);
+					squareHTMLMassive[i][j].appendChild(bishop);
 				}
 			}
 		}
@@ -166,39 +166,43 @@ class Knight{
 					let knight = document.createElement('img');
 					knight.src='images/piecesPNG/'+ side +'n.png';
 					knight.className = "piece knight";
-					square[i][j].appendChild(knight);
+					squareHTMLMassive[i][j].appendChild(knight);
 				}
 			}
 		}
 	}
 }
-function TranslateID(idName){
-	let X,Y;
-	let idNumber = ['1','2','3','4','5','6','7','8'];
-	let idLetter = ['a','b','c','d','e','f','g','h'];
-	for (let i = 0; i < 8; i++) {
-		if(idName[0] === idNumber[i])
-		{
-			X = i;
+//Massive of name of axes
+const IDNUMBER = ['8','7','6','5','4','3','2','1'];
+const IDLETTER = ['a','b','c','d','e','f','g','h'];
+
+//Function for differentiate id
+//////////////////////////////////////////////////////////
+function setID(x,y){
+	let idName = IDLETTER[x] + IDNUMBER[y];
+	return idName;
+}
+function getID(idName){
+	let tmp = [];
+	for(let i = 0; i < 8;i++){
+		if(idName[0] == IDLETTER[i]){
+			tmp[0] = i;
+		}
+		if(idName[1] == IDNUMBER[i]){
+			tmp[1] = i;
 		}
 	}
-		for (let i = 0; i < 8; i++) {
-			if(idName[1] === idLetter[i])
-			{
-				Y = i;
-			}
-		}
-		console.log('Координати: ', X + Y);
-	return X, Y;
+		return tmp;
 }
-function MovePiece(){
+//////////////////////////////////////////////////////////
+function MovePiece(element){
 	let x = 1;
 	let y = 1;
-	let square = this.document.querySelector('.square');
-	if(this.square.innerHTMl.querySelector('.piece')){
-		this.square.classList.add('.active');
+	if(element.innerHTMl.querySelector('.piece')){
+		element.classList.add('.active');
 	};
 }
+
 //Start position of pieces
 let DefaultStartPosition = [
 	['br','bn','bb','bq','bk','bb','bn','br'],
@@ -210,11 +214,15 @@ let DefaultStartPosition = [
 	['wp','wp','wp','wp','wp','wp','wp','wp'],
 	['wr','wn','wb','wq','wk','wb','wn','wr']
 ];
+
 //For Statistic Info and Save a Game Position
-/*--->let BoardPositionPieces = [[],[],[],[],[],[],[],[]];<---*/
+/*--->*/let BoardPositionPieces = [[],[],[],[],[],[],[],[]];/*<---*/
 BoardPositionPieces = DefaultStartPosition;
+
 //Massive of HTML Objects
-/*--->*/let square = [[],[],[],[],[],[],[],[]];/*<---*/
+/*--->*/let squareHTMLMassive = [[],[],[],[],[],[],[],[]];/*<---*/
+
+//Draw a chess)) The main function!!!
 function drawChess(){
 	let chessBoard = document.querySelector('.chess-board');
 	let out = '';
@@ -222,33 +230,40 @@ function drawChess(){
 	let m = 0;
 		for (let i = 0; i < sizeBoard; i++) {
 			for (let j = 0; j < sizeBoard; j++) {
+
 				if(m % 2 == 0){
-					out = `<div class="square white-square" data-x="${j}" data-y="${i}"></div>`
+					out += `<div class="square white-square" id="${setID(i,j)}"></div>`
 				}
 				else{
-					out = `<div class="square black-square" data-x="${j}" data-y="${i}"></div>`
+					out += `<div class="square black-square" id="${setID(i,j)}"></div>`
 				}
 				m++;
 			}
 			m++;
 		}
 		chessBoard.innerHTML = out;
+
+		//Set all events and functions for all squares
+		///////////////////////////////////////////////////////////////////////////
 		document.querySelectorAll('.chess-board').forEach(function(element){
 			element.addEventListener('onclick',MovePiece);
 		});
-		for (let i = 0; i < sizeBoard; i++) {
-			for (let j = 0; j < sizeBoard; j++) {
-				
+		for(let i = 0; i < 8; i++){
+			for(let j = 0; j < 8; j++){
+				let square = document.getElementById(`${IDLETTER[j]}${IDNUMBER[i]}`);
+				let id = getID(square.id);
+				squareHTMLMassive[id[0]][id[1]] = square;
 			}
 		}
+		///////////////////////////////////////////////////////////////////////////
 		let white = new Player('w');
 		let black = new Player('b');
 	}
  drawChess();
-EventOnClick = addEventListener(square[i][j].onclick) = TranslateID(square[i][j].id);
+/*EventOnClick = addEventListener(square[i][j].onclick) = TranslateID(square[i][j].id);
  function ChooseSquare(e){
 	e.className += 'choose-square';
-}
+}*/
 /*var piece = document.getElementById(square[i][j]);
 
 piece.onmousedown = function(e) { // 1. отследить нажатие
