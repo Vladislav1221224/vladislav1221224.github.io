@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta background="">
+		<title>Practise_HTML_CSS</title>
+		<link rel="stylesheet" href="css\main.css">
+		<link rel="stylesheet" href="css\index.css">
+</head>
+<body>
+	<div class="base-layout">
+		<noscript>Включите javascript</noscript>
+		<div id="top-nav-list">
+			<ul>
+				<li><a href="index.html" class="nav-component"><img width="18px" align="center" src="images/Home.png" alt="NoImage"><h7 class="lng-home">Home</h7></a></li>
+				<li><a href="game.html" class="nav-component"><h7 class="lng-play">Play</h7></a></li>
+				<li><a href="settings.html" class="nav-component"><img width="18px" align="center" src="images\settings.png" alt="NoImage"><h7 class="lng-settings">Settings</h7></a></li>
+			</ul>
+		</div>
+		<div id="right-nav-block" class="block">
+			<ul>
+				<li><a href="chat.html" id="right-nav-component" class="nav-component">Chat</a></li>
+				<li><a href="settings.html" id="right-nav-component-settings" class="nav-component">Settings</a></li>
+			</ul>
+		</div>
+		<div id="main-block"class="block">
+				<a href="https://www.chess.com/home">Chess.com</a>
+				
+		</div>
+		<div id="game-info-block">
+			<form action="game.html" target="_self"><button onclick="PlayButtonMenu()">Иг</button></form>
+		</div>
+		<div class="footer-block" class="block">
+			|<a href="developinfo.html" class="lng-developers">Developers</a>|
+			<a href="help.html" class="lng-help">Help</a>|
+			<a href="rules.html" class="lng-rules">Rules</a>|
+			<!--<a href="">Community</a>|
+			<a href="">Instagram(ForView)</a>|-->
+		</div>
+		<script src="js\main-window.js"></script>
+		<script src="js\lng.js"></script>
+		<script src="js\set-language.js"></script>
+	</div>
+</body>
+</html>

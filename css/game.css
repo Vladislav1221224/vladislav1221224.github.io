@@ -1,0 +1,66 @@
+#game-block {
+	left: 0%;
+	height: 100% - 44px;
+	width: 60%;
+	text-align: center;
+}
+.chess-board{
+	width: 50vw;
+	max-width: 560px;
+	height: 50vw;
+	max-height: 560px;
+	margin: 20px;
+	border: 4px solid rgb(24, 43, 71);
+	border-top-color: rgb(84, 126, 181);
+	border-left-color: rgb(44, 80, 128);
+}
+.square{
+	display: block;
+	float: left;
+	width: 12.5%;
+	height: 12.5%;
+}
+.black-square{
+	background-color: rgb(33, 56, 92);
+}
+.black-square:hover{
+	background-color: rgb(70, 94, 181);
+}
+.white-square{
+	background-color: rgb(192, 221, 255);
+}
+.white-square:hover{
+	background-color: rgb(156, 181, 218);
+}
+.piece{
+	width: 100%;
+	height: 100%;
+}
+.white-square .active{
+	background-color: rgb(222, 204, 140);
+}
+.black-square .active{
+	background-color: rgb(33, 92, 60);
+}
+#right-block{
+	right: 0%;
+	width:40%;
+	height: 100%;
+	position: fixed;
+	background-color: rgb(70, 94, 181);
+	border-radius: 0pt;
+	text-align: center;
+	text-decoration: none;
+}
+#players-info-layout{
+	padding: 20%;
+	
+}
+.footer-block{
+	float: none;
+	position: fixed;
+	bottom: 0;
+}
+.choose-square{
+ background-color: black;
+}
