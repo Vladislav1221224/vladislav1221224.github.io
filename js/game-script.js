@@ -1,38 +1,54 @@
 class Player{
-	constructor(sideValue){
-		this.side = sideValue;
+	constructor(nameValue){
+		this.name = nameValue;
 		let pawn = new Pawn(this.side);
 		let king = new King(this.side);
 		let queen = new Queen(this.side);
 		let rook = new Rook(this.side);
 		let bishop = new Bishop(this.side);
 		let knight = new Knight(this.side);
-		//console.log('White price = ' + pricePlayerPieces());
+	}
+	set name(value){
+		this._side = value[0];
+		this._name = value;
+	}
+	get name(){
+		return this._name;
 	}
 	set side(value){
-		this._side = value;
+		this._side = value[0];
 		}
 	get side(){
 		return this._side;
 	}
 	set pricePlayer(value){
+		value = 0;
 		this._pricePlayer = value;
 		}
 	get pricePlayer(){
 		return this._pricePlayer;
 	}
 	pricePlayerPieces(){
-		let price = '1';
-		//for (let i = 0; i < 8; i++) {
-			//for (let j = 0; j < 8; j++) {
-				//if(DefaultStartPosition[i][j] == this.side + 'p'){
-				//	price += Pawn.price;
-				//}
-				//else if(BoardPositionPieces[i][j] == this.side + 'k'){
-					//this.pricePlayer = King.price;
-				//}
-			//}
-		//}
+		let price = 0;
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				if(BoardPositionPieces[i][j] == this._side + 'p'){
+					price += 1;
+				}
+				else if(BoardPositionPieces[i][j] == this._side + 'q'){
+					price += 9;
+				}
+				else if(BoardPositionPieces[i][j] == this._side +'r'){
+					price += 5;
+				}
+				else if(BoardPositionPieces[i][j] == this._side +'b'){
+					price += 3;
+				}
+				else if(BoardPositionPieces[i][j] == this._side +'n'){
+					price += 3;
+				}
+			}
+		}
 		return price;
 	}
 }
@@ -52,7 +68,7 @@ class Pawn{
 				if(BoardPositionPieces[i][j] == side + 'p'){
 					let pawn = document.createElement('img');
 					pawn.src='images/piecesPNG/' + side + 'p.png';
-					pawn.className = "piece";
+					pawn.id = 'piece';
 					squareHTMLMassive[i][j].appendChild(pawn);
 				}
 			}
@@ -73,7 +89,7 @@ class King{
 				if(BoardPositionPieces[i][j] == side + 'k'){
 					let king = document.createElement('img');
 					king.src='images/piecesPNG/' + side + 'k.png';
-					king.className = "piece";
+					king.id = 'piece';
 					squareHTMLMassive[i][j].appendChild(king);
 				}
 			}
@@ -96,7 +112,7 @@ class Queen{
 				if(BoardPositionPieces[i][j] == side + 'q'){
 					let queen = document.createElement('img');
 					queen.src='images/piecesPNG/' + side + 'q.png';
-					queen.className = "piece";
+					queen.id = 'piece';
 					squareHTMLMassive[i][j].appendChild(queen);
 				}
 			}
@@ -119,7 +135,7 @@ class Rook{
 				if(BoardPositionPieces[i][j] == side +'r'){
 					let rook = document.createElement('img');
 					rook.src='images/piecesPNG/'+ side +'r.png';
-					rook.className = "piece";
+					rook.id = 'piece';
 					squareHTMLMassive[i][j].appendChild(rook);
 				}
 			}
@@ -142,7 +158,7 @@ class Bishop{
 				if(BoardPositionPieces[i][j] == side +'b'){
 					let bishop = document.createElement('img');
 					bishop.src='images/piecesPNG/'+ side +'b.png';
-					bishop.className = "piece";
+					bishop.id = 'piece';
 					squareHTMLMassive[i][j].appendChild(bishop);
 				}
 			}
@@ -165,7 +181,7 @@ class Knight{
 				if(BoardPositionPieces[i][j] == side +'n'){
 					let knight = document.createElement('img');
 					knight.src='images/piecesPNG/'+ side +'n.png';
-					knight.className = "piece knight";
+					knight.id = 'piece';
 					squareHTMLMassive[i][j].appendChild(knight);
 				}
 			}
@@ -186,20 +202,21 @@ function getID(idName){
 	let tmp = [];
 	for(let i = 0; i < 8;i++){
 		if(idName[0] == IDLETTER[i]){
-			tmp[0] = i;
+			tmp[1] = i;
 		}
 		if(idName[1] == IDNUMBER[i]){
-			tmp[1] = i;
+			tmp[0] = i;
 		}
 	}
 		return tmp;
 }
 //////////////////////////////////////////////////////////
 function MovePiece(element){
-	let x = 1;
-	let y = 1;
-	if(element.innerHTMl.querySelector('.piece')){
-		element.classList.add('.active');
+	let x = 0;
+	let y = 0;
+	console.log('click');
+	if(element. == 'piece'){
+		element.('active');
 	};
 }
 
@@ -232,10 +249,10 @@ function drawChess(){
 			for (let j = 0; j < sizeBoard; j++) {
 
 				if(m % 2 == 0){
-					out += `<div class="square white-square" id="${setID(i,j)}"></div>`
+					out += `<div class="square white-square" id="${setID(j,i)}"></div>`
 				}
 				else{
-					out += `<div class="square black-square" id="${setID(i,j)}"></div>`
+					out += `<div class="square black-square" id="${setID(j,i)}"></div>`
 				}
 				m++;
 			}
@@ -245,25 +262,27 @@ function drawChess(){
 
 		//Set all events and functions for all squares
 		///////////////////////////////////////////////////////////////////////////
-		document.querySelectorAll('.chess-board').forEach(function(element){
-			element.addEventListener('onclick',MovePiece);
-		});
+
 		for(let i = 0; i < 8; i++){
 			for(let j = 0; j < 8; j++){
-				let square = document.getElementById(`${IDLETTER[j]}${IDNUMBER[i]}`);
+				let square = document.getElementById(`${IDLETTER[i]}${IDNUMBER[j]}`);
 				let id = getID(square.id);
 				squareHTMLMassive[id[0]][id[1]] = square;
-			}
+				square.addEventListener('mousedown',MovePiece(square));
+				squareHTMLMassive[id[0]][id[1]].addEventListener;
+			};
 		}
+		console.log(squareHTMLMassive);
 		///////////////////////////////////////////////////////////////////////////
-		let white = new Player('w');
-		let black = new Player('b');
+		let white = new Player('white');
+		console.log(white._name + '^'+ white._side + ' price = ' + white.pricePlayerPieces());
+		let black = new Player('black');
+		console.log(black._name + '^'+ black._side + ' price = ' + black.pricePlayerPieces());
 	}
  drawChess();
-/*EventOnClick = addEventListener(square[i][j].onclick) = TranslateID(square[i][j].id);
  function ChooseSquare(e){
 	e.className += 'choose-square';
-}*/
+}
 /*var piece = document.getElementById(square[i][j]);
 
 piece.onmousedown = function(e) { // 1. отследить нажатие
