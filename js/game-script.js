@@ -32,19 +32,19 @@ class Player{
 		let price = 0;
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == this._side + 'p'){
+				if(CurrentPositionPieces[i][j] == this._side + 'p'){
 					price += 1;
 				}
-				else if(BoardPositionPieces[i][j] == this._side + 'q'){
+				else if(CurrentPositionPieces[i][j] == this._side + 'q'){
 					price += 9;
 				}
-				else if(BoardPositionPieces[i][j] == this._side +'r'){
+				else if(CurrentPositionPieces[i][j] == this._side +'r'){
 					price += 5;
 				}
-				else if(BoardPositionPieces[i][j] == this._side +'b'){
+				else if(CurrentPositionPieces[i][j] == this._side +'b'){
 					price += 3;
 				}
-				else if(BoardPositionPieces[i][j] == this._side +'n'){
+				else if(CurrentPositionPieces[i][j] == this._side +'n'){
 					price += 3;
 				}
 			}
@@ -65,11 +65,11 @@ class Pawn{
 	setPiece(side){
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == side + 'p'){
+				if(CurrentPositionPieces[i][j] == side + 'p'){
 					let pawn = document.createElement('img');
 					pawn.src='images/piecesPNG/' + side + 'p.png';
-					pawn.id = 'piece';
-					squareHTMLMassive[i][j].appendChild(pawn);
+					pawn.className = 'piece';
+					squareHTMLArray[i][j].append(pawn);
 				}
 			}
 		}
@@ -86,11 +86,11 @@ class King{
 	setPiece(side){
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == side + 'k'){
+				if(CurrentPositionPieces[i][j] == side + 'k'){
 					let king = document.createElement('img');
 					king.src='images/piecesPNG/' + side + 'k.png';
-					king.id = 'piece';
-					squareHTMLMassive[i][j].appendChild(king);
+					king.className = 'piece';
+					squareHTMLArray[i][j].append(king);
 				}
 			}
 		}
@@ -109,11 +109,11 @@ class Queen{
 	setPiece(side){
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == side + 'q'){
+				if(CurrentPositionPieces[i][j] == side + 'q'){
 					let queen = document.createElement('img');
 					queen.src='images/piecesPNG/' + side + 'q.png';
-					queen.id = 'piece';
-					squareHTMLMassive[i][j].appendChild(queen);
+					queen.className = 'piece';
+					squareHTMLArray[i][j].append(queen);
 				}
 			}
 		}
@@ -132,11 +132,11 @@ class Rook{
 	setPiece(side){
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == side +'r'){
+				if(CurrentPositionPieces[i][j] == side +'r'){
 					let rook = document.createElement('img');
 					rook.src='images/piecesPNG/'+ side +'r.png';
-					rook.id = 'piece';
-					squareHTMLMassive[i][j].appendChild(rook);
+					rook.className = 'piece';
+					squareHTMLArray[i][j].append(rook);
 				}
 			}
 		}
@@ -155,11 +155,11 @@ class Bishop{
 	setPiece(side){
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == side +'b'){
+				if(CurrentPositionPieces[i][j] == side +'b'){
 					let bishop = document.createElement('img');
 					bishop.src='images/piecesPNG/'+ side +'b.png';
-					bishop.id = 'piece';
-					squareHTMLMassive[i][j].appendChild(bishop);
+					bishop.className = 'piece';
+					squareHTMLArray[i][j].append(bishop);
 				}
 			}
 		}
@@ -178,11 +178,11 @@ class Knight{
 	setPiece(side){
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(BoardPositionPieces[i][j] == side +'n'){
+				if(CurrentPositionPieces[i][j] == side +'n'){
 					let knight = document.createElement('img');
 					knight.src='images/piecesPNG/'+ side +'n.png';
-					knight.id = 'piece';
-					squareHTMLMassive[i][j].appendChild(knight);
+					knight.className = 'piece';
+					squareHTMLArray[i][j].append(knight);
 				}
 			}
 		}
@@ -192,7 +192,7 @@ class Knight{
 const IDNUMBER = ['8','7','6','5','4','3','2','1'];
 const IDLETTER = ['a','b','c','d','e','f','g','h'];
 
-//Function for differentiate id
+//Function setter and getter id
 //////////////////////////////////////////////////////////
 function setID(x,y){
 	let idName = IDLETTER[x] + IDNUMBER[y];
@@ -210,18 +210,31 @@ function getID(idName){
 	}
 		return tmp;
 }
+function EatPiece(piece,squareB){
+
+}
 //////////////////////////////////////////////////////////
 function MovePiece(element){
-	let x = 0;
-	let y = 0;
-	console.log('click');
-	if(element. == 'piece'){
-		element.('active');
-	};
+	let piece = element.innerElements;
+	if(piece){
+		element.className += 'choose-square';
+		console.log('Click');
+	}
+}
+var MoveSide = function(){
+	var currentSide = 'white';
+	function change(){
+		if(currentSide === 'white'){
+			currentSide = 'black';
+		}
+		else if (currentSide === 'black'){
+			currentSide = 'white';
+		}
+	}
 }
 
 //Start position of pieces
-let DefaultStartPosition = [
+var DefaultStartPosition = [
 	['br','bn','bb','bq','bk','bb','bn','br'],
 	['bp','bp','bp','bp','bp','bp','bp','bp'],
 	['0', '0', '0', '0', '0', '0', '0', '0' ],
@@ -233,26 +246,38 @@ let DefaultStartPosition = [
 ];
 
 //For Statistic Info and Save a Game Position
-/*--->*/let BoardPositionPieces = [[],[],[],[],[],[],[],[]];/*<---*/
-BoardPositionPieces = DefaultStartPosition;
+/*--->*/var CurrentPositionPieces = [[],[],[],[],[],[],[],[]];/*<---*/
+CurrentPositionPieces = DefaultStartPosition;
 
 //Massive of HTML Objects
-/*--->*/let squareHTMLMassive = [[],[],[],[],[],[],[],[]];/*<---*/
+/*--->*/var squareHTMLArray = [[],[],[],[],[],[],[],[]];/*<---*/
 
 //Draw a chess)) The main function!!!
 function drawChess(){
-	let chessBoard = document.querySelector('.chess-board');
+	var chessBoard = document.querySelector('.chess-board');
 	let out = '';
-	let sizeBoard = 8;
+	var sizeBoard = 8;
 	let m = 0;
 		for (let i = 0; i < sizeBoard; i++) {
 			for (let j = 0; j < sizeBoard; j++) {
-
+				let innerElements = '';
 				if(m % 2 == 0){
-					out += `<div class="square white-square" id="${setID(j,i)}"></div>`
+					if(j === 0){
+						innerElements += `<div class="notation" id="number">${IDNUMBER[i]}</div>`
+					}
+					if(i === 7){
+						innerElements += `<div class="notation" id="letter">${IDLETTER[j]}</div>`
+					}
+					out += `<div class="square white-square" id="${setID(j,i)}">${innerElements}</div>`
 				}
 				else{
-					out += `<div class="square black-square" id="${setID(j,i)}"></div>`
+					if(j === 0){
+						innerElements += `<div class="notation" id="number">${IDNUMBER[i]}</div>`
+					}
+					if(i === 7){
+						innerElements += `<div class="notation" id="letter">${IDLETTER[j]}</div>`
+					}
+					out += `<div class="square black-square" id="${setID(j,i)}">${innerElements}</div>`
 				}
 				m++;
 			}
@@ -267,23 +292,30 @@ function drawChess(){
 			for(let j = 0; j < 8; j++){
 				let square = document.getElementById(`${IDLETTER[i]}${IDNUMBER[j]}`);
 				let id = getID(square.id);
-				squareHTMLMassive[id[0]][id[1]] = square;
-				square.addEventListener('mousedown',MovePiece(square));
-				squareHTMLMassive[id[0]][id[1]].addEventListener;
-			};
+				squareHTMLArray[id[0]][id[1]] = square;
+			}
 		}
-		console.log(squareHTMLMassive);
+		document.querySelectorAll('.piece').forEach(element = function (element) {
+			element.
+		  })
+		console.log(squareHTMLArray);
 		///////////////////////////////////////////////////////////////////////////
 		let white = new Player('white');
 		console.log(white._name + '^'+ white._side + ' price = ' + white.pricePlayerPieces());
 		let black = new Player('black');
 		console.log(black._name + '^'+ black._side + ' price = ' + black.pricePlayerPieces());
+		//startGame();
 	}
  drawChess();
  function ChooseSquare(e){
 	e.className += 'choose-square';
 }
-/*var piece = document.getElementById(square[i][j]);
+
+
+
+//In developing!!! Dragging the pieces
+/////////////////////////////////////////////////////////////
+/*document.querySelectorAll('.piece').forEach(element = function(piece){
 
 piece.onmousedown = function(e) { // 1. отследить нажатие
 
@@ -292,15 +324,15 @@ piece.onmousedown = function(e) { // 1. отследить нажатие
   piece.style.position = 'absolute';
   moveAt(e);
   // переместим в body, чтобы мяч был точно не внутри position:relative
-  document.body.appendChild(ball);
+  document.body.append(piece);
 
   piece.style.zIndex = 1000; // показывать мяч над другими элементами
 
   // передвинуть мяч под координаты курсора
   // и сдвинуть на половину ширины/высоты для центрирования
   function moveAt(e) {
-    piece.style.left = e.pageX - ball.offsetWidth / 2 + 'px';
-    piece.style.top = e.pageY - ball.offsetHeight / 2 + 'px';
+    piece.style.left = e.pageX - piece.offsetWidth / 2 + 'px';
+    piece.style.top = e.pageY - piece.offsetHeight / 2 + 'px';
   }
 
   // 3, перемещать по экрану
@@ -313,4 +345,5 @@ piece.onmousedown = function(e) { // 1. отследить нажатие
     document.onmousemove = null;
     piece.onmouseup = null;
   }
-}*/
+}});*/
+/////////////////////////////////////////////////////////////
