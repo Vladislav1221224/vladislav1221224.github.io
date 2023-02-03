@@ -83,16 +83,16 @@
     }
   }
 
-  // function debounce (f, interval, scope) {
-  //   var timeout = 0
-  //   return function (_args) {
-  //     window.clearTimeout(timeout)
-  //     var args = arguments
-  //     timeout = window.setTimeout(function () {
-  //       f.apply(scope, args)
-  //     }, interval)
-  //   }
-  // }
+		function debounce (f, interval, scope) {
+			var timeout = 0
+			return function (_args) {
+				window.clearTimeout(timeout)
+				var args = arguments
+				timeout = window.setTimeout(function () {
+					f.apply(scope, args)
+				}, interval)
+			}
+		}
 
   function uuid () {
     return 'xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx'.replace(/x/g, function (c) {

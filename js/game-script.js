@@ -1,6 +1,7 @@
 class Player{
 	constructor(nameValue){
 		this.name = nameValue;
+		this.side = this.name;
 		let pawn = new Pawn(this.side);
 		let king = new King(this.side);
 		let queen = new Queen(this.side);
@@ -9,7 +10,6 @@ class Player{
 		let knight = new Knight(this.side);
 	}
 	set name(value){
-		this._side = value[0];
 		this._name = value;
 	}
 	get name(){
@@ -210,28 +210,144 @@ function getID(idName){
 	}
 		return tmp;
 }
-function EatPiece(piece,squareB){
-
-}
 //////////////////////////////////////////////////////////
-function MovePiece(element){
-	let piece = element.innerElements;
-	if(piece){
-		element.className += 'choose-square';
-		console.log('Click');
+
+//Global variable for move a pieces
+/*--->*/let selectPiece = {element: null, name: undefined}/*<---*/
+/*--->*/let arrPos = {x: null, y: null}/*<---*/
+//Get a squareA with piece and set this piece in squareB
+//////////////////////////////////////////////////////////
+
+function selectSquare(element){
+	for(let i = 0; i < 8; i++){
+		for(let j = 0; j < 8; j++){
+			$(squareHTMLArray[i][j]).removeClass('choose-square');
+		}
+	}
+	$(element).addClass('choose-square');
+
+	selectPiece.name = CurrentPositionPieces[arrPos.x][arrPos.y];
+	CurrentPositionPieces[arrPos.x][arrPos.y] = '0';
+	console.log('currentPiece = ' + selectPiece.name);
+	selectPiece.element = element.querySelector('.piece');
+	console.log('Square is selected(' + arrPos.x + '/' + arrPos.y + ')');
+	console.log(element); 
+}
+//Functions, which will be used for move a pieces by players
+//////////////////////////////////////////////////////////
+function getPiece(element){
+
+	arrPos = getPosOfSquareFromArr(element);
+	//Variable for check the side of piece
+	let name = CurrentPositionPieces[arrPos.x][arrPos.y];
+	console.log(name);
+	if(selectPiece.name){
+		if(selectPiece.name[0] == name[0]){
+			
+		}
+	}
+	//Get a piece, if the square has a piece
+	else if(element.querySelector('.piece')){
+			if(!(element.classList.contains('choose-square'))){
+				selectSquare(element);
+			}
+		//If the player select a selected square, that square will not be selected
+		else if(element.classList.contains('choose-square')){
+			console.log('Ето работает)');
+			$(element).removeClass('choose-square');
+			CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+			selectPiece.element = null;
+			selectPiece.name = null;
+			console.log('Square is unselected(' + arrPos.x + '/' + arrPos.y + ')');
+		}
+	}
+
+	//If piece is selected and player select the empty square or square with enemy piece
+	else if(selectPiece.element /*&& element.querySelector('.move-destionation')/*&& currentSide == mySide*/){
+		console.log('Piece will be setted in square');
+		setPiece(element,selectPiece.element);
+	}
+	//If player don't select a piece and he is select an empty square on console will be displayed 'Not founded piece!'
+	else{
+		console.log('Not founded piece!');
 	}
 }
-var MoveSide = function(){
-	var currentSide = 'white';
-	function change(){
+
+//The function will be run if the piece has been selected
+//////////////////////////////////////////////////////////
+//This function sets the piece to squareB
+function setPiece(element, piece){
+
+	arrPos = getPosOfSquareFromArr(element);
+	let eatenPiece = element.querySelector('.piece');
+
+	//If square has enemy piece, this function remove enemy piece and set your piece to square
+	if(element.querySelector('.move-destination')){
+		if(eatenPiece){
+			console.log('Eat is do!(' + arrPos.x + '/' + arrPos.y + ')')
+			eatPiece(element);
+			for(let i = 0; i < 8; i++){
+				for(let j = 0; j < 8; j++){
+					$(squareHTMLArray[i][j]).removeClass('choose-square');
+				}
+			}
+			selectPiece.element = null;
+			selectPiece.name = null;
+		}
+		else if(piece){
+			console.log('Set Piece is do!(' + arrPos.x + '/' + arrPos.y + ')')
+			for(let i = 0; i < 8; i++){
+				for(let j = 0; j < 8; j++){
+					$(squareHTMLArray[i][j]).removeClass('choose-square');
+				}
+			}
+			arrPos = null;
+			arrPos = getPosOfSquareFromArr(element);
+			element.append(piece);
+			CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+
+			selectPiece.element = null;
+			selectPiece.name = null;
+		}
+	}
+	else{
+		console.log('You can\'t set piece at this square!');
+	}
+}
+//If squareB has enemy piece, that function remove this piece and set your piece to squareB
+function eatPiece(squareB){
+	arrPos = getPosOfSquareFromArr(squareB);
+	let secondSide = CurrentPositionPieces[arrPos.x][arrPos.y];
+	if(squareB.querySelector('.piece') && selectPiece.name[0] != secondSide[0]){
+		let deletedElement = squareB.querySelector('.piece');
+		deletedElement.remove();
+		squareB.append(selectPiece.element);
+		CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+	}
+	else{
+		console.error('Error: that)))')
+	}
+}
+//////////////////////////////////////////////////////////
+
+//Changing a side(...for game)
+//////////////////////////////////////////////////////////
+//let mySide = 'white';
+let currentSide = 'white';
+function changeSide(){
 		if(currentSide === 'white'){
 			currentSide = 'black';
+			return currentSide;
 		}
 		else if (currentSide === 'black'){
 			currentSide = 'white';
+			return currentSide;
+		}
+		else{
+			console.error('Side is not changed!!!');
 		}
 	}
-}
+//////////////////////////////////////////////////////////
 
 //Start position of pieces
 var DefaultStartPosition = [
@@ -252,65 +368,118 @@ CurrentPositionPieces = DefaultStartPosition;
 //Massive of HTML Objects
 /*--->*/var squareHTMLArray = [[],[],[],[],[],[],[],[]];/*<---*/
 
+//Get position of Massive of HTML Objects
+//////////////////////////////////////////////////////////
+function getPosOfSquareFromArr(element){
+	let x;
+	let y;
+	for(let i = 0; i < 8; i++){
+		for(let j = 0; j < 8; j++){
+			if(squareHTMLArray[i][j] == element){
+				x = i;
+				y = j;
+			}
+		}
+	}
+	return {x,y};
+}
+//////////////////////////////////////////////////////////
+
+//If value = 'default', chessboard draw a DefaultStartPosition of pieces
+//////////////////////////////////////////////////////////
+function startGame(white,black){
+	white._pricePlayer = white.pricePlayerPieces();
+	console.log(white._name + '^'+ white._side + ' price = ' + white._pricePlayer);
+
+	black._pricePlayer = black.pricePlayerPieces();
+	console.log(black._name + '^'+ black._side + ' price = ' + black._pricePlayer);
+}
+//////////////////////////////////////////////////////////
+
+//Other functions
+//////////////////////////////////////////////////////////
+function isString (s) {
+	return typeof s === 'string'
+}
+
+function isFunction (f) {
+	return typeof f === 'function'
+}
+
+function isInteger (n) {
+	return typeof n === 'number' &&
+				 isFinite(n) &&
+				 Math.floor(n) === n
+}
+//////////////////////////////////////////////////////////
+
 //Draw a chess)) The main function!!!
-function drawChess(){
+//////////////////////////////////////////////////////////
+function drawChess(value){
 	var chessBoard = document.querySelector('.chess-board');
 	let out = '';
 	var sizeBoard = 8;
 	let m = 0;
-		for (let i = 0; i < sizeBoard; i++) {
-			for (let j = 0; j < sizeBoard; j++) {
-				let innerElements = '';
-				if(m % 2 == 0){
-					if(j === 0){
-						innerElements += `<div class="notation" id="number">${IDNUMBER[i]}</div>`
-					}
-					if(i === 7){
-						innerElements += `<div class="notation" id="letter">${IDLETTER[j]}</div>`
-					}
-					out += `<div class="square white-square" id="${setID(j,i)}">${innerElements}</div>`
+	for (let i = 0; i < sizeBoard; i++) {
+		for (let j = 0; j < sizeBoard; j++) {
+			let innerElements = '';
+			if(m % 2 == 0){
+				if(j === 0){
+					innerElements += `<div class="notation" id="number">${IDNUMBER[i]}</div>`
 				}
-				else{
-					if(j === 0){
-						innerElements += `<div class="notation" id="number">${IDNUMBER[i]}</div>`
-					}
-					if(i === 7){
-						innerElements += `<div class="notation" id="letter">${IDLETTER[j]}</div>`
-					}
-					out += `<div class="square black-square" id="${setID(j,i)}">${innerElements}</div>`
+				if(i === 7){
+					innerElements += `<div class="notation" id="letter">${IDLETTER[j]}</div>`
 				}
-				m++;
+				out += `<div class="square white-square" id="${setID(j,i)}">${innerElements}</div>`
+			}
+			else{
+				if(j === 0){
+					innerElements += `<div class="notation" id="number">${IDNUMBER[i]}</div>`
+				}
+				if(i === 7){
+					innerElements += `<div class="notation" id="letter">${IDLETTER[j]}</div>`
+				}
+				out += `<div class="square black-square" id="${setID(j,i)}">${innerElements}</div>`
 			}
 			m++;
 		}
-		chessBoard.innerHTML = out;
+		m++;
+	}
+	chessBoard.innerHTML = out;
 
-		//Set all events and functions for all squares
-		///////////////////////////////////////////////////////////////////////////
-
-		for(let i = 0; i < 8; i++){
-			for(let j = 0; j < 8; j++){
-				let square = document.getElementById(`${IDLETTER[i]}${IDNUMBER[j]}`);
-				let id = getID(square.id);
-				squareHTMLArray[id[0]][id[1]] = square;
+	//Set all events and functions for all squares
+	///////////////////////////////////////////////////////////////////////////
+	for(let i = 0; i < 8; i++){
+		for(let j = 0; j < 8; j++){
+			let square = document.getElementById(`${IDLETTER[i]}${IDNUMBER[j]}`);
+			let id = getID(square.id);
+			squareHTMLArray[id[0]][id[1]] = square;
+		}
+	}
+	for(let i = 0; i < 8; i++){
+		for(let j = 0; j < 8; j++){
+			squareHTMLArray[i][j].onclick = function(){
+				getPiece(squareHTMLArray[i][j]);
 			}
 		}
-		document.querySelectorAll('.piece').forEach(element = function (element) {
-			element.
-		  })
-		console.log(squareHTMLArray);
-		///////////////////////////////////////////////////////////////////////////
-		let white = new Player('white');
-		console.log(white._name + '^'+ white._side + ' price = ' + white.pricePlayerPieces());
-		let black = new Player('black');
-		console.log(black._name + '^'+ black._side + ' price = ' + black.pricePlayerPieces());
-		//startGame();
 	}
- drawChess();
- function ChooseSquare(e){
-	e.className += 'choose-square';
-}
+	console.log(squareHTMLArray);
+	///////////////////////////////////////////////////////////////////////////
+	let white = new Player('white');
+	let black = new Player('black');
+	if(value === 'default'){
+		startGame(white,black);
+	}
+	else if(value === 'empty'){
 
+	}
+	else if(value === ''){
+
+	}
+
+}
+//////////////////////////////////////////////////////////
+ drawChess('default');
 
 
 //In developing!!! Dragging the pieces

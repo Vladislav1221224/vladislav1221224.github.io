@@ -27,10 +27,10 @@
 .white-square{
 	background-color: rgb(192, 221, 255);
 }
-.black-square:hover{
+black-square:hover{
 	background-color: rgb(70, 94, 181);
 }
-.white-square:hover{
+white-square:hover{
 	background-color: rgb(156, 181, 218);
 }
 .piece{
@@ -82,5 +82,12 @@
 	bottom: 0;
 }
 .choose-square{
- background-color: black;
+	background-color: rgb(255, 255, 151);
+	outline-style: solid;
+	outline-color: rgb(255, 255, 255);
+	outline-width: 3px;
+	outline-offset: -3px;
+}
+.dot{
+	
 }
