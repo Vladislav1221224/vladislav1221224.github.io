@@ -348,6 +348,82 @@ function changeSide(){
 	}
 //////////////////////////////////////////////////////////
 
+//The function will be run if the piece has been selected
+//////////////////////////////////////////////////////////
+//This function sets the piece to squareB
+function setPiece(element, piece){
+
+	arrPos = getPosOfSquareFromArr(element);
+	let eatenPiece = element.querySelector('.piece');
+
+	//If square has enemy piece, this function remove enemy piece and set your piece to square
+	if(element.querySelector('.move-destination')){
+		if(eatenPiece){
+			console.log('Eat is do!(' + arrPos.x + '/' + arrPos.y + ')')
+			eatPiece(element);
+			for(let i = 0; i < 8; i++){
+				for(let j = 0; j < 8; j++){
+					$(squareHTMLArray[i][j]).removeClass('choose-square');
+				}
+			}
+			selectPiece.element = null;
+			selectPiece.name = null;
+		}
+		else if(piece){
+			console.log('Set Piece is do!(' + arrPos.x + '/' + arrPos.y + ')')
+			for(let i = 0; i < 8; i++){
+				for(let j = 0; j < 8; j++){
+					$(squareHTMLArray[i][j]).removeClass('choose-square');
+				}
+			}
+			arrPos = null;
+			arrPos = getPosOfSquareFromArr(element);
+			element.append(piece);
+			CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+
+			selectPiece.element = null;
+			selectPiece.name = null;
+		}
+	}
+	else{
+		console.log('You can\'t set piece at this square!');
+	}
+}
+//If squareB has enemy piece, that function remove this piece and set your piece to squareB
+function eatPiece(squareB){
+	arrPos = getPosOfSquareFromArr(squareB);
+	let secondSide = CurrentPositionPieces[arrPos.x][arrPos.y];
+	if(squareB.querySelector('.piece') && selectPiece.name[0] != secondSide[0]){
+		let deletedElement = squareB.querySelector('.piece');
+		deletedElement.remove();
+		squareB.append(selectPiece.element);
+		CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+	}
+	else{
+		console.error('Error: that)))')
+	}
+}
+//////////////////////////////////////////////////////////
+
+//Changing a side(...for game)
+//////////////////////////////////////////////////////////
+//let mySide = 'white';
+let currentSide = 'white';
+function changeSide(){
+		if(currentSide === 'white'){
+			currentSide = 'black';
+			return currentSide;
+		}
+		else if (currentSide === 'black'){
+			currentSide = 'white';
+			return currentSide;
+		}
+		else{
+			console.error('Side is not changed!!!');
+		}
+	}
+//////////////////////////////////////////////////////////
+
 //Start position of pieces
 var DefaultStartPosition = [
 	['br','bn','bb','bq','bk','bb','bn','br'],
