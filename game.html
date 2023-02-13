@@ -6,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script type="text/javascript" src="js\jquery-3.6.3.min.js"></script>
 	<link rel="stylesheet" href="css\main.css">
-	<link rel="stylesheet" href="css/game.css">
+	<link rel="stylesheet" href="css\game.css">
 	<title>Chess</title>
 </head>
 <body>
@@ -20,11 +20,18 @@
 		</div>
 		<div id="right-block" class="block">
 			<div id="players-info-layout">
-				
 			</div>
 		</div>
 		<div id="game-block">
-			<div class="chess-board"></div>
+			<div id="layout-chess-board">
+				<div class="chess-board"></div>
+				<div id="right-player-layout">
+					<ul>
+						<li><button class="flip-chess-board"><img width="18px" src="images\flip.png" alt="no image"></button></li>
+						<li><button class="reset-chess-board">reset</button></li>
+					</ul>
+				</div>
+			</div>
 		</div>
 		<div class="footer-block" class="block">
 			|<a href="developinfo.html" class="lng-developers">Developers</a>|
