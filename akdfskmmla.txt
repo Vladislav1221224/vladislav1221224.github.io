@@ -1,0 +1,102 @@
+
+	arrPos = getPosOfSquareFromArr(element);
+
+	//Variable for check the side of piece
+	
+	let name = CurrentPositionPieces[arrPos.x][arrPos.y];
+	console.log('Name: ' + name);
+	//Get a piece, if the square has a piece
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//If piece is selected and player select the empty square or square with enemy piece
+	if(selectPiece.element){
+		if(name[0] != selectPiece.name[0] && element.querySelector('.move-destionation')){
+			console.log('Piece will be setted in square');
+		setPiece(element,selectPiece.element);
+		}
+		else{
+			selectSquare(element);
+		}
+	}
+
+	else if(element.querySelector('.piece')){
+		if(!(element.classList.contains('choose-square'))){
+			selectSquare(element);
+		}
+		//If the player select a selected square, that square will not be selected
+		else if(element.classList.contains('choose-square')){
+			console.log('Ето работает)');
+			$(element).removeClass('choose-square');
+			CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+			selectPiece.element = null;
+			selectPiece.name = null;
+			console.log('Square is unselected(' + arrPos.x + '/' + arrPos.y + ')');
+		}
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//If player don't select a piece and he is select an empty square on console will be displayed 'Not founded piece!'
+	else{
+		console.log('Not founded piece!');
+	}
+}
+
+//The function will be run if the piece has been selected
+//////////////////////////////////////////////////////////
+//This function sets the piece to squareB
+function setPiece(element, piece){
+
+	arrPos = getPosOfSquareFromArr(element);
+	let eatenPiece = element.querySelector('.piece');
+
+	//If square has enemy piece, this function remove enemy piece and set your piece to square
+	if(element.querySelector('.move-destination')){
+		if(eatenPiece){
+			console.log('Eat is do!(' + arrPos.x + '/' + arrPos.y + ')')
+			eatPiece(element);
+			for(let i = 0; i < 8; i++){
+				for(let j = 0; j < 8; j++){
+					$(squareHTMLArray[i][j]).removeClass('choose-square');
+				}
+			}
+			selectPiece.element = null;
+			selectPiece.name = null;
+		}
+		else if(piece){
+			console.log('Set Piece is do!(' + arrPos.x + '/' + arrPos.y + ')')
+			for(let i = 0; i < 8; i++){
+				for(let j = 0; j < 8; j++){
+					$(squareHTMLArray[i][j]).removeClass('choose-square');
+				}
+			}
+			arrPos = null;
+			arrPos = getPosOfSquareFromArr(element);
+			element.append(piece);
+			CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+
+			selectPiece.element = null;
+			selectPiece.name = null;
+		}
+	}
+	else{
+		console.log('You can\'t set piece at this square!');
+	}
+}
+//If squareB has enemy piece, that function remove this piece and set your piece to squareB
+function eatPiece(squareB){
+	arrPos = getPosOfSquareFromArr(squareB);
+	let secondSide = CurrentPositionPieces[arrPos.x][arrPos.y];
+	if(squareB.querySelector('.piece') && selectPiece.name[0] != secondSide[0]){
+		let deletedElement = squareB.querySelector('.piece');
+		deletedElement.remove();
+		squareB.append(selectPiece.element);
+		CurrentPositionPieces[arrPos.x][arrPos.y] = selectPiece.name;
+	}
+	else{
+		console.error('Error: that)))')
+	}
+
+
+
+
+
+
+	@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300&display=swap');

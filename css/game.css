@@ -5,12 +5,47 @@
 	width: 60%;
 	text-align: center;
 }
-.chess-board{
+#layout-chess-board{
+	margin:20px;
+}
+#right-player-layout{
+	background-color: transparent;
+	float: left;
+	width: 5%;
+	height: 100%;
+}
+.flip-chess-board{
+	float:left;
+	background-color:transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.flip-chess-board:hover{
+	opacity: 50%;
+}
+.reset-chess-board{
+	float: left;
+	font-weight: 900;
+	background-color:transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.reset-chess-board:hover{
+	opacity: 50%;
+}
+.chess-board{ 
+	float: left;
 	width: 50vw;
 	max-width: 560px;
 	height: 50vw;
 	max-height: 560px;
-	margin: 20px;
+	border-radius: 3px;
 	border: 4px solid rgb(24, 43, 71);
 	border-top-color: rgb(84, 126, 181);
 	border-left-color: rgb(44, 80, 128);
@@ -18,8 +53,13 @@
 .square{
 	position: relative;
 	float: left;
-	width: 12.5%;
-	height: 12.5%;
+	width: calc(100%/8);
+	height: calc(100%/8);
+	outline-style: solid;
+	outline-color: rgb(255, 255, 255);
+	outline-width: 0px;
+	outline-offset: 0px;
+	z-index: 0;
 }
 .black-square{
 	background-color: rgb(33, 56, 92);
@@ -27,16 +67,11 @@
 .white-square{
 	background-color: rgb(192, 221, 255);
 }
-black-square:hover{
-	background-color: rgb(70, 94, 181);
-}
-white-square:hover{
-	background-color: rgb(156, 181, 218);
-}
 .piece{
 	position: relative;
 	width: 100%;
 	height:	100%;
+	z-index: 100;
 }
 .white-square .active{
 	background-color: rgb(222, 204, 140);
@@ -47,6 +82,7 @@ white-square:hover{
 .notation{
 	position: absolute;
 	font-size: 16px;
+	z-index: 1;
 }
 #number{
 	top: 2%;
@@ -87,7 +123,38 @@ white-square:hover{
 	outline-color: rgb(255, 255, 255);
 	outline-width: 3px;
 	outline-offset: -3px;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
 }
-.dot{
-	
+.move-destination{
+	width: 40%;
+	height: 40%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-right: -50%;
+	transform: translate(-50%, -50%);
+	background-color:grey;
+	border-radius: 50%;
+	opacity: 50%;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+	z-index: 2;
+}
+.circle{
+	width: 80%;
+	height: 80%;
+	top: 50%;
+	left: 50%;
+	background-color: rgba(0, 0, 0, 0);
+	outline-style: solid;
+	outline-width: 5px;
+	outline-color: grey;
+	outline-offset: -5px;
+	border-radius: 100%;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
 }
