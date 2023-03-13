@@ -9,7 +9,8 @@ let chessboard = new ChessBoard('default');
 	chessboard.flipTheChessBoard();
  }
  document.querySelector('.reset-chess-board').onclick = function(){
-	chessboard.resetTheChessBoard();
+	chessboard = null;
+	chessboard = new ChessBoard('default');
  }
 let chessBoard = document.querySelector('.chess-board');
 let posInfo = chessBoard.getBoundingClientRect();
