@@ -437,6 +437,7 @@ class ChessBoard {
 				}
 				else if (chessboard.selectPiece) {
 					let square = chessboard.getSquareFromArr(element);
+					console.log(square);
 					if (square.position.x == chessboard.selectPiece.position.x && square.position.y == chessboard.selectPiece.position.y) {
 						chessboard.clearSelectSquare();
 						console.log('Фигура отменена');
@@ -446,13 +447,17 @@ class ChessBoard {
 						selectSquare(element);
 						console.log('Фигура сменена');
 					}
-					else if (square.piece && chessboard.selectPiece.side != square.piece.side && element.querySelector('.move-destination')) {
+					else if (square.piece && element.querySelector('.move-destination') && this.selectPiece.side != square.piece.side) {
 						eatPiece(element);
+					}
+					else{
+						console.error('Ничего не работает');
 					}
 				}
 			}
 			else if (!element.querySelector('.piece')) {
 				let square = chessboard.getSquareFromArr(element);
+				console.log(square)
 				if (!square.piece && element.querySelector('.move-destination')) {
 					setPiece(element);
 				}

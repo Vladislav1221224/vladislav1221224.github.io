@@ -117,7 +117,7 @@ export class Player {
 			}
 		});
 	}
-	isCheckMate() {
+	isCheckMate(value) {
 		let anotherPlayer;
 		let isCheckMate = 0;
 		let checkAmount = 0;
@@ -145,7 +145,7 @@ export class Player {
 				console.log('checkFigure is getted')
 				console.log(this.checkFigure)
 			}
-			else if(checkAmount > 1){
+			else if (checkAmount > 1) {
 				this.checkFigure = false;
 			}
 		}
@@ -159,7 +159,7 @@ export class Player {
 			possible.forEach(([xx, yy]) => {
 
 				if (xx >= 0 && xx < 8 && yy >= 0 && yy < 8) {
-					let pos = {x:xx,y:yy};
+					let pos = { x: xx, y: yy };
 					let isCheck = 1;
 
 					if (!this.chessboard.cellsArr[pos.y][pos.x].piece) {
@@ -204,15 +204,16 @@ export class Player {
 
 			//Check, if piece can cover a king
 			if (checkMate == 2 && checkAmount == 1) {
-				let checkPos = {xx:this.king.position.x ,yy:this.king.position.y};
+				let checkPos = { xx: this.king.position.x, yy: this.king.position.y };
 				let possible = this.checkFigure.moveDestination('move', checkPos);
 				console.log(possible)
 				possible.forEach(([xx, yy]) => {
-					let dest = {xx,yy};
+					let dest = { xx, yy };
 					for (let i = 0; i < this.figures.length; i++) {
 						console.log('check')
+						console.log(dest);
 						console.log(this.figures[i])
-						let pos = this.figures[i].moveDestination('move',dest);
+						let pos = this.figures[i].moveDestination('move', dest);
 						console.log(pos)
 						if (pos) {
 							console.error('is can setted!')
@@ -237,6 +238,11 @@ export class Player {
 				isCheckMate = 0;
 			}
 		}
-		return isCheckMate;
+		if (value == 'get') {
+			return checkAmount;
+		}
+		else {
+			return isCheckMate;
+		}
 	}
 }

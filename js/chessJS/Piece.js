@@ -80,7 +80,7 @@ class Piece {
 			}
 		}
 		else {
-			console.log('is false')
+			console.log('is true')
 			isPossible = true;
 		}
 		return isPossible;
@@ -90,30 +90,55 @@ class Piece {
 		let chessBoard = this.chessboard;
 		let thisPos = this.position;
 		let thisPlayer = this.player;
+		let anotherPlayer;
+		for (let i = 0; i < 2; i++) {
+			if (this.chessboard.player[i].side != thisPlayer.side) {
+				anotherPlayer = this.chessboard.player[i];
+			}
+		}
+
+
+
 		function isCheck() {
+
+			////////////////////////////////////////////////////////////////////
+			let piece;
+			if (chessBoard.cellsArr[pos.yy][pos.xx].piece) {
+				piece = chessBoard.cellsArr[pos.yy][pos.xx].piece;
+			}
+			////////////////////////////////////////////////////////////////////
+			let checkAmount = thisPlayer.isCheckMate('get');
+			////////////////////////////////////////////////////////////////////
 			chessBoard.cellsArr[pos.yy][pos.xx].piece = chessBoard.cellsArr[thisPos.y][thisPos.x].piece;
-			console.log(chessBoard.cellsArr[thisPos.y][thisPos.x].piece);
 			chessBoard.cellsArr[thisPos.y][thisPos.x].piece = undefined;
-			console.log(chessBoard.cellsArr[thisPos.y][thisPos.x].piece);
-			let isCheck = thisPlayer.isCheckMate();
-			console.log(isCheck);
+			////////////////////////////////////////////////////////////////////
+			anotherPlayer.drawCheckMateArray();
+			let isCheck = thisPlayer.isCheckMate('get');
+			////////////////////////////////////////////////////////////////////
 			chessBoard.cellsArr[thisPos.y][thisPos.x].piece = chessBoard.cellsArr[pos.yy][pos.xx].piece;
-			console.log(chessBoard.cellsArr[thisPos.y][thisPos.x].piece);
-			if (isCheck == 0) {
+			if (piece) { chessBoard.cellsArr[pos.yy][pos.xx].piece = piece }
+			else { chessBoard.cellsArr[pos.yy][pos.xx].piece = undefined }
+			////////////////////////////////////////////////////////////////////
+			anotherPlayer.drawCheckMateArray();
+			thisPlayer.isCheckMate();
+			if (isCheck <= checkAmount) {
+				console.log('is true');
 				return true;
 			}
-			else{
+			else {
+				console.log('is false');
 				return false;
 			}
 		}
+
+
+
 		if (this.player.checkFigure != false) {
-			console.log('issis')
 			if (!square.piece) {
-				if (this.canMove(pos)) {
-					//For other figures
-					if (isCheck()) {
-						console.log(isCheck());
-						if (option) {
+				if (isCheck()) {
+					if (this.canMove(pos)) {
+						//For other figures
+						if (!option) {
 							square.drawDestination('set');
 						}
 						//For pawns
@@ -126,8 +151,8 @@ class Piece {
 			}
 			else if (square.piece) {
 				if (square.piece.side != this.side) {
-					if (this.canMove(pos)) {
-						if (isCheck()) {
+					if (isCheck()) {
+						if (this.canMove(pos)) {
 							//For other figures
 							if (!option) {
 								square.drawDestination('eat');
@@ -267,12 +292,8 @@ class Knight extends Piece {
 				let square = this.chessboard.cellsArr[pos.yy][pos.xx];
 				if (destin && value == 'move') {
 					if (!square.piece) {
-						arr.push([pos.xx, pos.yy]);
 					}
 					else if (square.piece) {
-						console.log(square.html);
-						console.log(pos)
-						console.log(destin)
 						if (pos.xx == destin.xx && pos.yy == destin.yy) {
 							console.log('arr is return')
 							isReturn = true;
@@ -287,7 +308,7 @@ class Knight extends Piece {
 				}
 			}
 		});
-
+		console.log(isReturn);
 		if (isReturn) {
 			return arr;
 		}
@@ -330,7 +351,7 @@ class Bishop extends Piece {
 							arr.push([pos.xx, pos.yy]);
 						}
 						else if (square.piece && square.piece.name != 'king') {
-							if (pos.xx == destin.x && pos.yy == destin.y) {
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
 							else {
@@ -411,7 +432,7 @@ class Rook extends Piece {
 							arr.push([pos.xx, pos.yy]);
 						}
 						else if (square.piece && square.piece.name != 'king') {
-							if (pos.xx == destin.x && pos.yy == destin.y) {
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
 							else {
@@ -507,7 +528,7 @@ class Queen extends Piece {
 							arr.push([pos.xx, pos.yy]);
 						}
 						else if (square.piece && square.piece.name != 'king') {
-							if (pos.xx == destin.x && pos.yy == destin.y) {
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
 							else {
@@ -536,7 +557,6 @@ class Queen extends Piece {
 					}
 					else if (value == 'move') {
 						let isBreak = this.setDestin(square);
-						console.log(isBreak)
 						if (isBreak) {
 							break;
 						}
