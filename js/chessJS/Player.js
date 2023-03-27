@@ -39,7 +39,6 @@ export class Player {
 	get checkFigure() {
 		return this._checkFigure;
 	}
-
 	pricePlayerPieces() {
 		let price = 0;
 		for (let i = 0; i < 8; i++) {
@@ -71,28 +70,22 @@ export class Player {
 				if (namePos) {
 					if (namePos[0] == this.side[0]) {
 						if (namePos[1] == 'p') {
-							let pawn = new Pawn(this.side, pos, this.chessboard, this);
-							this._figures.push(pawn);
+							let pawn = new Pawn(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 						}
 						else if (namePos[1] == 'n') {
-							let knight = new Knight(this.side, pos, this.chessboard, this);
-							this._figures.push(knight);
+							let knight = new Knight(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 						}
 						else if (namePos[1] == 'b') {
-							let bishop = new Bishop(this.side, pos, this.chessboard, this);
-							this._figures.push(bishop);
+							let bishop = new Bishop(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 						}
 						else if (namePos[1] == 'r') {
-							let rook = new Rook(this.side, pos, this.chessboard, this);
-							this._figures.push(rook);
+							let rook = new Rook(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 						}
 						else if (namePos[1] == 'q') {
-							let queen = new Queen(this.side, pos, this.chessboard, this);
-							this._figures.push(queen);
+							let queen = new Queen(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 						}
 						else if (namePos[1] == 'k') {
-							let king = new King(this.side, pos, this.chessboard, this);
-							this._figures.push(king);
+							let king = new King(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 							this.king = king;
 						}
 					}
@@ -106,16 +99,13 @@ export class Player {
 				this.checkMateArr[i][j] = 0;
 			}
 		}
-		this.figures.forEach(element => {
-			element.drawCheckMateArray();
-			for (let i = 0; i < 8; i++) {
-				for (let j = 0; j < 8; j++) {
-					if (element.checkMateArray[i][j] == 1) {
-						this.checkMateArr[i][j] = element.checkMateArray[i][j];
-					}
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				if(this.chessboard.cellsArr[j][i].piece && this.chessboard.cellsArr[j][i].piece.square == this.chessboard.cellsArr[j][i]){
+					this.chessboard.cellsArr[j][i].piece.drawCheckMateArray();
 				}
 			}
-		});
+		}
 	}
 	isCheckMate(value) {
 		let anotherPlayer;
@@ -134,16 +124,11 @@ export class Player {
 			for (let i = 0; i < anotherPlayer.figures.length; i++) {
 				if (anotherPlayer.figures[i].checkMateArray[this.king.position.x][this.king.position.y] == 1) {
 					figure = anotherPlayer.figures[i];
-					console.log('figure is getted:')
-					console.log(figure)
 					checkAmount++;
 				}
 			}
-			console.log('checkAmount: ' + checkAmount)
 			if (checkAmount == 1) {
 				this.checkFigure = figure;
-				console.log('checkFigure is getted')
-				console.log(this.checkFigure)
 			}
 			else if (checkAmount > 1) {
 				this.checkFigure = false;
@@ -165,9 +150,6 @@ export class Player {
 					if (!this.chessboard.cellsArr[pos.y][pos.x].piece) {
 						for (let i = 0; i < anotherPlayer.figures.length; i++) {
 							if (anotherPlayer.figures[i].checkMateArray[pos.x][pos.y] == 1) {
-								console.log(this.chessboard.cellsArr[pos.y][pos.x].html)
-								console.log(anotherPlayer.figures[i])
-								console.log('its not possible')
 								isCheck = 2;
 								break;
 							}
@@ -175,50 +157,36 @@ export class Player {
 					}
 					else if (this.chessboard.cellsArr[pos.y][pos.x].piece) {
 						if (this.chessboard.cellsArr[pos.y][pos.x].piece.side == this.side) {
-							console.log(this.chessboard.cellsArr[pos.y][pos.x].html)
-							console.log('its not possible')
 							isCheck = 2;
 						}
 						else if (this.chessboard.cellsArr[pos.y][pos.x].piece.side != this.side) {
 							for (let i = 0; i < anotherPlayer.figures.length; i++) {
 								if (anotherPlayer.figures[i].checkMateArray[pos.x][pos.y] == 1) {
-									console.log(this.chessboard.cellsArr[pos.y][pos.x].html)
-									console.log('its not possible')
 									isCheck = 2;
 									break;
 								}
 							}
 						}
 					}
-					else {
-						console.log(this.chessboard.cellsArr[pos.y][pos.x].html)
-						console.log('possible')
-					}
-					console.log('isCheck: ' + isCheck)
 					if (isCheck == 1) {
 						checkMate = 1;
 					}
 				}
 			});
 
-
 			//Check, if piece can cover a king
 			if (checkMate == 2 && checkAmount == 1) {
 				let checkPos = { xx: this.king.position.x, yy: this.king.position.y };
 				let possible = this.checkFigure.moveDestination('move', checkPos);
-				console.log(possible)
 				possible.forEach(([xx, yy]) => {
 					let dest = { xx, yy };
 					for (let i = 0; i < this.figures.length; i++) {
-						console.log('check')
-						console.log(dest);
-						console.log(this.figures[i])
-						let pos = this.figures[i].moveDestination('move', dest);
-						console.log(pos)
-						if (pos) {
-							console.error('is can setted!')
-							checkMate = 1;
-							break;
+						if (this.figures[i].name != 'king') {
+							let pos = this.figures[i].moveDestination('move', dest);
+							if (pos) {
+								checkMate = 1;
+								break;
+							}
 						}
 					}
 				});

@@ -49,7 +49,6 @@ export class Cell {
 			else if (value == 'set') {
 				moveDestination.className = 'move-destination';
 			}
-			console.error('is draw')
 			this.html.appendChild(moveDestination);
 		}
 		else if (value == 'check') {

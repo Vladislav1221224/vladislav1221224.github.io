@@ -68,6 +68,7 @@
 	background-color: rgb(192, 221, 255);
 }
 .piece{
+	pointer-events: none;
 	position: relative;
 	width: 100%;
 	height:	100%;
@@ -161,4 +162,23 @@
 	-webkit-transition: all 0.1s;
 	-o-transition: all 0.1s;
 	transition: all 0.1s;
+}
+#pawn-promotion-layout{
+	display:block;
+	position: absolute;
+	background-color: silver;
+}
+.nav-component-pawn-promotion{
+	position:relative;
+	width: 100%;
+	height: 25%;
+	background-color: silver;
+	border-width: 0px;
+	cursor: pointer;
+}
+.nav-component-pawn-promotion:hover {
+	background-color: rgb(162, 162, 162);
+}
+.nav-component-pawn-promotion img {
+	width:100%;
 }

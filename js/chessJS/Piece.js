@@ -1,10 +1,11 @@
 class Piece {
-	constructor(name, side, pos, thisChessBoard, player) {
+	constructor(name, side, pos, thisChessBoard, player, square) {
 		this.name = name;
 		this.side = side;
 		this.position = pos;
 		this._chessboard = thisChessBoard;
 		this.player = player;
+		this.square = square;
 		this._checkMateArray = [[], [], [], [], [], [], [], []];
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
@@ -53,6 +54,12 @@ class Piece {
 	get player() {
 		return this._player;
 	}
+	set square(value) {
+		this._square = value;
+	}
+	get square() {
+		return this._square;
+	}
 	drawCheckMateArray() {
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
@@ -70,17 +77,14 @@ class Piece {
 				let xx = position[0];
 				let yy = position[1];
 				if (xx == pos.xx && yy == pos.yy) {
-					console.log('is true')
 					isPossible = true;
 				}
 			});
 			if (!isPossible) {
-				console.log('is false')
 				isPossible = false;
 			}
 		}
 		else {
-			console.log('is true')
 			isPossible = true;
 		}
 		return isPossible;
@@ -100,7 +104,6 @@ class Piece {
 
 
 		function isCheck() {
-
 			////////////////////////////////////////////////////////////////////
 			let piece;
 			if (chessBoard.cellsArr[pos.yy][pos.xx].piece) {
@@ -122,15 +125,12 @@ class Piece {
 			anotherPlayer.drawCheckMateArray();
 			thisPlayer.isCheckMate();
 			if (isCheck <= checkAmount) {
-				console.log('is true');
 				return true;
 			}
 			else {
-				console.log('is false');
 				return false;
 			}
 		}
-
 
 
 		if (this.player.checkFigure != false) {
@@ -150,7 +150,10 @@ class Piece {
 				}
 			}
 			else if (square.piece) {
-				if (square.piece.side != this.side) {
+				if(square.piece.enPassant){
+					square.drawDestination('eat');
+				}
+				else if (square.piece.side != this.side) {
 					if (isCheck()) {
 						if (this.canMove(pos)) {
 							//For other figures
@@ -183,12 +186,18 @@ class Piece {
 		this.html = piece;
 		this.chessboard.cellsArr[this.position.y][this.position.x].piece = this;
 		this.chessboard.cellsArr[this.position.y][this.position.x].html.appendChild(piece);
+		this.player._figures.push(this);
 	}
 }
 class Pawn extends Piece {
-	constructor(side, pos, chessboard, player) {
-		super('pawn', side, pos, chessboard, player);
+	constructor(side, pos, chessboard, player, square) {
+		super('pawn', side, pos, chessboard, player, square);
+
+		//if EnPassant return 'true' u can beat this pawn with help enPassant rule
+		/*-->*/this.isEnPassant = false;/*<--*/
 	}
+
+
 	moveDestination(value, destin) {
 		if (destin) {
 			if (!destin.xx && !destin.yy) {
@@ -235,9 +244,6 @@ class Pawn extends Piece {
 			}
 			return y;
 		}
-		function isEnPassant() {
-
-		}
 		for (let i = 0; i < 3; i++) {
 			let max = isFirstMove();
 			if (i > 0) {
@@ -251,14 +257,16 @@ class Pawn extends Piece {
 					if (destin && value == 'move') {
 						if (!square.piece && i == 0) {
 							arr.push([pos.xx, pos.yy]);
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+								return arr;
+							}
 						}
 						else if (square.piece && i > 0) {
-							console.log(square.html);
-							console.log(pos)
-							console.log(destin)
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
-								console.log('arr is return')
 								return arr;
+							}
+							else {
+								break;
 							}
 						}
 					}
@@ -267,7 +275,10 @@ class Pawn extends Piece {
 					}
 					else if (value == 'move') {
 						if (i == 0) {
-							this.setDestin(square, 'set');
+							let isBreak = this.setDestin(square, 'set');
+							if (isBreak) {
+								break;
+							}
 						}
 						else if (i > 0) {
 							this.setDestin(square, 'eat');
@@ -279,8 +290,8 @@ class Pawn extends Piece {
 	}
 }
 class Knight extends Piece {
-	constructor(side, pos, chessboard, player) {
-		super('knight', side, pos, chessboard, player);
+	constructor(side, pos, chessboard, player, square) {
+		super('knight', side, pos, chessboard, player, square);
 	}
 	moveDestination(value, destin) {
 		let possible = [[this.position.x + 2, this.position.y + 1], [this.position.x + 2, this.position.y - 1], [this.position.x - 2, this.position.y + 1], [this.position.x - 2, this.position.y - 1], [this.position.x + 1, this.position.y + 2], [this.position.x + 1, this.position.y - 2], [this.position.x - 1, this.position.y + 2], [this.position.x - 1, this.position.y - 2]];
@@ -292,10 +303,12 @@ class Knight extends Piece {
 				let square = this.chessboard.cellsArr[pos.yy][pos.xx];
 				if (destin && value == 'move') {
 					if (!square.piece) {
+						if (pos.xx == destin.xx && pos.yy == destin.yy) {
+							isReturn = true;
+						}
 					}
 					else if (square.piece) {
 						if (pos.xx == destin.xx && pos.yy == destin.yy) {
-							console.log('arr is return')
 							isReturn = true;
 						}
 					}
@@ -308,15 +321,14 @@ class Knight extends Piece {
 				}
 			}
 		});
-		console.log(isReturn);
 		if (isReturn) {
 			return arr;
 		}
 	}
 }
 class Bishop extends Piece {
-	constructor(side, pos, chessboard, player) {
-		super('bishop', side, pos, chessboard, player);
+	constructor(side, pos, chessboard, player, square) {
+		super('bishop', side, pos, chessboard, player, square);
 	}
 	moveDestination(value, destin) {
 		let position = this.position;
@@ -349,8 +361,11 @@ class Bishop extends Piece {
 					if (destin && value == 'move') {
 						if (!square.piece) {
 							arr.push([pos.xx, pos.yy]);
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+								return arr;
+							}
 						}
-						else if (square.piece && square.piece.name != 'king') {
+						else if (square.piece) {
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
@@ -380,7 +395,6 @@ class Bishop extends Piece {
 					}
 					else if (value == 'move') {
 						let isBreak = this.setDestin(square);
-						console.log(isBreak)
 						if (isBreak) {
 							break;
 						}
@@ -394,9 +408,30 @@ class Bishop extends Piece {
 	}
 }
 class Rook extends Piece {
-	constructor(side, pos, chessboard, player) {
-		super('rook', side, pos, chessboard, player);
+	constructor(side, pos, chessboard, player, square) {
+		super('rook', side, pos, chessboard, player, square);
+		if (this.side == 'white') {
+			if (this.square.ID == 'a1' || this.square.ID == 'h1') {
+				this.isCastling = true;
+			}
+		}
+		else if (this.side == 'black') {
+			if (this.square.ID == 'a8' || this.square.ID == 'h8') {
+				this.isCastling = true;
+			}
+		}
+		else {
+			this.isCastling = false;
+		}
 	}
+
+	set isCastling(value) {
+		this._castling = value;
+	}
+	get isCastling() {
+		return this._castling;
+	}
+
 	moveDestination(value, destin) {
 		let position = this.position;
 		let side = this.side;
@@ -430,8 +465,11 @@ class Rook extends Piece {
 					if (destin && value == 'move') {
 						if (!square.piece) {
 							arr.push([pos.xx, pos.yy]);
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+								return arr;
+							}
 						}
-						else if (square.piece && square.piece.name != 'king') {
+						else if (square.piece) {
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
@@ -461,7 +499,6 @@ class Rook extends Piece {
 					}
 					else if (value == 'move') {
 						let isBreak = this.setDestin(square);
-						console.log(isBreak)
 						if (isBreak) {
 							break;
 						}
@@ -475,8 +512,8 @@ class Rook extends Piece {
 	}
 }
 class Queen extends Piece {
-	constructor(side, pos, chessboard, player) {
-		super('queen', side, pos, chessboard, player);
+	constructor(side, pos, chessboard, player, square) {
+		super('queen', side, pos, chessboard, player, square);
 	}
 	moveDestination(value, destin) {
 		let position = this.position;
@@ -526,8 +563,11 @@ class Queen extends Piece {
 					if (destin && value == 'move') {
 						if (!square.piece) {
 							arr.push([pos.xx, pos.yy]);
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+								return arr;
+							}
 						}
-						else if (square.piece && square.piece.name != 'king') {
+						else if (square.piece) {
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
@@ -570,9 +610,74 @@ class Queen extends Piece {
 	}
 }
 class King extends Piece {
-	constructor(side, pos, chessboard, player) {
-		super('king', side, pos, chessboard, player);
+	constructor(side, pos, chessboard, player, square) {
+		super('king', side, pos, chessboard, player, square);
+		if (this.side == 'white') {
+			if (this.square.ID == 'e1') {
+				this.isCastling = true;
+			}
+		}
+		else if (this.side == 'black') {
+			if (this.square.ID == 'e8') {
+				this.isCastling = true;
+			}
+		}
+		else {
+			this.isCastling = false;
+		}
 	}
+	Castling() {
+		for (let i = 0; i < this.player.figures.length; i++) {
+			if (this.player.figures[i].name == 'rook' && this.player.figures[i].isCastling == true && (this.player.figures[i].square.ID == 'h' + this.square.ID[1] || this.player.figures[i].square.ID == 'a' + this.square.ID[1])) {
+				let pos = { xx: this.position.x, yy: this.position.y };
+				let isPossible = this.player.figures[i].moveDestination('move', pos);
+				if (isPossible) {
+					let isCastling = true;
+					{
+						let anotherPlayer;
+						for (let i = 0; i < 2; i++) {
+							if (this.chessboard.player[i].side != this.side) {
+								anotherPlayer = this.chessboard.player[i];
+							}
+						}
+
+						//If squares for castling are control enemy figures isCastling = false;
+						for (let i = 0; i < anotherPlayer.figures.length; i++) {
+							for (let j = isPossible.length - 1; j > isPossible.length - 3; j--) {
+								let pos = { x: isPossible[j][0], y: isPossible[j][1] };
+								if (anotherPlayer.figures[i].checkMateArray[pos.x][pos.y] != 0) {
+									isCastling = false;
+								}
+							}
+						}
+					}
+
+					//Draw castling destinations for king
+					if (isCastling) {
+						for (let i = 0; i < isPossible.length; i++) {
+							let pos = { x: isPossible[i][0], y: isPossible[i][1] };
+							console.log(pos);
+							let square = this.chessboard.getSquareFromArr(pos);
+							if (isPossible.length - 2 == i) {
+								square.drawDestination('set');
+							}
+							else if (0 == i) {
+								square.drawDestination('eat');
+							}
+							console.log(square);
+						}
+					}
+				}
+			}
+		}
+	}
+	set isCastling(value) {
+		this._castling = value;
+	}
+	get isCastling() {
+		return this._castling;
+	}
+
 	possibleMove(pos) {
 		let isPossible = true;
 		let player;
@@ -600,23 +705,35 @@ class King extends Piece {
 		}
 		return isPossible;
 	}
-	moveDestination(value) {
+	moveDestination(value, destin) {
 		let position = this.position;
 		let possible = [[position.x + 1, position.y + 1], [position.x + 1, position.y - 1], [position.x - 1, position.y + 1], [position.x - 1, position.y - 1], [position.x, position.y + 1], [position.x, position.y - 1], [position.x - 1, position.y], [position.x + 1, position.y]];
+		let isReturn = false;
+		let arr = [[this.position.x, this.position.y]];
 		possible.forEach(([xx, yy]) => {
-			if (xx >= 0 && xx < 8 && yy >= 0 && yy < 8) {
-				let square = this.chessboard.cellsArr[yy][xx];
-				if (value == 'check') {
+			let pos = { xx, yy };
+			if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
+				let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+				if (destin && value == 'move') {
+					if (!square.piece) {
+						arr.push([pos.xx, pos.yy]);
+					}
+					else if (square.piece) {
+						if (pos.xx == destin.xx && pos.yy == destin.yy) {
+							console.log('it');
+							isReturn = true;
+						}
+					}
+				}
+				else if (value == 'check') {
 					if (!square.piece) {
 						square.drawDestination('check', this);
 					}
 					else if (square.piece) {
-						if (square.piece.side != this.side) {
-							square.drawDestination('check', this);
-						}
+						square.drawDestination('check', this);
 					}
 				}
-				else if (value == 'move' && this.possibleMove({ xx, yy })) {
+				else if (value == 'move' && this.possibleMove(pos)) {
 					if (!square.piece) {
 						square.drawDestination('set');
 					}
@@ -629,6 +746,14 @@ class King extends Piece {
 			}
 		});
 
+		if (this.isCastling == true && value == 'move' && this.player.isCheckMate() == 0 && !destin) {
+			console.log('castling is do')
+			this.Castling();
+		}
+		if (isReturn) {
+			console.log(arr);
+			return arr;
+		}
 	}
 }
 
