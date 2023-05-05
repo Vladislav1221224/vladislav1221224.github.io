@@ -66,10 +66,10 @@ export class Cell {
 		if (color == 'white' || color == 'black') { }
 		else { console.error('Error: color must be \'white\' or \'black\''); }
 
-		if (pos.y == 7) {
+		if ((this.chessboard.chessBoardSide == 'white' && pos.y == 7) || (this.chessboard.chessBoardSide == 'black' && pos.y == 0)) {
 			innerElements += `<div class="notation" id="letter">${this.ID[0]}</div>`;
 		}
-		if (pos.x == 0) {
+		if ((this.chessboard.chessBoardSide == 'white' && pos.x == 0) || (this.chessboard.chessBoardSide == 'black' && pos.x == 7)) {
 			innerElements += `<div class="notation" id="number">${this.ID[1]}</div>`;
 		}
 		this.html = `<div class="square ${color}-square" id="${this.ID}">${innerElements}</div>`;

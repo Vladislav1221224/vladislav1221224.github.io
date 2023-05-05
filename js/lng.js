@@ -1,4 +1,8 @@
 const langArr = {
+	"rating": {"ru": "Рейтинг",
+	"en": "Rating",
+	"ua": "Рейтинг",
+	},
 	"title-settings": {"ru": "Chess настройки",
 	"en": "Chess Settings",
 	"ua": "Chess налаштування",

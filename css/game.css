@@ -14,6 +14,12 @@
 	width: 5%;
 	height: 100%;
 }
+#footer-player-layout{
+	background-color: transparent;
+	float: left;
+	width: 100%;
+	height: 5%;
+}
 .flip-chess-board{
 	float:left;
 	background-color:transparent;
@@ -39,6 +45,19 @@
 .reset-chess-board:hover{
 	opacity: 50%;
 }
+.get-fen{
+	float: left;
+	font-weight: 900;
+	background-color:transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+.get-fen:hover{
+	opacity: 50%;
+}
 .chess-board{ 
 	float: left;
 	width: 50vw;
@@ -60,6 +79,16 @@
 	outline-width: 0px;
 	outline-offset: 0px;
 	z-index: 0;
+}
+.square:hover> .move-destination{
+	width: 60%;
+	height: 60%;
+}
+.square:hover> .circle{
+	width: 100%;
+	height: 100%;
+	outline-width: calc(1.7rem);
+	outline-offset: -2.3rem;
 }
 .black-square{
 	background-color: rgb(33, 56, 92);
@@ -133,8 +162,8 @@
 	transition: all 0.1s;
 }
 .move-destination{
-	width: 40%;
-	height: 40%;
+	width: 30%;
+	height: 30%;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -181,4 +210,102 @@
 }
 .nav-component-pawn-promotion img {
 	width:100%;
+}
+#set-previous-fen{
+	float: left;
+	font-weight: 900;
+	background-color:transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+#set-previous-fen:hover{
+	opacity: 50%;
+}
+#set-next-fen{
+	float: left;
+	font-weight: 900;
+	background-color:transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+#set-next-fen:hover{
+	opacity: 50%;
+}
+#moves-info-layout{
+	position:relative;
+	width: 100%;
+	height: 25%;
+	background-color: transparent;
+	border-width: 0px;
+	cursor: pointer;
+}
+#open-fen-window{
+	position: absolute;
+	left: 1%;
+	bottom: calc(1% + 88px);
+	background: rgba(0, 0, 0, 0);
+	cursor: pointer;
+	border-width:0;
+}
+#open-fen-window:hover b{
+	color: silver;
+}
+#close-fen-window{
+	position: relative;
+	float:right;
+	margin: auto;
+	width: auto;
+	height: auto;
+	background-color: rgb(44, 80, 128);
+	cursor: pointer;
+	border-radius: 50%;
+	border-width: 0;
+	z-index: 100;
+}
+#close-fen-window:hover>.close{
+	background-color: rgba(88, 129, 190, 0.5);
+}
+#fen-window-background{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+}
+.fen-layout{
+	display: block;
+	position: absolute;
+	margin: auto;
+	top: 50%;
+	left: 50%;
+	box-shadow:0 0.5rem 1.5rem rgba(0,0,0,.5);
+	background-color: rgb(44, 80, 128);
+	padding: 0.5%;
+	width: 30%;
+	height: 30%;
+	border-radius: 1rem;
+	transform: translate(-50%, -50%);
+}
+.fen-input{
+	color:silver;
+	background-color: rgba(0, 0, 0, 0.3);
+	outline: none;
+	margin:auto;
+	width:60%;
+	height:80%;
+	resize: none;
+}
+#button-setFEN{
+	cursor: pointer;
+}
+#fen-error-layout{
+	color: rgba(255, 68, 0, 0.482);
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
 }

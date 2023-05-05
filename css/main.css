@@ -7,6 +7,9 @@ body{
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
 }
 div{
 	display: block;
@@ -88,4 +91,52 @@ img{
 	-moz-user-select: none;
 	-webkit-user-select: none;
 	-ms-user-select: none;
+}
+#change-lang-component{
+	float: right;
+	height: 40px;
+	margin: 0pt 6pt;
+	font-size: 10pt;
+	background-color: rgb(37, 88, 146);
+	border-width: 0px;
+}
+.change-language{
+	cursor: pointer;
+}
+option{
+	cursor: pointer;
+}
+input{
+	cursor: pointer;
+	background-color: rgb(37, 88, 146);
+	border-width: 0px;
+}
+form{
+	background-color: rgb(37, 88, 146);
+}
+.button{
+	border-width: 3px;
+	border-width: 3px;
+	border-radius: 3px;
+	border-style: solid;
+	background-color: rgb(37, 88, 146);
+	border-color: rgb(10, 45, 73);
+	border-top-color: rgb(84, 126, 181);
+	border-left-color: rgb(44, 80, 128);
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+}
+.button:hover{
+	background-color: rgb(106, 152, 211);
+}
+.button:active{
+	border-color: rgb(24, 43, 71);
+	background-color: rgb(24, 43, 71);
+}
+.close {
+	width: 1em;
+	height: 1em;
+	background-color: rgba(24, 43, 71, 0.5);
+  clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
 }

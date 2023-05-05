@@ -4,7 +4,6 @@ export class Player {
 	constructor(side, chessboard) {
 		this.side = side;
 		this._chessboard = chessboard;
-		this.chessboard._player.push(this);
 		this._figures = [];
 		this.drawPiece();
 		this.checkMateArr = [[], [], [], [], [], [], [], []];
@@ -71,22 +70,28 @@ export class Player {
 					if (namePos[0] == this.side[0]) {
 						if (namePos[1] == 'p') {
 							let pawn = new Pawn(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
+							this._figures.push(pawn);
 						}
 						else if (namePos[1] == 'n') {
 							let knight = new Knight(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
+							this._figures.push(knight);
 						}
 						else if (namePos[1] == 'b') {
 							let bishop = new Bishop(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
+							this._figures.push(bishop);
 						}
 						else if (namePos[1] == 'r') {
 							let rook = new Rook(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
+							this._figures.push(rook);
 						}
 						else if (namePos[1] == 'q') {
 							let queen = new Queen(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
+							this._figures.push(queen);
 						}
 						else if (namePos[1] == 'k') {
 							let king = new King(this.side, pos, this.chessboard, this, this.chessboard.cellsArr[pos.y][pos.x]);
 							this.king = king;
+							this._figures.push(king);
 						}
 					}
 				}
@@ -101,7 +106,7 @@ export class Player {
 		}
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				if(this.chessboard.cellsArr[j][i].piece && this.chessboard.cellsArr[j][i].piece.square == this.chessboard.cellsArr[j][i]){
+				if (this.chessboard.cellsArr[j][i].piece && this.chessboard.cellsArr[j][i].piece.square == this.chessboard.cellsArr[j][i]) {
 					this.chessboard.cellsArr[j][i].piece.drawCheckMateArray();
 				}
 			}
@@ -134,7 +139,6 @@ export class Player {
 				this.checkFigure = false;
 			}
 		}
-
 		if (checkAmount > 0) {
 
 			let checkMate = 2;
@@ -177,6 +181,7 @@ export class Player {
 			//Check, if piece can cover a king
 			if (checkMate == 2 && checkAmount == 1) {
 				let checkPos = { xx: this.king.position.x, yy: this.king.position.y };
+				console.log(this.checkFigure.moveDestination('move', checkPos))
 				let possible = this.checkFigure.moveDestination('move', checkPos);
 				possible.forEach(([xx, yy]) => {
 					let dest = { xx, yy };
@@ -213,4 +218,15 @@ export class Player {
 			return isCheckMate;
 		}
 	}
+	destroy() {
+		this.chessboard.clearSelectSquare();
+		let length = this.figures.length;
+		for (let j = 0; j < length; j++) {
+			this.figures[this.figures.length - 1].destroy();
+		}
+		for (let j = 0; j < this.chessboard.player.length; j++) {
+			if (this.chessboard.player[j].side == this.side) {this.chessboard.player.splice(j,1)}
+		}
+		delete this;
+	}	
 }

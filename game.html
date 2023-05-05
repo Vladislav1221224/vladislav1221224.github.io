@@ -15,12 +15,22 @@
 			<ul>
 				<li><a href="index.html" class="nav-component"><img width="18px" align="center" src="images/Home.png" alt="NoImage"><h7 class="lng-home">Home</h7></a></li>
 				<li><a href="game.html" class="nav-component"><h7 class="lng-play">Play</h7></a></li>
-				<li><a href="settings.html" class="nav-component"><img width="18px" align="center" src="images\settings.png" alt="NoImage"><h7 class="lng-settings">Settings</h7></a></li>
+				<li id="change-lang-component"><h class="lng-language">Language</h>
+					<select class="change-language">
+						<option value="ua">ua</option>
+						<option value="ru">ru</option>
+						<option value="en" selected>en</option>
+					</select>
+				</li>
 			</ul>
 		</div>
+
+
 		<div id="right-block" class="block">
 			<div id="players-info-layout">
+				<b class="lng-rating">Рейтинг</b>: <b id="rating">Ти бот</b>
 			</div>
+			<button id="open-fen-window"><b>FEN</b></button>
 		</div>
 		<div id="game-block">
 			<div id="layout-chess-board">
@@ -29,7 +39,15 @@
 					<ul>
 						<li><button class="flip-chess-board"><img width="18px" src="images\flip.png" alt="no image"></button></li>
 						<li><button class="reset-chess-board">reset</button></li>
+						<li><button class="get-fen">FEN</button></li>
 					</ul>
+				</div>
+				<div id="footer-player-layout">
+					<ul id="footer-game-layout">
+						<li><button class="nav-component" id="set-previous-fen"><</button></li>
+						<li><button class="nav-component" id="set-next-fen">></button></li>
+					</ul>
+					<div class="nav-component" id="moves-info-layout"></div>
 				</div>
 			</div>
 		</div>
