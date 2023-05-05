@@ -1,8 +1,4 @@
-<<<<<<<< Updated upstream:js/chessJS/game-script.mjs
-import ChessBoard from "./chessJS/ChessBoard.mjs";
-========
 import ChessBoard from "./chessJS/ChessBoard.js";
->>>>>>>> Stashed changes:js/game-script.js
 
 let chessboard = new ChessBoard('white');
 
