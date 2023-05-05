@@ -1,4 +1,4 @@
-import { Pawn, King, Knight, Bishop, Rook, Queen } from "./Piece.js";
+import { Pawn, King, Knight, Bishop, Rook, Queen } from "./Piece.mjs";
 
 export class Player {
 	constructor(side, chessboard) {
