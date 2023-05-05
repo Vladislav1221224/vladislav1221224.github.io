@@ -1,4 +1,4 @@
-import ChessBoard from "./ChessBoard.js";
+import ChessBoard from "./chessBoard.js";
 
 let chessboard = new ChessBoard('white');
 
