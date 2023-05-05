@@ -1,6 +1,6 @@
 import { Pawn, King, Knight, Bishop, Rook, Queen } from "./Piece.mjs";
 
-export class Player {
+export default class Player {
 	constructor(side, chessboard) {
 		this.side = side;
 		this._chessboard = chessboard;
