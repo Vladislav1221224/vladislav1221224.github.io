@@ -253,7 +253,7 @@
 	cursor: pointer;
 	border-width:0;
 }
-#open-fen-window:hover b{
+#open-fen-window:hover> b{
 	color: silver;
 }
 #close-fen-window{
