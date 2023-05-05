@@ -1,5 +1,5 @@
 
-export class Cell {
+export default class Cell {
 	constructor(pos, color, chessboard) {
 		this.position = {x:null,y:null};
 		if (typeof pos.x == 'number' && typeof pos.y == 'number') {
