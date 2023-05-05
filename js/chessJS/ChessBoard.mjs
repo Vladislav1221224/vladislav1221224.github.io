@@ -1,6 +1,6 @@
-import { Cell } from "./cells.js";
-import { Player } from "./Player.js";
-import { Pawn, King, Knight, Bishop, Rook, Queen, Piece } from "./Piece.js";
+import { Cell } from "./cells.mjs";
+import { Player } from "./Player.mjs";
+import { Pawn, King, Knight, Bishop, Rook, Queen, Piece } from "./Piece.mjs";
 		//Constant that holds the names of the sides
 /*--->*/const SIDENAME = ['white', 'black'];/*<---*/
 //Start position for chess
