@@ -1,4 +1,4 @@
-import Cell from "./Сell.mjs";
+import {Cell} from "./Сell.js";
 import Player from "./Player.mjs";
 import { Pawn, King, Knight, Bishop, Rook, Queen, Piece } from "./Piece.mjs";
 		//Constant that holds the names of the sides
