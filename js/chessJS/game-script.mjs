@@ -1,4 +1,4 @@
-// import ChessBoard from "./ChessBoard.mjs";
+import ChessBoard from "./ChessBoard.mjs";
 
 let chessboard = new ChessBoard('white');
 
