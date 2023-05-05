@@ -23,7 +23,7 @@ let DefaultStartPositionFEN = "rkbqkbkr/pppppppp/8/8/8/8/PPPPPPPP/RKBQKBKR w KQk
 
 
 
-class ChessBoard {
+export default class ChessBoard {
 	constructor(value) {
 		this._cellsArr = [[], [], [], [], [], [], [], []];
 
@@ -1440,4 +1440,3 @@ class ChessBoard {
 		delete this;
 	}
 }
-export default ChessBoard;
