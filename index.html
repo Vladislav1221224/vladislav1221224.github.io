@@ -25,7 +25,12 @@
 			<ul>
 				<li><a href="index.html" class="nav-component"><img width="18px" align="center" src="images/Home.png" alt="NoImage"><h7 class="lng-home">Home</h7></a></li>
 				<li><a href="game.html" class="nav-component"><h7 class="lng-play">Play</h7></a></li>
-				<li id="change-lang-component"><h class="lng-language">Language</h>
+				<li><button type="button" id="btn-navbar" class="button" data-toggle="collapse" data-target=".nav-collapse">  
+					<div class="icon-bar"></div>  
+					<div class="icon-bar"></div>  
+					<div class="icon-bar"></div>  
+			</button></li>
+				<li id="change-lang-component"><b class="lng-language">Language</b>
 					<select class="change-language">
 						<option value="ua">ua</option>
 						<option value="ru">ru</option>
@@ -34,8 +39,7 @@
 				</li>
 			</ul>
 		</div>
-		<div id="right-nav-block" class="block">
-				<b id="vertical-text">тут текст</b>
+		<div hidden id="right-nav-block" class="block">
 		</div>
 		<div id="main-block"class="block">
 				<a href="https://www.chess.com/home">Chess.com</a>

@@ -1,0 +1,133 @@
+.chess-board{
+	float: left;
+	max-width: 80vw;
+	width: 500px;
+	max-height: 80vw;
+	height: 500px;
+	border-radius: 3px;
+	border: 4px solid rgb(24, 43, 71);
+	border-top-color: rgb(84, 126, 181);
+	border-left-color: rgb(44, 80, 128);
+}
+.square{
+	position: relative;
+	float: left;
+	width: calc(100%/8);
+	height: calc(100%/8);
+	outline-style: solid;
+	outline-color: rgb(255, 255, 255);
+	outline-width: 0px;
+	outline-offset: 0px;
+	z-index: 0;
+}
+.square:hover> .move-destination{
+	width: 60%;
+	height: 60%;
+}
+.square:hover> .circle{
+	width: 100%;
+	height: 100%;
+	outline-width: calc(1.7rem);
+	outline-offset: -2.3rem;
+}
+.black-square{
+	background-color: rgb(33, 56, 92);
+}
+.white-square{
+	background-color: rgb(192, 221, 255);
+}
+.piece{
+	pointer-events: none;
+	position: relative;
+	width: 100%;
+	height:	100%;
+	z-index: 100;
+}
+.notation{
+	position: absolute;
+	font-size: 16px;
+	z-index: 1;
+}
+#number{
+	top: 2%;
+	left: 2%;
+}
+#letter{
+	bottom: 1%;
+	right: 5%;
+}
+.white-square .notation{
+	color: rgb(33, 56, 92);
+}
+.black-square .notation{
+	color: rgb(192, 221, 255);
+}
+.choose-square{
+	background-color: rgb(255, 255, 151);
+	outline-style: solid;
+	outline-color: rgb(255, 255, 255);
+	outline-width: 3px;
+	outline-offset: -3px;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+}
+.check{
+	background-color: rgb(255, 95, 95);
+	outline-style: solid;
+	outline-color: rgb(255, 128, 128);
+	outline-width: 3px;
+	outline-offset: -3px;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+}
+.move-destination{
+	width: 30%;
+	height: 30%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color:grey;
+	border-radius: 50%;
+	opacity: 50%;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+	z-index: 2;
+}
+.circle{
+	width: 80%;
+	height: 80%;
+	top: 50%;
+	left: 50%;
+	background-color: rgba(0, 0, 0, 0);
+	outline-style: solid;
+	outline-width: 5px;
+	outline-color: grey;
+	outline-offset: -5px;
+	border-radius: 100%;
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+}
+#pawn-promotion-layout{
+	display:block;
+	position: absolute;
+	background-color: silver;
+}
+.nav-component-pawn-promotion{
+	position:relative;
+	width: 100%;
+	height: 25%;
+	background-color: silver;
+	border-width: 0px;
+	cursor: pointer;
+}
+.nav-component-pawn-promotion:hover {
+	background-color: rgb(162, 162, 162);
+}
+.nav-component-pawn-promotion img {
+	width:100%;
+}
