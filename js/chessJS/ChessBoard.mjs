@@ -1,5 +1,5 @@
-import { Cell } from "./Сells.mjs";
-import { Player } from "./Player.mjs";
+import Cell from "./Cell.mjs";
+import Player from "./Player.mjs";
 import { Pawn, King, Knight, Bishop, Rook, Queen, Piece } from "./Piece.mjs";
 		//Constant that holds the names of the sides
 /*--->*/const SIDENAME = ['white', 'black'];/*<---*/
@@ -23,7 +23,7 @@ let DefaultStartPositionFEN = "rkbqkbkr/pppppppp/8/8/8/8/PPPPPPPP/RKBQKBKR w KQk
 
 
 
-class ChessBoard {
+export default class ChessBoard {
 	constructor(value) {
 		this._cellsArr = [[], [], [], [], [], [], [], []];
 
@@ -1440,4 +1440,3 @@ class ChessBoard {
 		delete this;
 	}
 }
-export default ChessBoard;

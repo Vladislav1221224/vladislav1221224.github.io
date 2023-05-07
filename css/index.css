@@ -1,7 +1,8 @@
 #main-block{
 	display: block;
 	float: left;
-	width: 50%;
+	max-width: 100vh;
+	min-height: 100%;
 	height: 50vw;
 	border-right: 4px;
 	border-bottom: 4px;
@@ -22,18 +23,25 @@
 	padding: 20px;
 }
 #right-nav-block{
+	z-index: 2;
+	display: none;
 	top: 0;
 	right: 0;
-	width:20%;
+	min-width: 400px;
+	width: 40%;
 	height: 100%;
+	max-width: 100vw;
 	position: fixed;
 	border-radius: 0pt;
 	text-align: center;
 	text-decoration: none;
+	@media(max-width: 600px){
+		min-width: 100vw;
+	}
 }
 #right-nav-component{
 	display: block;
-	margin-top: 1vw;
+	margin-top: 5px;
 	width: 100%;
 	text-align: center;
 	border: 0;
@@ -44,7 +52,7 @@
 	height:20%;
 }
 #top-nav-list, .footer-block{
-	width: 80%;
+	width: 100%;
 }
 #vertical-text{
 	writing-mode: vertical-rl;
