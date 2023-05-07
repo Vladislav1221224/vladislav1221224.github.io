@@ -162,8 +162,8 @@
 	transition: all 0.1s;
 }
 .move-destination{
-	width: 50%;
-	height: 50%;
+	width: 30%;
+	height: 30%;
 	position: absolute;
 	top: 50%;
 	left: 50%;
