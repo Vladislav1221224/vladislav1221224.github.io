@@ -4,6 +4,7 @@
 	margin: 0;
 	width:auto;
 	height:auto;
+	box-sizing: border-box;
 	@media(max-width: 560px){
 		margin: auto;
 		width: 100%;
