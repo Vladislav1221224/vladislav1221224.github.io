@@ -18,7 +18,7 @@ let DefaultStartPosition = [
 
 //Test position
 ////////////////////////////////////////////////////////
-let DefaultStartPositionFEN = "rkbqkbkr/pppppppp/8/8/8/8/PPPPPPPP/RKBQKBKR w KQkq - ";
+let DefaultStartPositionFEN = "rkbqkbkr/pppppppp/8/8/8/8/PPPPPPPP/RKBQKBKR w KQkq -";
 ////////////////////////////////////////////////////////
 
 
@@ -58,7 +58,8 @@ export default class ChessBoard {
 		this.setButtons();
 	}
 
-
+	//Variables
+	///////////////////////////////////////
 	//Keeps the figure, which was selected
 	///////////////////////////////////////
 	selectCell;
@@ -98,7 +99,10 @@ export default class ChessBoard {
 	///////////////////////////////////////
 	isSelect;
 	///////////////////////////////////////
+	///////////////////////////////////////
 
+	//Methods
+	///////////////////////////////////////
 	//ARRAY OF CHESSBOARD CELLS AND FIGURES
 	get cellsArr() {
 		return this._cellsArr;
@@ -140,9 +144,9 @@ export default class ChessBoard {
 		}
 	}
 
-//Return true if player don't have moves
-	isStalemate(player){
-		
+	//Return true if player don't have moves
+	isStalemate(player) {
+
 	}
 	//Change a flag "playerSide"
 	changePlayerSide() {
@@ -167,15 +171,6 @@ export default class ChessBoard {
 		}
 		else {
 			console.error('Error: SIDENAME is not defined!')
-		}
-	}
-
-	static viewChessBoardCells(arr) {
-		let myArr = [[], [], [], [], [], [], [], []];
-		for (let i = 0; i < 8; i++) {
-			for (let j = 0; j < 8; j++) {
-				myArr[i][j] = arr[i][j];
-			}
 		}
 	}
 
@@ -239,10 +234,10 @@ export default class ChessBoard {
 
 	//Draw a chess)) The main function!!!
 	drawChessBoard(prop) {
+
 		let side;
+
 		for (let i = 0; i < 2; i++) {
-			console.log('i = ' + i)
-			console.log(this.player[0]);
 			if (this.player[0]) {
 				this.player[0].destroy();
 			}
@@ -251,27 +246,27 @@ export default class ChessBoard {
 			for (let j = 0; j < 8; j++) {
 				if (this.cellsArr[i][j]) {
 					this.cellsArr[i][j].html.remove();
+					this.cellsArr[i][j] = undefined;
 				}
 			}
 		}
-		if (typeof prop == "string" && (prop == "white" || prop == "black") || this.isFEN(prop)) {
-			side = prop;
-		} else { console.error("prop error!!!"); return 0 }
-		this.html = document.querySelector('.chess-board');
-		if (this.isFEN(prop)) {
-			let probels = 0;
-			for (let i = 0; i < prop.length; i++) {
-				if (probels == 1) {
-					side = this.isSideFen(prop[i]);
-					break;
-				}
-				if (prop[i] == ' ') {
-					probels++;
-				}
-			}
+
+		let info;
+		if (typeof prop == "string" && (prop == "white" || prop == "black")) { side = prop; }
+		else if (this.isFEN(prop)) {
+			info = this.getInfoFen(prop);
+			side = info.side;
 		}
-		this.drawCells(side);
+		else { console.error("prop error!!!"); return 0 }
+
+		if (!this.html || !(this.html.classList.contains('chess-board'))) {
+			console.log(this.html);
+			this.html = document.createElement('div');
+			this.html.classList = "chess-board";
+		}
+		console.log(this.html);
 		this.chessBoardSide = side;
+		this.drawCells(side);
 		if (this.isFEN(prop)) {
 			this.setFEN(prop);
 		}
@@ -282,9 +277,8 @@ export default class ChessBoard {
 				}
 			}
 			this.isGame = true;
-			this.playerSide = SIDENAME[0];
+			this.playerSide = side;
 			this.drawPlayers();
-
 			for (let i = 0; i < 2; i++) {
 				console.log(this.player[i]);
 				this.player[i].drawCheckMateArray();
@@ -303,11 +297,9 @@ export default class ChessBoard {
 	}
 	//Draw a cells and initialize cells events and logic of dragging by help cells events
 	drawCells(chessBoardSide) {
-		let chessBoard = document.querySelector('.chess-board');
-		this.chessBoardSide = chessBoardSide;
-		let out = '';
+
 		//Set all events and functions for all squares
-		///////////////////////////////////////////////////////////////////////////
+
 		let color = 'white';
 		function changeColor() {
 			if (color == 'black') {
@@ -321,7 +313,7 @@ export default class ChessBoard {
 				for (let j = 0; j < 8; j++) {
 					let pos = { x: j, y: i };
 					let cell = new Cell(pos, color, this);
-					out += cell.html;
+					this.html.append(cell.html);
 					this.cellsArr[i][j] = cell;
 					changeColor();
 				}
@@ -332,19 +324,11 @@ export default class ChessBoard {
 				for (let j = 7; j >= 0; j--) {
 					let pos = { x: j, y: i };
 					let cell = new Cell(pos, color, this);
-					out += cell.html;
+					this.html.append(cell.html);
 					this.cellsArr[i][j] = cell;
 					changeColor();
 				}
 				changeColor();
-			}
-		}
-		chessBoard.innerHTML = out;
-		for (let i = 0; i < 8; i++) {
-			for (let j = 0; j < 8; j++) {
-				let pos = { x: j, y: i };
-				let square = document.getElementById(`${Cell.IDLETTER[pos.x]}${Cell.IDNUMBER[pos.y]}`);
-				this.cellsArr[pos.y][pos.x].html = square;
 			}
 		}
 
@@ -437,13 +421,12 @@ export default class ChessBoard {
 			}
 		})
 
-
+		//Mouse logic for each Cell
+		///////////////////////////////////////////////////////////////////////
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
-				let square = document.getElementById(`${Cell.IDLETTER[i]}${Cell.IDNUMBER[j]}`);
+				let square = this.cellsArr[j][i].html;
 
-				//Mouse logic for each Cell
-				///////////////////////////////////////////////////////////////////////
 				square.onmousedown = function (mouse) {
 					if (mouse.button == 0) {
 						//If User window has DOM element with id "pawn-promotion-layout" User must select a piece on this element or click on any element for cancel this move
@@ -523,10 +506,10 @@ export default class ChessBoard {
 						}
 					}
 				}
-				///////////////////////////////////////////////////////////////////////
 			}
 		}
-		//this.setAnimation();
+		///////////////////////////////////////////////////////////////////////
+		//////////////////////////////////
 	}
 	//Draw a players and figures
 	drawPlayers() {
@@ -617,11 +600,10 @@ export default class ChessBoard {
 				else if (this.selectCell && element.html.querySelector('.move-destination')) {
 					let square = element;
 					element = square.html;
-
-					if (square.piece && this.selectCell.piece.side == square.piece.side) {
-						if (this.selectCell.piece.name == 'king' && this.selectCell.piece.isCastling == true && square.piece.name == 'rook' && square.piece.isCastling == true) {
-							this.doCastling(element, this.selectCell.piece);
-						}
+					console.log(this.selectCell.piece.canCastling == true)
+					if (square.piece && this.selectCell.piece.name == 'king' && square.piece.name == 'rook' && this.selectCell.piece.side == square.piece.side && this.selectCell.piece.canCastling == true && square.piece.canCastling == true) {
+						console.log('CASTLING IS IN...')
+						this.doCastling(element, this.selectCell.piece);
 					}
 					//If square has enemy figure and move-destination
 					else if (square.piece && this.selectCell.side != square.piece.side) {
@@ -655,18 +637,24 @@ export default class ChessBoard {
 				}
 			}
 			//If square without any piece
-			else if (!element.piece && element.html.querySelector('.move-destination') || element.piece && (JSON.stringify(element.position) !== JSON.stringify(element.piece.position))) {
+			else if (!element.piece && element.html.querySelector('.move-destination') || (element.piece && (JSON.stringify(element.position) !== JSON.stringify(element.piece.position)))) {
 				let square = element;
 				element = square.html;
+
+				//Pawn promotion
 				if (this.selectCell.piece.name == 'pawn' && ((this.selectCell.piece.side == 'white' && square.ID[1] == 8) || (this.selectCell.piece.side == 'black' && square.ID[1] == 1))) {
 					this.pawnPromotion(square, this.selectCell.piece);
 				}
-				else if (this.selectCell.piece.name == 'king' && this.selectCell.piece.isCastling == true) {
+				//Castling
+				else if (this.selectCell.piece.name == 'king' && this.selectCell.piece.canCastling == true) {
+					console.log('CASTLING IS IN...')
 					let cell = chessboard.getSquareFromArr(element);
 					let pos = { xx: cell.position.x, yy: cell.position.y };
 					let arr = this.selectCell.piece.moveDestination('move', pos);
-					if (arr) {
-						this.castling(element, this.selectCell.piece);
+					console.log(arr);
+					if (!arr) {
+						console.log('is do castling')
+						this.doCastling(element, this.selectCell.piece);
 					}
 					else {
 						this.setPiece('change', element);
@@ -694,9 +682,13 @@ export default class ChessBoard {
 	setPiece(valueChangeSide, element, thisPiece) {
 		if (element) {
 			if (valueChangeSide && (valueChangeSide == 'change' || valueChangeSide == 'nochange')) {
-				this.lastPosFEN = this.getFEN();
 				let square = this.getSquareFromArr(element);
-
+				if (valueChangeSide == 'change') {
+					this.lastPosFEN = this.getFEN();
+					const soundMove = new Audio('sounds/move.mp3');
+					soundMove.play();
+					this.changePlayerSide();
+				}
 				//EatPiece logic
 				if (square.piece && ((JSON.stringify(square.position) === JSON.stringify(square.piece.position)) || (this.selectCell.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position))))) {
 					this.eatPiece(element);
@@ -707,12 +699,6 @@ export default class ChessBoard {
 
 				//Set a piece logic
 				if (!square.piece) {
-					if (valueChangeSide == 'change') {
-						const soundMove = new Audio('sounds/move.mp3');
-						soundMove.play();
-						this.changePlayerSide();
-					}
-
 					let piece;
 					if (!thisPiece) {
 						piece = this.selectCell.piece;
@@ -820,6 +806,8 @@ export default class ChessBoard {
 
 	//Do a Castling
 	doCastling(element, king) {
+		console.log(element)
+		let lastFEN = this.getFEN();
 		if (element.querySelector('.move-destination')) {
 			let square = this.getSquareFromArr(element);
 			if (king.side == 'white') {
@@ -863,6 +851,7 @@ export default class ChessBoard {
 		else {
 			console.error('Error: CastlingPiece не работает!!!')
 		}
+		this.lastPosFEN = lastFEN;
 	}
 
 	//Pawn promotion method
@@ -957,7 +946,7 @@ export default class ChessBoard {
 				}
 			}
 		}
-		else if ((element.x >= 0 && element.x < 8)&& (element.y >= 0 && element.y < 8)) {
+		else if ((element.x >= 0 && element.x < 8) && (element.y >= 0 && element.y < 8)) {
 			cell = this.cellsArr[element.y][element.x];
 		}
 		else if (this.isID(element)) {
@@ -1036,10 +1025,23 @@ export default class ChessBoard {
 
 	//Return true if this string is FEN
 	isFEN(fen) {
+		function error(num) {
+			for (let k = 0; k < fen.length; k++) {
+				let tmp = '';
+				if (k + 1 == num) {
+					tmp += '>>' + fen[num] + '<<';
+					k++;
+				}
+				tmp += fen[k];
+			}
+			return tmp;
+		}
 		if (fen != "white" && fen != "black") {
 			let flag = true;
 			let probels = 0;
 			let count = 0;
+			let side;
+			let row = 1;
 			for (let i = 0; i < fen.length; i++) {
 				if (fen[i] == ' ') {
 					probels++;
@@ -1054,87 +1056,134 @@ export default class ChessBoard {
 						continue;
 					}
 				}
-				else if (!parseInt(fen[i]) && !this.isPieceFen(fen[i]) && !fen[i] == '/') {
+				else if (probels == 0 && !parseInt(fen[i]) && !this.isPieceFen(fen[i]) && !fen[i] == '/') {
 					flag = false;
 					break;
 				}
+				//Checks whether the number of figures and empty cells per one row is correct
+				else if (probels == 0) {
+					if (this.isPieceFen(fen[i])) {
+						if ((row == 1 || row == 8) && fen[i].toLowerCase() == 'p') {
+							flag = false;
+							break;
+						}
+						count++;
+					}
+					else if (parseInt(fen[i])) {
+						count += parseInt(fen[i]);
+					}
+					if (count > 8) {
+						flag = false;
+						break;
+					}
+					else if (fen[i] == '/') {
+						row++;
+						count = 0;
+					}
+				}
+				//Checks of side after first probel is --> 'w' or 'b' <--
 				else if (probels == 1 && !this.isSideFen(fen[i])) {
 					flag = false;
 					break;
 				}
-				else if (probels == 2 && !this.isPieceFen(fen[i])) {
-					flag = false;
-					break;
+				//Checks of part with castling-info is correct
+				else if (probels == 2) {
+					let tmp = '';
+					while (fen[i] == ' ') {
+						if (fen[i] == 'K' || fen[i] == 'k' || fen[i] == 'Q' || fen[i] == 'q') {
+							for (let j = 0; j < tmp.length; j++) {
+								if (tmp[j] && fen[i] == tmp[j]) {
+									flag = false;
+									break;
+								}
+							}
+							tmp += fen[i];
+						}
+						else {
+							flag = false;
+							break;
+						}
+						i++;
+					}
+					if (!flag) { break }
 				}
+				//Checks if enPassant info is ID
 				else if (probels == 3 && !this.isID(fen[i] + fen[i + 1])) {
 					flag = false;
 					break;
 				}
+				//Checks the pawn standing after the enPassant square
 				else if (flag && probels == 3) {
 					let itFen = fen[i] + fen[i + 1];
 					if (itFen) {
-						let rows = 0;
-						let column = 0;
+						let rows = 8;
+						let column = 1;
 						let position = { x: null, y: null };
+
 						for (const key in Cell.IDLETTER) {
 							console.log("pos = " + itFen[0])
 							if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] === itFen[0].toLowerCase()) {
-								if (parseInt(itFen[1]) == 6) {
+								if (side == 'black' && parseInt(itFen[1]) == 6) {
 									position.y = parseInt(itFen[1]) - 1;
 								}
-								else if (parseInt(itFen[1]) == 3) {
+								else if (side == 'white' && parseInt(itFen[1]) == 3) {
 									position.y = parseInt(itFen[1]) + 1;
 								}
 								if (position.y != 4 && position.y != 5) {
+									console.error(error(j));
 									flag = false;
 									break;
 								}
 								position.x = parseInt(key);
 							}
 						}
-						console.log(position)
-						for (let j = 0; j < fen.length; j++) {
-							console.log(rows + "/" + position.y)
-							if (rows == position.y) {
-								column++;
-								if (column == position.x && this.isPieceFen(fen[j])) {
-									if (position.y == 5 && fen[j] != toLowerCase(fen[j])) {
+						if (flag) {
+							console.log(position);
+							let fenROW = '';
+							for (let j = 0; j < fen.length; j++) {
+								console.log(rows + "/" + position.y)
+								if (rows == position.y) {
+									fenROW += fen[j];
+									console.log(fenROW);
+									console.log(j);
+									console.log(fen[j]);
+									console.log(column + " ... " + position.x)
+									if (column == position.x) {
+										if (this.isPieceFen(fen[j])) {
+											if (position.y == 4 && fen[j] != fen[j].toLowerCase()) {
+												console.log(true)
+												break;
+											}
+											else if (position.y == 5 && fen[j] != fen[j].toUpperCase()) {
+												console.log(true)
+												break;
+											}
+										}
+										else {
+											console.log('is false');
+											flag = false;
+											break;
+										}
+									}
+									else if (parseInt(fen[j])) {
+										column += parseInt(fen[j]) - 2;
+									}
+									else if (fen[j] == '/') {
 										flag = false;
 										break;
 									}
-									else if (position.y == 4 && fen[j] != toUpperCase(fen[j])) {
-										flag = false;
-										break;
-									}
+									column++;
 								}
-								else if (parseInt(fen[j])) {
-									column += parseInt(fen[j]);
+								else if (fen[j] == '/') {
+									rows--;
 								}
-							}
-							else if (fen[j] == '/') {
-								rows++;
 							}
 						}
 					}
 					break;
 				}
-
-				if (probels == 0) {
-					if (this.isPieceFen(fen[i])) {
-						count++;
-					}
-					else if (parseInt(fen[i])) {
-						count += parseInt(fen[i]);
-					}
-					else if (fen[i] == '/') {
-						console.log("Count = " + count)
-						if (count != 8) {
-							flag = false;
-							console.log(i);
-							break;
-						}
-						count = 0;
-					}
+				if (probels == 1) {
+					side = this.isSideFen(fen[i]);
 				}
 			}
 
@@ -1144,14 +1193,13 @@ export default class ChessBoard {
 			return false;
 		}
 	}
+
 	//Return true if variable fen is ID of cell
 	isID(fen) {
 		if (fen && typeof fen == "string") {
 			let bool = false;
 			for (const key in Cell.IDLETTER) {
-				console.log(fen[0])
 				if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] === fen[0].toLowerCase()) {
-					console.log(`${fen} is IDlet of ${key}`);
 					bool = true;
 				}
 			}
@@ -1159,7 +1207,6 @@ export default class ChessBoard {
 				bool = false;
 				for (const key in Cell.IDNUMBER) {
 					if (Cell.IDNUMBER.hasOwnProperty(key) && Cell.IDNUMBER[key] === fen[1].toLowerCase()) {
-						console.log(`${fen} is IDnum of ${key}`);
 						bool = true;
 					}
 				}
@@ -1176,7 +1223,6 @@ export default class ChessBoard {
 		}
 		for (const key in SIDE) {
 			if (SIDE.hasOwnProperty(key) && key === fen.toLowerCase()) {
-				console.log(`${fen} is a side of ${key}`);
 				return SIDE[key];
 			}
 		}
@@ -1195,11 +1241,55 @@ export default class ChessBoard {
 		};
 		for (const key in PIECES) {
 			if (PIECES.hasOwnProperty(key) && PIECES[key] === fen.toLowerCase()) {
-				console.log(`${fen} is a value of ${key}`);
 				return fen;
 			}
 		}
 		return false;
+	}
+
+	//Get info --> FEN <--
+	getInfoFen(fen) {
+		if (this.isFEN(fen)) {
+			let info = {
+				position: '',
+				side: '',
+				castling: '',
+				enPassant: ''
+			}
+
+			while (fen[0] != ' ') {
+				info.position += fen[0];
+				fen = fen.substring(1);
+			}
+			if (fen[0] == ' ') {
+				console.log(fen);
+				fen = fen.substring(1);
+			}
+			while (fen[0] != ' ') {
+				console.log(fen);
+				info.side = this.isSideFen(fen[0]);
+				fen = fen.substring(1);
+			}
+			if (fen[0] == ' ') {
+				fen = fen.substring(1);
+			}
+			while (fen[0] != ' ') {
+				info.castling += fen[0];
+				fen = fen.substring(1);
+			}
+			if (fen[0] == ' ') {
+				fen = fen.substring(1);
+			}
+			while (fen[0] && fen[0] != ' ') {
+				info.enPassant += fen[0];
+				fen = fen.substring(1);
+			}
+			console.log(info);
+			return info;
+		} else {
+			console.error('Error: fen is not correct!')
+			return 0;
+		}
 	}
 
 	//Castling info for FEN
@@ -1248,14 +1338,14 @@ export default class ChessBoard {
 			['', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', ''],
 			['', '', '', '', '', '', '', '']];
-			console.log(FEN);
+
+			let infoFEN = this.getInfoFen(FEN);
+			console.log(infoFEN);
 			let k = 0;
 			for (let i = 0; i < 8; i++) {
 				for (let j = 0; j < 8; j++) {
-					let fen = FEN[k];
-					//console.log("fen=" + fen + " / pos=[" + i + "][" + j + "]")
-					console.error(k + ') = "' + fen + '"' + '[' + i + ']' + '[' + j + ']');
-					if (fen == '/') { console.log('is slash = ' + i); break }
+					let fen = infoFEN.position[k];
+					if (fen == '/') { break }
 					//If fen is number => j += fen - 1
 					else if (!isNaN(parseInt(fen))) {
 						j += parseInt(fen) - 1;
@@ -1276,13 +1366,6 @@ export default class ChessBoard {
 				}
 				k++;
 			}
-			for (let i = 0; i < FEN.length; i++) {
-				if (FEN[i - 1] === ' ') {
-					this.playerSide = this.isSideFen(FEN[i]);
-					console.log("GAME SIDE = " + this.playerSide)
-					break;
-				}
-			}
 			this.currentPositionPieces = currentPos;
 			let length = this.player.length;
 			for (let j = 0; j < length; j++) {
@@ -1291,6 +1374,7 @@ export default class ChessBoard {
 
 			this.drawPlayers();
 			this.isGame = true;
+			this.playerSide = infoFEN.side;
 			//Set EnPassant
 			{
 				k = 0;
@@ -1340,12 +1424,7 @@ export default class ChessBoard {
 			let fen = '';
 			let num = 0;
 			for (let j = 0; j < 8; j++) {
-				// if(this.cellsArr[i][j].piece){
-				// 	console.log(this.cellsArr[i][j].piece)
-				// 	console.log(this.cellsArr[i][j].position)
-				// 	console.log(this.cellsArr[i][j].piece.position)
-				// }
-				if (this.cellsArr[i][j].piece != undefined && (JSON.stringify(this.cellsArr[i][j].position) === JSON.stringify(this.cellsArr[i][j].piece.position))) {
+				if (this.cellsArr[i][j] && this.cellsArr[i][j].piece != undefined && (JSON.stringify(this.cellsArr[i][j].position) === JSON.stringify(this.cellsArr[i][j].piece.position))) {
 					if (num > 0) { fen += num; num = 0 }
 					let fenPiece = this.cellsArr[i][j].piece.name[0]
 					if (this.cellsArr[i][j].piece.name === 'knight') {
@@ -1439,4 +1518,5 @@ export default class ChessBoard {
 		}
 		delete this;
 	}
+	///////////////////////////////////////
 }

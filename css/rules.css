@@ -1,8 +1,12 @@
 #main-block{
-	width: 60%;
-	margin: 20px;
+	width: 90%;
+	margin: auto;
 	padding: 5px;
 	color: rgb(150, 197, 255);
+	@media (min-width: 900px) {
+		margin: 20px;
+		width: 60%;
+	}
 }
 #header-name{
 	text-shadow: 2px 2px 3px black;

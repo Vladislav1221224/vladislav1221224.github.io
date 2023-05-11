@@ -11,11 +11,15 @@ export default class Cell {
 		}
 		else { console.error('Error: pos must have elements {x,y}'); }
 	}
+	//ID list
 	static IDNUMBER = ['8', '7', '6', '5', '4', '3', '2', '1'];
 	static IDLETTER = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+
 	get chessboard() {
 		return this._chessboard;
 	}
+
 	set ID(value) {
 		this._ID = Cell.IDLETTER[value.x] + Cell.IDNUMBER[value.y];
 	}
@@ -27,9 +31,6 @@ export default class Cell {
 	}
 	get position() {
 		return this._position;
-	}
-	set html(value) {
-		this._html = value;
 	}
 	get html() {
 		return this._html;
@@ -62,8 +63,10 @@ export default class Cell {
 	drawCell(pos, color) {
 		this.position = pos;
 		this.ID = this.position;
+		let cell = document.createElement('div');
 		let innerElements = '';
-		if (color == 'white' || color == 'black') { }
+		if (color == 'white' || color == 'black') {			cell.className = `square ${color}-square`;
+		cell.id = this.ID; }
 		else { console.error('Error: color must be \'white\' or \'black\''); }
 
 		if ((this.chessboard.chessBoardSide == 'white' && pos.y == 7) || (this.chessboard.chessBoardSide == 'black' && pos.y == 0)) {
@@ -72,6 +75,7 @@ export default class Cell {
 		if ((this.chessboard.chessBoardSide == 'white' && pos.x == 0) || (this.chessboard.chessBoardSide == 'black' && pos.x == 7)) {
 			innerElements += `<div class="notation" id="number">${this.ID[1]}</div>`;
 		}
-		this.html = `<div class="square ${color}-square" id="${this.ID}">${innerElements}</div>`;
+		this._html = cell;
+		this._html.innerHTML = innerElements;
 	}
 }
