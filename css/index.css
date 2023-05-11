@@ -1,9 +1,9 @@
 #main-block{
 	display: block;
+	box-sizing: border-box;
 	float: left;
-	max-width: 100vh;
-	min-height: 100%;
-	height: 50vw;
+	width: 100%;
+	height: 60%;
 	border-right: 4px;
 	border-bottom: 4px;
 	border-color: darkgreen;
@@ -11,6 +11,9 @@
 	border-bottom-right-radius: 5pt;
 	text-decoration: none;
 	padding: 20px;
+	@media (min-width: 700px) {
+		width: 60%;
+	}
 }
 #main-block::first-letter {
 	font-size: 250%;

@@ -1,21 +1,28 @@
+html{
+	min-width: 350px;
+	min-height: 400px;
+	width: 100%;
+	height: 100%;
+}
 body{
 	position: relative;
+	min-width: inherit;
+	min-height: inherit;
+	min-width: 100%;
+	min-height: 100%;
 	background-color: rgb(37, 53, 64);
 	margin: 0;
 	padding: 0;
-	min-width: 350px;
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
-	min-height: 100%;
 	-webkit-transition: all 0.1s;
 	-o-transition: all 0.1s;
 	transition: all 0.1s;
 }
 div{
 	display: block;
-	flex: 1 0 auto;
 }
 .block{
 	background-color: rgb(37, 88, 146);
@@ -54,10 +61,10 @@ option{
 	border: 0px;
 }
 .base-layout{
-	min-width: 50%;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
+	min-width: inherit;
+	min-height: inherit;
+	width: inherit;
+	height: 100vh;
 	font-family: 'Oswald', sans-serif;
 }
 .nav-component{
@@ -75,8 +82,8 @@ option{
 }
 #top-nav-list, .footer-block {
 	z-index: 100;
-	flex: 0 0 auto; 
 	background-color: rgb(37, 88, 146);
+	min-width: inherit;
 	width: 100%;
 	padding: 0;
 	height:40px;
@@ -87,8 +94,10 @@ option{
 	border-color: rgb(24, 43, 71);
 }
 .footer-block{
-	position: relative;
-	flex: 0 0 auto;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	line-height: 36px;
 	margin-top: 30px;
 	border-bottom: 0;

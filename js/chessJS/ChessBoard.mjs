@@ -238,17 +238,15 @@ export default class ChessBoard {
 		let side;
 
 		for (let i = 0; i < 2; i++) {
-			console.log('i = ' + i)
-			console.log(this.player[0]);
 			if (this.player[0]) {
 				this.player[0].destroy();
 			}
 		}
-
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
 				if (this.cellsArr[i][j]) {
-					this.cellsArr[i][j].destroy();
+					this.cellsArr[i][j].html.remove();
+					this.cellsArr[i][j] = undefined;
 				}
 			}
 		}
@@ -261,9 +259,12 @@ export default class ChessBoard {
 		}
 		else { console.error("prop error!!!"); return 0 }
 
-		this.html = document.createElement('div');
-		this.html.classList = "chess-board";
-
+		if (!this.html || !(this.html.classList.contains('chess-board'))) {
+			console.log(this.html);
+			this.html = document.createElement('div');
+			this.html.classList = "chess-board";
+		}
+		console.log(this.html);
 		this.chessBoardSide = side;
 		this.drawCells(side);
 		if (this.isFEN(prop)) {
@@ -1024,10 +1025,10 @@ export default class ChessBoard {
 
 	//Return true if this string is FEN
 	isFEN(fen) {
-		function error(num){
+		function error(num) {
 			for (let k = 0; k < fen.length; k++) {
 				let tmp = '';
-				if(k + 1 == num){
+				if (k + 1 == num) {
 					tmp += '>>' + fen[num] + '<<';
 					k++;
 				}
@@ -1062,7 +1063,7 @@ export default class ChessBoard {
 				//Checks whether the number of figures and empty cells per one row is correct
 				else if (probels == 0) {
 					if (this.isPieceFen(fen[i])) {
-						if((row == 1 || row == 8) && fen[i].toLowerCase() == 'p'){
+						if ((row == 1 || row == 8) && fen[i].toLowerCase() == 'p') {
 							flag = false;
 							break;
 						}
