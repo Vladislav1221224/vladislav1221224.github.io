@@ -1,5 +1,7 @@
 .chess-board{
 	float: left;
+	min-width: 300px;
+	min-height: 300px;
 	max-width: 80vw;
 	width: 500px;
 	max-height: 80vw;
@@ -8,6 +10,7 @@
 	border: 4px solid rgb(24, 43, 71);
 	border-top-color: rgb(84, 126, 181);
 	border-left-color: rgb(44, 80, 128);
+	margin: 5px;
 }
 .square{
 	position: relative;

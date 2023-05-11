@@ -3,7 +3,7 @@ body{
 	background-color: rgb(37, 53, 64);
 	margin: 0;
 	padding: 0;
-	min-width: 100px;
+	min-width: 350px;
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
@@ -74,7 +74,7 @@ option{
 	background-color: rgb(80, 123, 172);
 }
 #top-nav-list, .footer-block {
-	z-index: 3;
+	z-index: 100;
 	flex: 0 0 auto; 
 	background-color: rgb(37, 88, 146);
 	width: 100%;

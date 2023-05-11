@@ -1,8 +1,9 @@
 import ChessBoard from "./chessJS/ChessBoard.mjs";
 
-let chessboard = new ChessBoard('white');
-
-//r3r1k1/ppp2pp1/3p2qp/4P3/2BP4/P4Q1b/2P2PP1/R4RK1 b - -
+let chessboard = new ChessBoard('r3kbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R b KQkq -');
+console.log(document.getElementById('layout-chess-board'));
+document.getElementById('layout-chess-board').prepend(chessboard.html);
+//r3kbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R b KQkq -
 
 let input;
 let buttonFen;

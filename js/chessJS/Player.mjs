@@ -14,30 +14,14 @@ export default class Player {
 	get chessboard() {
 		return this._chessboard;
 	}
-	set king(value) {
-		this._king = value;
-	}
-	get king() {
-		return this._king;
-	}
-	set side(value) {
-		this._side = value;
-	}
-	get side() {
-		return this._side;
-	}
-	set pricePlayer(value) {
-		this._pricePlayer = value;
-	}
-	get pricePlayer() {
-		return this._pricePlayer;
-	}
-	set checkFigure(value) {
-		this._checkFigure = value;
-	}
-	get checkFigure() {
-		return this._checkFigure;
-	}
+	king;
+
+	side;
+
+	pricePlayer;
+
+	checkFigure;
+	
 	pricePlayerPieces() {
 		let price = 0;
 		for (let i = 0; i < 8; i++) {
