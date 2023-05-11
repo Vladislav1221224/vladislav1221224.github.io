@@ -81,7 +81,7 @@ option{
 	background-color: rgb(80, 123, 172);
 }
 #top-nav-list, .footer-block {
-	z-index: 100;
+	z-index: 150;
 	background-color: rgb(37, 88, 146);
 	min-width: inherit;
 	width: 100%;
