@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta background="">
+	
+	<link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/images/favicons/favicon-16x16.png">
+	<link rel="manifest" href="/favicons/site.webmanifest">
+	<link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
+	<meta name="msapplication-TileColor" content="#da532c">
+	<meta name="theme-color" content="#ffffff">
+	
+		<title class="lng-title-home">Home</title>
+		<link rel="stylesheet" href="css\main.css">
+		<link rel="stylesheet" href="css\index.css">
+</head>
+<body>
+	<div class="base-layout">
+		<noscript>Включите javascript</noscript>
+		<div id="top-nav-list">
+			<ul>
+				<li><a href="index.html" class="nav-component"><img width="18px" align="center" src="images/Home.png" alt="NoImage"><h7 class="lng-home">Home</h7></a></li>
+				<li><a href="game.html" class="nav-component"><h7 class="lng-play">Play</h7></a></li>
+				<li><button type="button" id="btn-navbar" class="button" data-toggle="collapse" data-target=".nav-collapse">  
+					<div class="icon-bar"></div>  
+					<div class="icon-bar"></div>  
+					<div class="icon-bar"></div>  
+			</button></li>
+				<li id="change-lang-component"><b class="lng-language">Language</b>
+					<select class="change-language">
+						<option value="ua">ua</option>
+						<option value="ru">ru</option>
+						<option value="en" selected>en</option>
+					</select>
+				</li>
+			</ul>
+		</div>
+		<div hidden id="right-nav-block" class="block">
+		</div>
+		<div id="main-block"class="block">
+				<a href="https://www.chess.com/home">Chess.com</a>
+				<div id="players-info-layout">
+					<div id="short-players-info">
+						<div><b class="lng-rating">Rating</b>:<b id="rating">Ти бот</b></div>
+					</div>
+				</div>
+		</div>
+		<div id="game-info-block">
+			<a href="game.html" class="nav-component"><h7 class="lng-play">Play</h7></a>
+		</div>
+		<div class="footer-block" class="block">
+			|<a href="developinfo.html" class="lng-developers">Developers</a>|
+			<a href="help.html" class="lng-help">Help</a>|
+			<a href="rules.html" class="lng-rules">Rules</a>|
+			<!--<a href="">Community</a>|
+			<a href="">Instagram(ForView)</a>|-->
+		</div>
+	</div>
+</body>
+<script src="js\main-window.js"></script>
+<script src="js\lng.js"></script>
+<script src="js\set-language.js"></script>
+</html>
