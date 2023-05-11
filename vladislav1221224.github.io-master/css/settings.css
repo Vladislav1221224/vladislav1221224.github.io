@@ -1,0 +1,53 @@
+#main-block{
+	float: left;
+	width: 50%;
+	height: 100%;
+	border-right: 4px;
+	border-bottom: 4px;
+	border-color: darkgreen;
+	border-radius: 0pt;
+	border-bottom-right-radius: 5pt;
+	text-decoration: none;
+	padding: 20px;
+}
+#main-block::first-letter {
+	font-size: 250%;
+}
+#game-info-block{
+	float: left;
+	border-radius: 0pt;
+	border-bottom-left-radius: 5pt;
+	text-decoration: none;
+	padding: 20px;
+}
+#main-nav-block{
+	display: block;
+	float: left;
+	width: 60%;
+	height: 100%;
+	margin: 10px 5%;
+	border: 0px;
+	border-radius: 5px;
+	text-align: center;
+	text-decoration: none;
+}
+#settings-nav-block{
+	float:left;
+	width:40%;
+	height: 100%;
+	margin: 5px;
+	border: 0px;
+	border-radius: 5px;
+	text-decoration: none;
+}
+
+#settings-nav-component{
+	display: block;
+	width: 100%;
+	border: 0;
+	border-radius: 0;
+}
+.footer-block{
+	position: relative;
+	float: left;
+}
