@@ -2,7 +2,6 @@ body{
 	margin: 0;
 	padding: 0;
 	min-width: 300px;
-  max-width: 1200px;
 	min-height: 100%;
   margin: 0 auto;
 	background-color: rgb(37, 53, 64);
@@ -72,6 +71,7 @@ option{
 #top-nav-list, .footer-block {
 	z-index: 150;
 	background-color: rgb(37, 88, 146);
+	min-width: inherit;
 	width: 100%;
 	padding: 0;
 	height:40px;
@@ -85,7 +85,6 @@ option{
 	position: fixed;
 	bottom: 0;
 	left: 0;
-	right: 0;
 	width: 100%;
 	line-height: 36px;
 	margin-top: 30px;
