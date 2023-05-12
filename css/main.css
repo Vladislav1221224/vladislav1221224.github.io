@@ -1,18 +1,11 @@
-html{
-	min-width: 350px;
-	min-height: 400px;
-	width: 100%;
-	height: 100%;
-}
 body{
-	position: relative;
-	min-width: inherit;
-	min-height: inherit;
-	min-width: 100%;
-	min-height: 100%;
-	background-color: rgb(37, 53, 64);
 	margin: 0;
 	padding: 0;
+	min-width: 300px;
+  max-width: 1200px;
+	min-height: 100%;
+  margin: 0 auto;
+	background-color: rgb(37, 53, 64);
 	-moz-user-select: none;
 	-khtml-user-select: none;
 	-webkit-user-select: none;
@@ -61,10 +54,6 @@ option{
 	border: 0px;
 }
 .base-layout{
-	min-width: inherit;
-	min-height: inherit;
-	width: inherit;
-	height: 100vh;
 	font-family: 'Oswald', sans-serif;
 }
 .nav-component{
@@ -83,7 +72,6 @@ option{
 #top-nav-list, .footer-block {
 	z-index: 150;
 	background-color: rgb(37, 88, 146);
-	min-width: inherit;
 	width: 100%;
 	padding: 0;
 	height:40px;
@@ -94,10 +82,11 @@ option{
 	border-color: rgb(24, 43, 71);
 }
 .footer-block{
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	left: 0;
 	right: 0;
+	width: 100%;
 	line-height: 36px;
 	margin-top: 30px;
 	border-bottom: 0;
