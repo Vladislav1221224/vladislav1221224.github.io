@@ -1,9 +1,12 @@
 import ChessBoard from "./chessJS/ChessBoard.mjs";
 
 let chessboard = new ChessBoard('white');
-console.log(document.getElementById('layout-chess-board'));
+
 document.getElementById('layout-chess-board').prepend(chessboard.html);
-//r3kbnr/pppp1ppp/2n5/4p3/3P4/2N2N2/PPP1PPPP/R1BQKB1R b KQkq -
+
+
+
+
 
 let input;
 let buttonFen;
@@ -62,12 +65,13 @@ function setFenOfInput(fen) {
 }
 
 let ratingInfoHtml = document.querySelector('#rating');
-console.log(ratingInfoHtml);
+
+
+
 function setRatingInfo(value) {
 	if (value && typeof value == "number" && value >= 0 && value < 4000) {
 		ratingInfoHtml.innerHTML = value;
 	}
 }
-
 
 setRatingInfo(1000);

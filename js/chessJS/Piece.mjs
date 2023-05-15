@@ -37,144 +37,197 @@ class Piece {
 		}
 		this.moveDestination('check');
 	}
-	hasDestinations() {
 
-	}
 	//If player has check, this method verify can this(figure) move to any of squares for save a king
 	canMove(pos) {
-		let checkPos = { xx: this.player.king.position.x, yy: this.player.king.position.y };
-		let isPossible;
-		if (this.player.checkFigure) {
-			let possible = this.player.checkFigure.moveDestination('move', checkPos);
-			possible.forEach((position) => {
-				let xx = position[0];
-				let yy = position[1];
-				if (xx == pos.xx && yy == pos.yy) {
-					isPossible = true;
-				}
-			});
-			if (!isPossible) {
-				isPossible = false;
-			}
-		}
-		else {
-			isPossible = true;
-		}
-		return isPossible;
-	}
-
-	setDestin(square, option) {
-		let pos = { xx: square.position.x, yy: square.position.y };
-		let chessBoard = this.chessboard;
-		let thisPos = this.position;
-		let thisPlayer = this.player;
 		let anotherPlayer;
 		for (let i = 0; i < 2; i++) {
-			if (this.chessboard.player[i].side != thisPlayer.side) {
+			if (this.chessboard.player[i].side != this.side) {
 				anotherPlayer = this.chessboard.player[i];
 			}
 		}
 
+		////////////////////////////////////////////////////////////////////
+		let piece;
+		if (this.chessboard.cellsArr[pos.yy][pos.xx].piece) {
+			piece = this.chessboard.cellsArr[pos.yy][pos.xx].piece;
+		}
+		////////////////////////////////////////////////////////////////////
+		this.chessboard.cellsArr[pos.yy][pos.xx].piece = this.chessboard.cellsArr[this.position.y][this.position.x].piece;
+		this.chessboard.cellsArr[this.position.y][this.position.x].piece = undefined;
+		////////////////////////////////////////////////////////////////////
+		anotherPlayer.drawCheckMateArray();
+		let isCheck = this.player.isCheckMate();
+		////////////////////////////////////////////////////////////////////
+		this.chessboard.cellsArr[this.position.y][this.position.x].piece = this;
+		if (piece) { this.chessboard.cellsArr[pos.yy][pos.xx].piece = piece }
+		else { this.chessboard.cellsArr[pos.yy][pos.xx].piece = undefined }
+		////////////////////////////////////////////////////////////////////
+		anotherPlayer.drawCheckMateArray();
+		if (isCheck == 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+setDestin(square, option) {
+	let pos = { xx: square.position.x, yy: square.position.y };
+	let anotherPlayer;
+	for (let i = 0; i < 2; i++) {
+		if (this.chessboard.player[i].side != this.side) {
+			anotherPlayer = this.chessboard.player[i];
+		}
+	}
 
 
-		function isCheck() {
-			////////////////////////////////////////////////////////////////////
-			let piece;
-			if (chessBoard.cellsArr[pos.yy][pos.xx].piece) {
-				piece = chessBoard.cellsArr[pos.yy][pos.xx].piece;
-			}
-			////////////////////////////////////////////////////////////////////
-			let checkAmount = thisPlayer.isCheckMate('get');
-			////////////////////////////////////////////////////////////////////
-			chessBoard.cellsArr[pos.yy][pos.xx].piece = chessBoard.cellsArr[thisPos.y][thisPos.x].piece;
-			chessBoard.cellsArr[thisPos.y][thisPos.x].piece = undefined;
-			////////////////////////////////////////////////////////////////////
-			anotherPlayer.drawCheckMateArray();
-			let isCheck = thisPlayer.isCheckMate('get');
-			////////////////////////////////////////////////////////////////////
-			chessBoard.cellsArr[thisPos.y][thisPos.x].piece = chessBoard.cellsArr[pos.yy][pos.xx].piece;
-			if (piece) { chessBoard.cellsArr[pos.yy][pos.xx].piece = piece }
-			else { chessBoard.cellsArr[pos.yy][pos.xx].piece = undefined }
-			////////////////////////////////////////////////////////////////////
-			anotherPlayer.drawCheckMateArray();
-			thisPlayer.isCheckMate();
-			if (isCheck <= checkAmount) {
-				return true;
-			}
-			else {
+		if (!square.piece || (this.name != 'pawn' && square.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position)))) {
+			if (this.canMove(pos)) {
+				if (!option) {
+					square.drawDestination('set');
+				}
+				//For pawns
+				else if (option == 'set' || (option == 'set' && square.piece && square.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position)))) {
+					square.drawDestination('set');
+				}
 				return false;
 			}
 		}
-
-
-		if (this.player.checkFigure != false) {
-			if (!square.piece || (this.name != 'pawn' && square.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position)))) {
-				if (isCheck()) {
-					if (this.canMove(pos)) {
-						if (!option) {
-							square.drawDestination('set');
-						}
-						//For pawns
-						else if (option == 'set' || (option == 'set' && square.piece && square.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position)))) {
-							square.drawDestination('set');
-						}
-						return false;
+		else if (square.piece) {
+			if (this.name == 'pawn' && square.piece.enPassant) {
+				square.drawDestination('eat');
+			}
+			else if (square.piece.side != this.side) {
+				if (this.canMove(pos)) {
+					//For other figures
+					if (!option) {
+						square.drawDestination('eat');
+					}
+					//For pawns
+					else if (option == 'eat') {
+						square.drawDestination('eat');
 					}
 				}
 			}
-			else if (square.piece) {
-				if (this.name == 'pawn' && square.piece.enPassant) {
-					square.drawDestination('eat');
-				}
-				else if (square.piece.side != this.side) {
-					if (isCheck()) {
-						if (this.canMove(pos)) {
-							//For other figures
-							if (!option) {
-								square.drawDestination('eat');
-							}
-							//For pawns
-							else if (option == 'eat') {
-								square.drawDestination('eat');
-							}
-						}
-					}
-				}
-				return true;
-			}
+			return true;
+		}
+}
+
+hasDestination(square, option){
+	let pos = { xx: square.position.x, yy: square.position.y };
+	let chessBoard = this.chessboard;
+	let thisPos = this.position;
+	let thisPlayer = this.player;
+	let anotherPlayer;
+
+	for (let i = 0; i < 2; i++) {
+		if (this.chessboard.player[i].side != thisPlayer.side) {
+			anotherPlayer = this.chessboard.player[i];
 		}
 	}
-	addPiece() {
-		let side = this.side[0];
-		let name;
-		if (this.name == 'knight') {
-			name = 'n';
+
+
+
+	function isCheck() {
+		////////////////////////////////////////////////////////////////////
+		let piece;
+		if (chessBoard.cellsArr[pos.yy][pos.xx].piece) {
+			piece = chessBoard.cellsArr[pos.yy][pos.xx].piece;
+		}
+		////////////////////////////////////////////////////////////////////
+		let checkAmount = thisPlayer.isCheckMate('get');
+		////////////////////////////////////////////////////////////////////
+		chessBoard.cellsArr[pos.yy][pos.xx].piece = chessBoard.cellsArr[thisPos.y][thisPos.x].piece;
+		chessBoard.cellsArr[thisPos.y][thisPos.x].piece = undefined;
+		////////////////////////////////////////////////////////////////////
+		anotherPlayer.drawCheckMateArray();
+		let isCheck = thisPlayer.isCheckMate('get');
+		////////////////////////////////////////////////////////////////////
+		chessBoard.cellsArr[thisPos.y][thisPos.x].piece = chessBoard.cellsArr[pos.yy][pos.xx].piece;
+		if (piece) { chessBoard.cellsArr[pos.yy][pos.xx].piece = piece }
+		else { chessBoard.cellsArr[pos.yy][pos.xx].piece = undefined }
+		////////////////////////////////////////////////////////////////////
+		anotherPlayer.drawCheckMateArray();
+		thisPlayer.isCheckMate();
+		if (isCheck <= checkAmount) {
+			return true;
 		}
 		else {
-			name = this.name[0];
+			return false;
 		}
-		let piece = document.createElement('img');
-		piece.src = 'images/piecesPNG/' + side + name + '.png';
-		piece.className = 'piece';
-		this.html = piece;
-		this.chessboard.cellsArr[this.position.y][this.position.x].piece = this;
-		this.chessboard.cellsArr[this.position.y][this.position.x].html.appendChild(piece);
 	}
-	destroy() {
-		for (let j = 0; j < this.player.figures.length; j++) {
-			if (this.player.figures[j] == this) { this.player.figures.splice(j, 1) }
-		}
-		for (let i = 0; i < 8; i++) {
-			for (let j = 0; j < 8; j++) {
-				if (this.chessboard.cellsArr[i][j].piece && this.chessboard.cellsArr[i][j].piece == this) {
-					this.chessboard.cellsArr[i][j].piece = null;
+
+
+	if (this.player.checkFigure != false) {
+		if (!square.piece || (this.name != 'pawn' && square.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position)))) {
+			if (isCheck()) {
+				if (this.canMove(pos)) {
+					if (!option) {
+						return true;
+					}
+					//For pawns
+					else if (option == 'set' || (option == 'set' && square.piece && square.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position)))) {
+						return true;
+					}
+					return false;
 				}
 			}
 		}
-		//this.square.piece = undefined;
-		this.html.remove();
-		delete this;
+		else if (square.piece) {
+			if (this.name == 'pawn' && square.piece.enPassant) {
+				return true;
+			}
+			else if (square.piece.side != this.side) {
+				if (isCheck()) {
+					if (this.canMove(pos)) {
+						//For other figures
+						if (!option) {
+							return true;
+						}
+						//For pawns
+						else if (option == 'eat') {
+							return true;
+						}
+					}
+				}
+			}
+			return false;
+		}
 	}
+}
+
+addPiece() {
+	let side = this.side[0];
+	let name;
+	if (this.name == 'knight') {
+		name = 'n';
+	}
+	else {
+		name = this.name[0];
+	}
+	let piece = document.createElement('img');
+	piece.src = 'images/piecesPNG/' + side + name + '.png';
+	piece.className = 'piece';
+	this.html = piece;
+	this.chessboard.cellsArr[this.position.y][this.position.x].piece = this;
+	this.chessboard.cellsArr[this.position.y][this.position.x].html.appendChild(piece);
+}
+destroy() {
+	for (let j = 0; j < this.player.figures.length; j++) {
+		if (this.player.figures[j] == this) { this.player.figures.splice(j, 1) }
+	}
+	for (let i = 0; i < 8; i++) {
+		for (let j = 0; j < 8; j++) {
+			if (this.chessboard.cellsArr[i][j].piece && this.chessboard.cellsArr[i][j].piece == this) {
+				this.chessboard.cellsArr[i][j].piece = null;
+			}
+		}
+	}
+	//this.square.piece = undefined;
+	this.html.remove();
+	delete this;
+}
 }
 class Pawn extends Piece {
 	constructor(side, pos, chessboard, player, square) {
@@ -234,46 +287,6 @@ class Pawn extends Piece {
 			}
 			return y;
 		}
-		if (value && value == "hasDestinations") {
-			let hasDestin = false;
-			for (let i = 0; i < 3; i++) {
-				let max = isFirstMove();
-				if (i > 0) {
-					max = 1;
-				}
-				for (let j = 0; j < max; j++) {
-					let pos = destination(i, j);
-					if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-						if (value == 'move') {
-							if (i == 0) {
-								hasDestin = true;
-								if (isBreak) {
-									break;
-								}
-							}
-							else if (i > 0) {
-								hasDestin = true;
-							}
-						}
-					}
-				}
-				let pos = { xx, yy };
-				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (this.possibleMove(pos)) {
-						if (!square.piece) {
-							hasDestin = true;
-						}
-						else if (square.piece) {
-							if (square.piece.side != this.side) {
-								hasDestin = true;
-							}
-						}
-					}
-				}
-			}
-			return hasDestin;
-		}
 		for (let i = 0; i < 3; i++) {
 			let max = isFirstMove();
 			if (i > 0) {
@@ -284,7 +297,25 @@ class Pawn extends Piece {
 				let pos = destination(i, j);
 				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
 					let square = chessboard.cellsArr[pos.yy][pos.xx];
-					if (destin && value == 'move') {
+					if (value == "hasDestinations") {
+						if (i == 0) {
+							if (this.hasDestination(square, 'set')) {
+								return true;
+							}
+							else {
+								return false;
+							}
+						}
+						else if (i > 0) {
+							if (this.hasDestination(square, 'eat')) {
+								return true;
+							}
+							else {
+								return false;
+							}
+						}
+					}
+					else if (destin && value == 'move') {
 						if (!square.piece && i == 0) {
 							arr.push([pos.xx, pos.yy]);
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
@@ -327,31 +358,19 @@ class Knight extends Piece {
 		let possible = [[this.position.x + 2, this.position.y + 1], [this.position.x + 2, this.position.y - 1], [this.position.x - 2, this.position.y + 1], [this.position.x - 2, this.position.y - 1], [this.position.x + 1, this.position.y + 2], [this.position.x + 1, this.position.y - 2], [this.position.x - 1, this.position.y + 2], [this.position.x - 1, this.position.y - 2]];
 		let isReturn = false;
 		let arr = [[this.position.x, this.position.y]];
-		if (value && value == "hasDestinations") {
-			let hasDestin = false;
-			possible.forEach(([xx, yy]) => {
-				let pos = { xx, yy };
-				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (this.possibleMove(pos)) {
-						if (!square.piece) {
-							hasDestin = true;
-						}
-						else if (square.piece) {
-							if (square.piece.side != this.side) {
-								hasDestin = true;
-							}
-						}
-					}
-				}
-			});
-			return hasDestin;
-		}
-		else {
+		{
 			possible.forEach(([xx, yy]) => {
 				let pos = { xx, yy }
 				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
 					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+					if (value == "hasDestinations") {
+						if (this.hasDestination(square)) {
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
 					if (destin && value == 'move') {
 						if (!square.piece) {
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
@@ -410,7 +429,15 @@ class Bishop extends Piece {
 				let pos = destination(i, j);
 				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
 					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (destin && value == 'move') {
+					if (value == "hasDestinations") {
+						if (this.hasDestination(square)) {
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					else if (destin && value == 'move') {
 						if (!square.piece) {
 							arr.push([pos.xx, pos.yy]);
 							if (pos.xx == destin.xx && pos.yy == destin.yy) {
@@ -481,79 +508,88 @@ class Rook extends Piece {
 	canCastling;
 
 	moveDestination(value, destin) {
-		let position = this.position;
-		let side = this.side;
-		function destination(i, j) {
-			let xx, yy;
-			if (i == 0) {
-				xx = position.x + (j + 1);
-				yy = position.y;
-			}
-			else if (i == 1) {
-				xx = position.x - (j + 1);
-				yy = position.y;
-			}
-			else if (i == 2) {
-				xx = position.x;
-				yy = position.y + (j + 1);
-			}
-			else if (i == 3) {
-				xx = position.x;
-				yy = position.y - (j + 1);
-			}
-			return { xx, yy };
+		if (value == 'move' || value == 'check' || value == 'hasDestinations') {
+			let position = this.position;
+			function destination(i, j) {
+				let xx, yy;
+				if (i == 0) {
+					xx = position.x + (j + 1);
+					yy = position.y;
+				}
+				else if (i == 1) {
+					xx = position.x - (j + 1);
+					yy = position.y;
+				}
+				else if (i == 2) {
+					xx = position.x;
+					yy = position.y + (j + 1);
+				}
+				else if (i == 3) {
+					xx = position.x;
+					yy = position.y - (j + 1);
+				}
+				return { xx, yy };
 
-		}
-		for (let i = 0; i < 4; i++) {
-			let arr = [[this.position.x, this.position.y]];
-			for (let j = 0; j < 8; j++) {
-				let pos = destination(i, j);
-				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (destin && value == 'move') {
-						if (!square.piece) {
-							arr.push([pos.xx, pos.yy]);
-							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+			}
+			for (let i = 0; i < 4; i++) {
+				let arr = [[this.position.x, this.position.y]];
+				for (let j = 0; j < 8; j++) {
+					let pos = destination(i, j);
+					if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
+						let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+						if (value == "hasDestinations") {
+							if (this.hasDestination(square)) {
+								return true;
+							}
+							else {
+								return false;
+							}
+						}
+						else if (destin && value == 'move') {
+							if (!square.piece) {
+								arr.push([pos.xx, pos.yy]);
+								if (pos.xx == destin.xx && pos.yy == destin.yy) {
+									return arr;
+								}
+							}
+							else if (square.piece) {
+								if (pos.xx == destin.xx && pos.yy == destin.yy) {
+									return arr;
+								}
+								else {
+									break;
+								}
+							}
+							else if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
 						}
-						else if (square.piece) {
-							if (pos.xx == destin.xx && pos.yy == destin.yy) {
-								return arr;
+						else if (value == 'check') {
+							if (!square.piece) {
+								square.drawDestination('check', this);
 							}
-							else {
+							else if (square.piece.name == 'king') {
+								square.drawDestination('check', this);
+							}
+							else if (square.piece.side == this.side) {
+								square.drawDestination('check', this);
+								break;
+							}
+							else if (square.piece.side != this.side) {
+								square.drawDestination('check', this);
 								break;
 							}
 						}
-						else if (pos.xx == destin.xx && pos.yy == destin.yy) {
-							return arr;
+						else if (value == 'move') {
+							let isBreak = this.setDestin(square);
+							if (isBreak) {
+								break;
+							}
 						}
 					}
-					else if (value == 'check') {
-						if (!square.piece) {
-							square.drawDestination('check', this);
-						}
-						else if (square.piece.name == 'king') {
-							square.drawDestination('check', this);
-						}
-						else if (square.piece.side == this.side) {
-							square.drawDestination('check', this);
-							break;
-						}
-						else if (square.piece.side != this.side) {
-							square.drawDestination('check', this);
-							break;
-						}
+					else {
+						break;
 					}
-					else if (value == 'move') {
-						let isBreak = this.setDestin(square);
-						if (isBreak) {
-							break;
-						}
-					}
-				}
-				else {
-					break;
 				}
 			}
 		}
@@ -564,94 +600,98 @@ class Queen extends Piece {
 		super('queen', side, pos, chessboard, player, square);
 	}
 	moveDestination(value, destin) {
-		let position = this.position;
-		let side = this.side;
-		function destination(i, j) {
-			let xx, yy;
-			if (i == 0) {
-				xx = position.x + (j + 1);
-				yy = position.y;
+		if (value == 'move' || value == 'check' || value == 'hasDestinations') {
+			if (value == "hasDestinations") {
+				return true;
 			}
-			else if (i == 1) {
-				xx = position.x - (j + 1);
-				yy = position.y;
+			let position = this.position;
+			function destination(i, j) {
+				let xx, yy;
+				if (i == 0) {
+					xx = position.x + (j + 1);
+					yy = position.y;
+				}
+				else if (i == 1) {
+					xx = position.x - (j + 1);
+					yy = position.y;
+				}
+				else if (i == 2) {
+					xx = position.x;
+					yy = position.y + (j + 1);
+				}
+				else if (i == 3) {
+					xx = position.x;
+					yy = position.y - (j + 1);
+				}
+				else if (i == 4) {
+					xx = position.x + (j + 1);
+					yy = position.y + (j + 1);
+				}
+				else if (i == 5) {
+					xx = position.x - (j + 1);
+					yy = position.y + (j + 1);
+				}
+				else if (i == 6) {
+					xx = position.x + (j + 1);
+					yy = position.y - (j + 1);
+				}
+				else if (i == 7) {
+					xx = position.x - (j + 1);
+					yy = position.y - (j + 1);
+				}
+				return { xx, yy };
 			}
-			else if (i == 2) {
-				xx = position.x;
-				yy = position.y + (j + 1);
-			}
-			else if (i == 3) {
-				xx = position.x;
-				yy = position.y - (j + 1);
-			}
-			else if (i == 4) {
-				xx = position.x + (j + 1);
-				yy = position.y + (j + 1);
-			}
-			else if (i == 5) {
-				xx = position.x - (j + 1);
-				yy = position.y + (j + 1);
-			}
-			else if (i == 6) {
-				xx = position.x + (j + 1);
-				yy = position.y - (j + 1);
-			}
-			else if (i == 7) {
-				xx = position.x - (j + 1);
-				yy = position.y - (j + 1);
-			}
-			return { xx, yy };
-		}
-		for (let i = 0; i < 8; i++) {
-			let arr = [[this.position.x, this.position.y]];
-			for (let j = 0; j < 8; j++) {
-				let pos = destination(i, j);
-				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (destin && value == 'move') {
-						if (!square.piece) {
-							arr.push([pos.xx, pos.yy]);
-							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+			for (let i = 0; i < 8; i++) {
+				let arr = [[this.position.x, this.position.y]];
+				for (let j = 0; j < 8; j++) {
+					let pos = destination(i, j);
+					if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
+						let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+						if (destin && value == 'move') {
+							if (!square.piece) {
+								arr.push([pos.xx, pos.yy]);
+								if (pos.xx == destin.xx && pos.yy == destin.yy) {
+									return arr;
+								}
+							}
+							else if (square.piece && square.position == square.piece.position) {
+								if (pos.xx == destin.xx && pos.yy == destin.yy) {
+									return arr;
+								}
+								else {
+									break;
+								}
+							}
+							else if (pos.xx == destin.xx && pos.yy == destin.yy) {
 								return arr;
 							}
 						}
-						else if (square.piece && square.position == square.piece.position) {
-							if (pos.xx == destin.xx && pos.yy == destin.yy) {
-								return arr;
+						else if (value == 'check') {
+							if (!square.piece) {
+								square.drawDestination('check', this);
 							}
-							else {
+							else if (square.piece.name == 'king') {
+								square.drawDestination('check', this);
+							}
+							else if (square.piece.side == this.side) {
+								square.drawDestination('check', this);
+								break;
+							}
+							else if (square.piece.side != this.side) {
+								square.drawDestination('check', this);
 								break;
 							}
 						}
-						else if (pos.xx == destin.xx && pos.yy == destin.yy) {
-							return arr;
+						else if (value == 'move') {
+							let isBreak = this.setDestin(square);
+							if (isBreak) {
+								break;
+							}
 						}
 					}
-					else if (value == 'check') {
-						if (!square.piece) {
-							square.drawDestination('check', this);
-						}
-						else if (square.piece.name == 'king') {
-							square.drawDestination('check', this);
-						}
-						else if (square.piece.side == this.side) {
-							square.drawDestination('check', this);
-							break;
-						}
-						else if (square.piece.side != this.side) {
-							square.drawDestination('check', this);
-							break;
-						}
+					else {
+						break;
 					}
-					else if (value == 'move') {
-						let isBreak = this.setDestin(square);
-						if (isBreak) {
-							break;
-						}
-					}
-				}
-				else {
-					break;
 				}
 			}
 		}
@@ -717,7 +757,6 @@ class King extends Piece {
 							else if (0 == i) {
 								square.drawDestination('eat');
 							}
-							console.log(square);
 						}
 					}
 				}
@@ -753,75 +792,77 @@ class King extends Piece {
 		return isPossible;
 	}
 	moveDestination(value, destin) {
-		let position = this.position;
-		let possible = [[position.x + 1, position.y + 1], [position.x + 1, position.y - 1], [position.x - 1, position.y + 1], [position.x - 1, position.y - 1], [position.x, position.y + 1], [position.x, position.y - 1], [position.x - 1, position.y], [position.x + 1, position.y]];
-		let isReturn = false;
-		let arr = [[this.position.x, this.position.y]];
-		if (value && value == "hasDestinations") {
-			let hasDestin = false;
-			possible.forEach(([xx, yy]) => {
-				let pos = { xx, yy };
-				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (this.possibleMove(pos)) {
-						if (!square.piece) {
-							console.log(square.html)
-							hasDestin = true;
-						}
-						else if (square.piece) {
-							if (square.piece.side != this.side) {
+		if (value == 'move' || value == 'check' || value == 'hasDestinations') {
+
+			let position = this.position;
+
+			let possible = [[position.x + 1, position.y + 1], [position.x + 1, position.y - 1], [position.x - 1, position.y + 1], [position.x - 1, position.y - 1], [position.x, position.y + 1], [position.x, position.y - 1], [position.x - 1, position.y], [position.x + 1, position.y]];
+
+			let isReturn = false;
+			let arr = [[this.position.x, this.position.y]];
+
+			if (value && value == "hasDestinations") {
+				let hasDestin = false;
+
+				possible.forEach(([xx, yy]) => {
+					let pos = { xx, yy };
+					if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
+						let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+						if (this.possibleMove(pos)) {
+							if (!square.piece) {
 								hasDestin = true;
 							}
-						}
-					}
-				}
-			});
-			return hasDestin;
-		}
-		else {
-			possible.forEach(([xx, yy]) => {
-				let pos = { xx, yy };
-				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
-					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
-					if (destin && value == 'move') {
-						console.log("DESTIN IS SEARCH!!!")
-						console.log(destin);
-						console.log(pos);
-						if (!square.piece) {
-							arr.push([pos.xx, pos.yy]);
-						}
-						if (pos.xx == destin.xx && pos.yy == destin.yy) {
-								console.log('it');
-								isReturn = true;
-						}
-					}
-					else if (value == 'check') {
-						if (!square.piece) {
-							square.drawDestination('check', this);
-						}
-						else if (square.piece) {
-							square.drawDestination('check', this);
-						}
-					}
-					else if (value == 'move' && this.possibleMove(pos)) {
-						if (!square.piece) {
-							square.drawDestination('set');
-						}
-						else if (square.piece) {
-							if (square.piece.side != this.side) {
-								square.drawDestination('eat');
+							else if (square.piece) {
+								if (square.piece.side != this.side) {
+									hasDestin = true;
+								}
 							}
 						}
 					}
-				}
-			});
-
-			if (this.canCastling == true && value == 'move' && this.player.isCheckMate() == 0 && !destin) {
-				this.Castling();
+				});
+				return hasDestin;
 			}
-			if (isReturn) {
-				console.log(arr);
-				return arr;
+			else {
+				possible.forEach(([xx, yy]) => {
+					let pos = { xx, yy };
+					if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
+						let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+						if (destin && value == 'move') {
+							if (!square.piece) {
+								arr.push([pos.xx, pos.yy]);
+							}
+							if (pos.xx == destin.xx && pos.yy == destin.yy) {
+								isReturn = true;
+							}
+						}
+						else if (value == 'check') {
+							if (!square.piece) {
+								square.drawDestination('check', this);
+							}
+							else if (square.piece) {
+								square.drawDestination('check', this);
+							}
+						}
+						else if (value == 'move' && this.possibleMove(pos)) {
+							if (!square.piece) {
+								square.drawDestination('set');
+							}
+							else if (square.piece) {
+								if (square.piece.side != this.side) {
+									square.drawDestination('eat');
+								}
+							}
+						}
+					}
+				});
+
+				if (this.canCastling == true && value == 'move' && this.player.isCheckMate() == 0 && !destin) {
+					this.Castling();
+				}
+				if (isReturn) {
+					console.log(arr);
+					return arr;
+				}
 			}
 		}
 	}
