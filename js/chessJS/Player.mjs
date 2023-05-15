@@ -14,14 +14,22 @@ export default class Player {
 	get chessboard() {
 		return this._chessboard;
 	}
+
+	//King figure
+	///////////////////////
 	king;
+	///////////////////////
 
+	//Side)))
+	///////////////////////
 	side;
+	///////////////////////
 
+	//Price of figures
+	///////////////////////
 	pricePlayer;
+	///////////////////////
 
-	checkFigure;
-	
 	pricePlayerPieces() {
 		let price = 0;
 		for (let i = 0; i < 8; i++) {
@@ -100,7 +108,7 @@ export default class Player {
 		let anotherPlayer;
 		let isCheckMate = 0;
 		let checkAmount = 0;
-		this.checkFigure = undefined;
+		let checkFigure = undefined;
 		for (let i = 0; i < 2; i++) {
 			if (this.chessboard.player[i].side != this.side) {
 				anotherPlayer = this.chessboard.player[i];
@@ -111,17 +119,15 @@ export default class Player {
 		{
 			let figure;
 			for (let i = 0; i < anotherPlayer.figures.length; i++) {
-				if (anotherPlayer.figures[i].checkMateArray[this.king.position.x][this.king.position.y] == 1) {
+				if ((this.chessboard.cellsArr[anotherPlayer.figures[i].position.y][anotherPlayer.figures[i].position.x].piece == anotherPlayer.figures[i]) && anotherPlayer.figures[i].checkMateArray[this.king.position.x][this.king.position.y] == 1) {
 					figure = anotherPlayer.figures[i];
+					checkFigure = figure;
 					checkAmount++;
 				}
 			}
-			if (checkAmount == 1) {
-				this.checkFigure = figure;
-			}
-			else if (checkAmount > 1) {
-				this.checkFigure = false;
-			}
+		}
+		if(checkAmount != 1){
+			checkFigure = undefined;
 		}
 		if (checkAmount > 0) {
 
@@ -165,8 +171,7 @@ export default class Player {
 			//Check, if piece can cover a king
 			if (checkMate == 2 && checkAmount == 1) {
 				let checkPos = { xx: this.king.position.x, yy: this.king.position.y };
-				console.log(this.checkFigure.moveDestination('move', checkPos))
-				let possible = this.checkFigure.moveDestination('move', checkPos);
+				let possible = checkFigure.moveDestination('move', checkPos);
 				possible.forEach(([xx, yy]) => {
 					let dest = { xx, yy };
 					for (let i = 0; i < this.figures.length; i++) {
@@ -195,12 +200,15 @@ export default class Player {
 				isCheckMate = 0;
 			}
 		}
-		if (value == 'get') {
-			return checkAmount;
-		}
-		else {
 			return isCheckMate;
+	}
+	isHasMoves(){
+		for (let i = 0; i < this.figures.length; i++) {
+			if(this.figures[i].moveDestination('hasDestinations')){
+				return true;
+			}
 		}
+		return false;
 	}
 	destroy() {
 		this.chessboard.clearSelectSquare();
@@ -209,8 +217,8 @@ export default class Player {
 			this.figures[this.figures.length - 1].destroy();
 		}
 		for (let j = 0; j < this.chessboard.player.length; j++) {
-			if (this.chessboard.player[j].side == this.side) {this.chessboard.player.splice(j,1)}
+			if (this.chessboard.player[j].side == this.side) { this.chessboard.player.splice(j, 1) }
 		}
 		delete this;
-	}	
+	}
 }

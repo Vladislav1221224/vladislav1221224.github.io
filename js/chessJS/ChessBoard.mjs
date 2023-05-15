@@ -22,7 +22,6 @@ let DefaultStartPositionFEN = "rkbqkbkr/pppppppp/8/8/8/8/PPPPPPPP/RKBQKBKR w KQk
 ////////////////////////////////////////////////////////
 
 
-
 export default class ChessBoard {
 	constructor(value) {
 		this._cellsArr = [[], [], [], [], [], [], [], []];
@@ -60,6 +59,7 @@ export default class ChessBoard {
 
 	//Variables
 	///////////////////////////////////////
+
 	//Keeps the figure, which was selected
 	///////////////////////////////////////
 	selectCell;
@@ -123,11 +123,12 @@ export default class ChessBoard {
 			let pos = player.king.position;
 			let isCheckMate = player.isCheckMate();
 			if (isCheckMate > 0) {
+				console.log("IS CHECK")
 				$(this.cellsArr[pos.y][pos.x].html).addClass('check');
 				if (isCheckMate == 2) {
-					for (let i = 0; i < 2; i++) {
+					for (let i = 0; i < this.player.length; i++) {
 						if (this.player[i].side != player.side) {
-							winner = this.player[i];
+							winner = i;
 						}
 					}
 					console.log('ISCHECKMATE')
@@ -345,6 +346,7 @@ export default class ChessBoard {
 						let piece = chessboard.selectCell.piece;
 						document.onmousemove = null;
 						piece.html.onmouseup = null;
+						piece.html.classList.remove('drag');
 						piece.html.style.position = 'relative';
 						piece.html.style.width = 100 + '%';
 						piece.html.style.height = 100 + '%';
@@ -373,6 +375,7 @@ export default class ChessBoard {
 						}
 						document.onmousemove = null;
 						piece.html.onmouseup = null;
+						piece.html.classList.remove('drag');
 						piece.html.style.position = 'relative';
 						piece.html.style.width = 100 + '%';
 						piece.html.style.height = 100 + '%';
@@ -398,6 +401,7 @@ export default class ChessBoard {
 					if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
 						let piece = chessboard.selectCell.piece;
 						document.onmousemove = null;
+						piece.html.classList.remove('drag');
 						piece.html.style.position = 'relative';
 						piece.html.style.width = 100 + '%';
 						piece.html.style.height = 100 + '%';
@@ -466,6 +470,7 @@ export default class ChessBoard {
 									element.style.cursor = 'grabbing';
 								})
 								let piece = chessboard.selectCell.piece;
+								piece.html.classList.add('drag');
 								if (!chessboard.isSelect || chessboard.selectCell.html == square) { chessboard.dragging(piece) }
 							}
 						}
@@ -488,6 +493,7 @@ export default class ChessBoard {
 							let piece = chessboard.selectCell.piece;
 							document.onmousemove = null;
 							piece.html.onmouseup = null;
+							piece.html.classList.remove('drag');
 							piece.html.style.position = 'relative';
 							piece.html.style.width = 100 + '%';
 							piece.html.style.height = 100 + '%';
@@ -600,9 +606,7 @@ export default class ChessBoard {
 				else if (this.selectCell && element.html.querySelector('.move-destination')) {
 					let square = element;
 					element = square.html;
-					console.log(this.selectCell.piece.canCastling == true)
 					if (square.piece && this.selectCell.piece.name == 'king' && square.piece.name == 'rook' && this.selectCell.piece.side == square.piece.side && this.selectCell.piece.canCastling == true && square.piece.canCastling == true) {
-						console.log('CASTLING IS IN...')
 						this.doCastling(element, this.selectCell.piece);
 					}
 					//If square has enemy figure and move-destination
@@ -745,6 +749,12 @@ export default class ChessBoard {
 
 					//Checks for mate
 					this.isCheckMate(player);
+					if (!player.isHasMoves()) {
+						this._checkMate = 2;
+						console.log("is Draw!!!")
+					} else {
+						console.log("is not Draw!!!")
+					}
 				}
 				else {
 					console.log('Не допустимий ход!!!');
@@ -772,7 +782,6 @@ export default class ChessBoard {
 			else {
 				square = element;
 			}
-			console.log('its do');
 			square.piece.destroy();
 		}
 	}
@@ -1371,10 +1380,51 @@ export default class ChessBoard {
 			for (let j = 0; j < length; j++) {
 				this.player[this.player.length - 1].destroy();
 			}
-
 			this.drawPlayers();
 			this.isGame = true;
 			this.playerSide = infoFEN.side;
+
+			//Set castling
+			if (infoFEN.castling != '-') {
+				let castlfen = infoFEN.castling;
+				for (let i = 0; i < castlfen.length; i++) {
+					for (let j = 0; j < this.player.length; j++) {
+						if (castlfen[i] == castlfen[i].toUpperCase()) {
+							if (this.player[j].side == 'white') {
+								if (castlfen[i] === 'Q') {
+									let square = this.getSquareFromArr('h1');
+									if (square.piece && square.piece.name == 'rook') {
+										square.piece.isCastling = true;
+									}
+								}
+								else if (castlfen[i] === 'K') {
+									let square = this.getSquareFromArr('a1');
+									if (square.piece && square.piece.name == 'rook') {
+										square.piece.isCastling = true;
+									}
+								}
+							}
+						}
+						else if (castlfen[i] == castlfen[i].toLowerCase()) {
+							if (this.player[j].side == 'black') {
+								if (castlfen[i] === 'q') {
+									let square = this.getSquareFromArr('h8');
+									if (square.piece && square.piece.name == 'rook') {
+										square.piece.isCastling = true;
+									}
+								}
+								else if (castlfen[i] === 'k') {
+									let square = this.getSquareFromArr('a8');
+									if (square.piece && square.piece.name == 'rook') {
+										square.piece.isCastling = true;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
 			//Set EnPassant
 			{
 				k = 0;
@@ -1444,7 +1494,6 @@ export default class ChessBoard {
 			thisFEN += fen;
 		}
 		thisFEN += ' ' + this.playerSide[0] + ' ' + this.castlingForFEN + ' ' + this.EnPassantForFEN + ' ' + ' ';
-		console.error(thisFEN);
 		return thisFEN;
 	}
 
