@@ -1,91 +1,117 @@
 #game-block {
 	display: block;
 	position: relative;
-	float:left;
+	float: left;
 	text-align: center;
 	margin: 0;
-	width:auto;
-	height:auto;
-	@media(max-width: 500px){
+	width: auto;
+	height: auto;
+
+	@media(max-width: 500px) {
 		margin: auto;
 		width: 100%;
-		height:50vh;
+		height: calc(50vh - 88px);
 		padding: 0;
 	}
+
+	@media(max-height:450px) {
+		width: auto;
+		height: calc(100vh - 88px);
+		margin: 0;
+	}
 }
-#layout-chess-board{
-	margin:20px;
+
+#layout-chess-board {
+	margin: 20px;
+
 	@media(max-width: 500px) {
 		margin: 0;
 		margin-top: 5px;
 		width: auto;
 		height: auto;
+	}
+
+	@media(max-height:450px) {
+		width: calc(100vh - 88px);
+		height: calc(100vh - 96px);
+		margin: 0;
+	}
 }
-}
-#right-player-layout{
+
+#right-player-layout {
 	display: none;
 	background-color: transparent;
 	float: left;
 	width: 5%;
 	height: 100%;
-	@media(min-width: 950px){
+
+	@media(min-width: 950px) {
 		display: block;
 	}
 }
-#footer-player-layout{
+
+#footer-player-layout {
 	background-color: transparent;
 	float: left;
 	width: 100%;
 	height: 5%;
 }
-.flip-chess-board{
-	float:left;
-	display:inherit;
-	background-color:transparent;
-	height: 100%;
-	padding: 0pt 5pt;
-	border-width: 0px;
-	border-radius: 50%;
-	cursor: pointer;
-}
-.flip-chess-board:hover{
-	opacity: 50%;
-}
-.reset-chess-board{
+
+.flip-chess-board {
 	float: left;
-	display:inherit;
-	font-weight: 900;
-	background-color:transparent;
+	display: inherit;
+	background-color: transparent;
 	height: 100%;
 	padding: 0pt 5pt;
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
 }
-.reset-chess-board:hover{
+
+.flip-chess-board:hover {
 	opacity: 50%;
 }
-.get-fen{
+
+.reset-chess-board {
+	float: left;
+	display: inherit;
+	font-weight: 900;
+	background-color: transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+.reset-chess-board:hover {
+	opacity: 50%;
+}
+
+.get-fen {
 	float: left;
 	display: none;
 	font-weight: 900;
-	background-color:transparent;
+	background-color: transparent;
 	height: 100%;
 	padding: 0pt 5pt;
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
-	@media(min-width: 950px){
+
+	@media(min-width: 950px) {
 		display: block;
 	}
 }
-.get-fen:hover{
+
+.get-fen:hover {
 	opacity: 50%;
 }
-#right-block{
+
+#right-block {
 	z-index: 1;
 	right: 0%;
-	width:40%;
+	width: 40%;
 	height: 100%;
 	max-width: 100vw;
 	position: fixed;
@@ -94,58 +120,67 @@
 	text-align: center;
 	text-decoration: none;
 }
-#players-info-layout{
+
+#players-info-layout {
 	padding: 20%;
-	
+
 }
-#set-previous-fen{
+
+#set-previous-fen {
 	float: left;
 	font-weight: 900;
-	background-color:transparent;
+	background-color: transparent;
 	height: 100%;
 	padding: 0pt 5pt;
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
 }
-#set-previous-fen:hover{
+
+#set-previous-fen:hover {
 	opacity: 50%;
 }
-#set-next-fen{
+
+#set-next-fen {
 	float: left;
 	font-weight: 900;
-	background-color:transparent;
+	background-color: transparent;
 	height: 100%;
 	padding: 0pt 5pt;
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
 }
-#set-next-fen:hover{
+
+#set-next-fen:hover {
 	opacity: 50%;
 }
-#moves-info-layout{
-	position:relative;
+
+#moves-info-layout {
+	position: relative;
 	width: 100%;
 	height: 25%;
 	background-color: transparent;
 	border-width: 0px;
 	cursor: pointer;
 }
-#open-fen-window{
+
+#open-fen-window {
 	position: absolute;
 	left: 1%;
 	bottom: calc(1% + 88px);
 	background: rgba(0, 0, 0, 0);
 	cursor: pointer;
-	border-width:0;
+	border-width: 0;
 }
-#open-fen-window:hover> b{
+
+#open-fen-window:hover>b {
 	color: silver;
 }
-#close-fen-window{
+
+#close-fen-window {
 	position: relative;
-	float:right;
+	float: right;
 	margin: auto;
 	width: auto;
 	height: auto;
@@ -155,23 +190,26 @@
 	border-width: 0;
 	z-index: 100;
 }
-#close-fen-window:hover>.close{
+
+#close-fen-window:hover>.close {
 	background-color: rgba(88, 129, 190, 0.5);
 }
-#fen-window-background{
+
+#fen-window-background {
 	position: fixed;
 	z-index: 3;
 	width: 100%;
 	height: 100%;
 	background-color: rgba(0, 0, 0, 0.3);
 }
-.fen-layout{
+
+.fen-layout {
 	display: block;
 	position: absolute;
 	margin: auto;
 	top: 50%;
 	left: 50%;
-	box-shadow:0 0.5rem 1.5rem rgba(0,0,0,.5);
+	box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, .5);
 	background-color: rgb(44, 80, 128);
 	padding: 0.5%;
 	width: 30%;
@@ -179,28 +217,32 @@
 	border-radius: 1rem;
 	transform: translate(-50%, -50%);
 }
-.fen-input{
-	color:silver;
+
+.fen-input {
+	color: silver;
 	background-color: rgba(0, 0, 0, 0.3);
 	outline: none;
-	margin:auto;
-	width:60%;
-	height:80%;
+	margin: auto;
+	width: 60%;
+	height: 80%;
 	resize: none;
 }
-#button-setFEN{
+
+#button-setFEN {
 	cursor: pointer;
 }
-#fen-error-layout{
+
+#fen-error-layout {
 	color: rgba(255, 68, 0, 0.482);
 	-webkit-transition: all 0.1s;
 	-o-transition: all 0.1s;
 	transition: all 0.1s;
 }
+
 #right-block[hidden] {
-  display: none;
-  
-  @media (min-width: 920px) {
-    display: block;
-  }
+	display: none;
+
+	@media (min-width: 920px) {
+		display: block;
+	}
 }
