@@ -1,5 +1,4 @@
 .chess-board {
-	border-color: green;
 	float: left;
 	width: 70vh;
 	height: 70vh;
@@ -12,14 +11,15 @@
 
 	@media(max-width: 75vh) {
 		box-shadow: none;
-		border-color: red;
 		margin: 0px;
 		width: calc(80vh - 88px);
 		height: calc(80vh - 88px);
 	}
+	@media(max-height:450px){
+
+	}
 
 	@media(max-width: 500px) and (max-width: 75vh) {
-		border-color: green;
 		box-shadow: none;
 		margin: 0;
 		width: calc(100vw - 8px);
