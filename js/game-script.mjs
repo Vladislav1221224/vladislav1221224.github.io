@@ -4,8 +4,12 @@ let chessboard = new ChessBoard('white');
 
 document.getElementById('layout-chess-board').prepend(chessboard.html);
 
+//Slider for chessboards
+let chesboardArray = [];
 
-
+chessboard.doMove('e2e4');
+chessboard.doMove('e4e5');
+chessboard.doMove('Qd1h5');
 
 
 let input;

@@ -50,14 +50,35 @@ export default class ChessBoard {
 		/*-->*/this.castlingForFEN = '-';/*<--*/
 		/*-->*/this.EnPassantForFEN = '-';/*<--*/
 
-		/*-->*/this.moveArr = [];/*<--*/
 		/*-->*/this.lastPosFEN;/*<--*/
 		this.setCastlingForFEN();
 		this.FEN = this.getFEN();
 		this.setButtons();
+
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				this._startPosition[i][j] = this.currentPositionPieces[i][j];
+			}
+		}
 	}
 
 	//Variables
+	///////////////////////////////////////
+
+	//Start Position
+	///////////////////////////////////////
+	_startPosition = [[], [], [], [], [], [], [], []];
+	get startPosition() {
+		return this._startPosition;
+	}
+	///////////////////////////////////////
+
+	//Keeps moves
+	///////////////////////////////////////
+	_moves = [];
+	get moves() {
+		return this._moves;
+	}
 	///////////////////////////////////////
 
 	//Keeps the figure, which was selected
@@ -123,15 +144,14 @@ export default class ChessBoard {
 			let pos = player.king.position;
 			let isCheckMate = player.isCheckMate();
 			if (isCheckMate > 0) {
-				console.log("IS CHECK")
 				$(this.cellsArr[pos.y][pos.x].html).addClass('check');
 				if (isCheckMate == 2) {
 					for (let i = 0; i < this.player.length; i++) {
 						if (this.player[i].side != player.side) {
+							console.log("IS CHECKMATE!!!")
 							winner = i;
 						}
 					}
-					console.log('ISCHECKMATE')
 				}
 			}
 			//set a Winner to variable checkMate
@@ -145,10 +165,6 @@ export default class ChessBoard {
 		}
 	}
 
-	//Return true if player don't have moves
-	isStalemate(player) {
-
-	}
 	//Change a flag "playerSide"
 	changePlayerSide() {
 		if (this.playerSide == SIDENAME[0]) {
@@ -261,11 +277,9 @@ export default class ChessBoard {
 		else { console.error("prop error!!!"); return 0 }
 
 		if (!this.html || !(this.html.classList.contains('chess-board'))) {
-			console.log(this.html);
 			this.html = document.createElement('div');
 			this.html.classList = "chess-board";
 		}
-		console.log(this.html);
 		this.chessBoardSide = side;
 		this.drawCells(side);
 		if (this.isFEN(prop)) {
@@ -281,7 +295,6 @@ export default class ChessBoard {
 			this.playerSide = side;
 			this.drawPlayers();
 			for (let i = 0; i < 2; i++) {
-				console.log(this.player[i]);
 				this.player[i].drawCheckMateArray();
 			}
 			let player;
@@ -370,8 +383,6 @@ export default class ChessBoard {
 					if (chessboard.selectCell) {
 						let piece = chessboard.selectCell.piece;
 						if (chessboard.isDeveloper) {
-							console.log('HTML is cancelled');
-							console.log(piece)
 						}
 						document.onmousemove = null;
 						piece.html.onmouseup = null;
@@ -651,13 +662,10 @@ export default class ChessBoard {
 				}
 				//Castling
 				else if (this.selectCell.piece.name == 'king' && this.selectCell.piece.canCastling == true) {
-					console.log('CASTLING IS IN...')
 					let cell = chessboard.getSquareFromArr(element);
 					let pos = { xx: cell.position.x, yy: cell.position.y };
 					let arr = this.selectCell.piece.moveDestination('move', pos);
-					console.log(arr);
 					if (!arr) {
-						console.log('is do castling')
 						this.doCastling(element, this.selectCell.piece);
 					}
 					else {
@@ -684,6 +692,8 @@ export default class ChessBoard {
 
 	//Set a piece and destroy a enemy piece by help a method "eatPiece"
 	setPiece(valueChangeSide, element, thisPiece) {
+		console.log(thisPiece);
+		console.log(element);
 		if (element) {
 			if (valueChangeSide && (valueChangeSide == 'change' || valueChangeSide == 'nochange')) {
 				let square = this.getSquareFromArr(element);
@@ -714,9 +724,10 @@ export default class ChessBoard {
 					let side = piece.side;
 
 					if (valueChangeSide == 'change') {
-						let squareA = piece.square;
 						let squareB = square;
-						this.moveArr.push(this.getFENMove(squareA, squareB));
+
+						this._moves.push(this.getFENMove(piece, squareB));
+						console.log(this.moves);
 					}
 					square.piece = piece;
 					piece.position = square.position;
@@ -750,14 +761,12 @@ export default class ChessBoard {
 					//Checks for mate
 					this.isCheckMate(player);
 					if (!player.isHasMoves()) {
+						console.log('Is StaleMate!!!');
 						this._checkMate = 2;
-						console.log("is Draw!!!")
 					} else {
-						console.log("is not Draw!!!")
 					}
 				}
 				else {
-					console.log('Не допустимий ход!!!');
 				}
 				//A FEN saving
 				if (valueChangeSide == 'change') {
@@ -815,13 +824,11 @@ export default class ChessBoard {
 
 	//Do a Castling
 	doCastling(element, king) {
-		console.log(element)
 		let lastFEN = this.getFEN();
 		if (element.querySelector('.move-destination')) {
 			let square = this.getSquareFromArr(element);
 			if (king.side == 'white') {
 				if (square.ID == 'g1' || square.ID == 'h1') {
-					console.log('Ближняя сторона')
 					let rook = this.getSquareFromArr('h1').piece;
 					element = this.getSquareFromArr('g1').html;
 					this.setPiece('nochange', element, king);
@@ -829,7 +836,6 @@ export default class ChessBoard {
 					this.setPiece('change', element, rook);
 				}
 				else if (square.ID == 'c1' || square.ID == 'a1') {
-					console.log('Дальняя сторона')
 					let rook = this.getSquareFromArr('a1').piece;
 					element = this.getSquareFromArr('c1').html;
 					this.setPiece('nochange', element, king);
@@ -839,7 +845,6 @@ export default class ChessBoard {
 			}
 			else if (king.side == 'black') {
 				if (square.ID == 'g8' || square.ID == 'h8') {
-					console.log('Ближняя сторона')
 					let rook = this.getSquareFromArr('h8').piece;
 					element = this.getSquareFromArr('g8').html;
 					this.setPiece('nochange', element, king);
@@ -847,7 +852,6 @@ export default class ChessBoard {
 					this.setPiece('change', element, rook);
 				}
 				else if (square.ID == 'c8' || square.ID == 'a8') {
-					console.log('Дальняя сторона')
 					let rook = this.getSquareFromArr('a8').piece;
 					element = this.getSquareFromArr('c8').html;
 					this.setPiece('nochange', element, king);
@@ -1130,7 +1134,6 @@ export default class ChessBoard {
 						let position = { x: null, y: null };
 
 						for (const key in Cell.IDLETTER) {
-							console.log("pos = " + itFen[0])
 							if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] === itFen[0].toLowerCase()) {
 								if (side == 'black' && parseInt(itFen[1]) == 6) {
 									position.y = parseInt(itFen[1]) - 1;
@@ -1147,29 +1150,20 @@ export default class ChessBoard {
 							}
 						}
 						if (flag) {
-							console.log(position);
 							let fenROW = '';
 							for (let j = 0; j < fen.length; j++) {
-								console.log(rows + "/" + position.y)
 								if (rows == position.y) {
 									fenROW += fen[j];
-									console.log(fenROW);
-									console.log(j);
-									console.log(fen[j]);
-									console.log(column + " ... " + position.x)
 									if (column == position.x) {
 										if (this.isPieceFen(fen[j])) {
 											if (position.y == 4 && fen[j] != fen[j].toLowerCase()) {
-												console.log(true)
 												break;
 											}
 											else if (position.y == 5 && fen[j] != fen[j].toUpperCase()) {
-												console.log(true)
 												break;
 											}
 										}
 										else {
-											console.log('is false');
 											flag = false;
 											break;
 										}
@@ -1271,11 +1265,9 @@ export default class ChessBoard {
 				fen = fen.substring(1);
 			}
 			if (fen[0] == ' ') {
-				console.log(fen);
 				fen = fen.substring(1);
 			}
 			while (fen[0] != ' ') {
-				console.log(fen);
 				info.side = this.isSideFen(fen[0]);
 				fen = fen.substring(1);
 			}
@@ -1293,7 +1285,6 @@ export default class ChessBoard {
 				info.enPassant += fen[0];
 				fen = fen.substring(1);
 			}
-			console.log(info);
 			return info;
 		} else {
 			console.error('Error: fen is not correct!')
@@ -1349,7 +1340,6 @@ export default class ChessBoard {
 			['', '', '', '', '', '', '', '']];
 
 			let infoFEN = this.getInfoFen(FEN);
-			console.log(infoFEN);
 			let k = 0;
 			for (let i = 0; i < 8; i++) {
 				for (let j = 0; j < 8; j++) {
@@ -1436,7 +1426,6 @@ export default class ChessBoard {
 						let fen = FEN[i] + FEN[i + 1];
 						if (this.isID(fen)) {
 							let square = this.getSquareFromArr(fen);
-							console.log(square)
 							if (square.ID[1] == 3) {
 								this.setEnPassant(this.cellsArr[square.position.y - 1][square.position.x].piece, square);
 							}
@@ -1494,22 +1483,117 @@ export default class ChessBoard {
 			thisFEN += fen;
 		}
 		thisFEN += ' ' + this.playerSide[0] + ' ' + this.castlingForFEN + ' ' + this.EnPassantForFEN + ' ' + ' ';
+		console.error(thisFEN);
 		return thisFEN;
 	}
 
-	//Write a moves notation in arrat
-	getFENMove(squareA, squareB) {
-		if (!squareB instanceof Cell) {
-			console.error('squareB has not class CELL');
-		}
-		else if (!squareA instanceof Cell) {
-			console.error('squareA has not class CELL');
+	//Write a moves notation in array
+	getFENMove(piece, squareB) {
+		if (piece instanceof Piece && squareB instanceof Cell) {
+			let pieceName = piece.name[0];
+			if (piece.name == 'pawn') { pieceName = '' }
+			if (piece.name == 'knight') { pieceName = 'n' }
+			let fenA = piece.square.ID;
+			let fenB = squareB.ID;
+			return pieceName + fenA + fenB;
 		}
 		else {
-			let fenA = squareA.ID;
-			let fenB = squareB.ID;
-			return fenA + fenB;
+			console.log(piece)
+			console.log(squareB);
+			console.error('Error: Piece or square is not class Piece or Cell');
 		}
+	}
+
+	//
+	setFENMove(num) {
+		if (typeof num == 'number') {
+
+			function convertIDtoXY(ID) {
+				if (this.isID(element)) {
+					let pos = { x: null, y: null };
+					for (const key in Cell.IDLETTER) {
+						if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] === ID[0].toLowerCase()) {
+							pos.x = key;
+						}
+					}
+					for (const key in Cell.IDNUMBER) {
+						if (Cell.IDNUMBER.hasOwnProperty(key) && Cell.IDNUMBER[key] === ID[1].toLowerCase()) {
+							pos.y = key;
+						}
+					}
+					return pos;
+				}
+			}
+			console.log(ID);
+			console.log(this.cellsArr[pos.y][pos.x]);
+
+
+
+
+
+
+		} else {
+			console.error("Error: num is not number");
+		}
+	}
+
+	doMove(move, option) {
+		let change = true;
+		if (option) {
+			if (option == 'nochange') {
+				change = false;
+			} else if (option == 'change') {
+				change = true;
+			}
+		}
+		console.log('Move: ');
+		console.log(move);
+		let chessboard = this;
+		function convertIDtoXY(ID) {
+			console.log(ID);
+			if (chessboard.isID(ID)) {
+				let pos = { x: null, y: null };
+				for (const key in Cell.IDLETTER) {
+					if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] === ID[0].toLowerCase()) {
+						pos.x = key;
+					}
+				}
+				for (const key in Cell.IDNUMBER) {
+					if (Cell.IDNUMBER.hasOwnProperty(key) && Cell.IDNUMBER[key] === ID[1].toLowerCase()) {
+						pos.y = key;
+					}
+				}
+				return pos;
+			}
+		}
+		if (true) {
+			let squareA;
+			let squareB;
+			if (parseInt(move[1])) {
+				squareA = convertIDtoXY(move[0] + move[1]);
+				squareB = convertIDtoXY(move[2] + move[3]);
+			}
+			else {
+				squareA = convertIDtoXY(move[1] + move[2]);
+				squareB = convertIDtoXY(move[3] + move[4]);
+			}
+			console.log(this.cellsArr[squareA.y][squareA.x].html);
+			console.log(this.cellsArr[squareB.y][squareB.x].html);
+			if (change) {
+				if (this.cellsArr[squareA.y][squareA.x].piece) {
+					this.selectCell = this.cellsArr[squareA.y][squareA.x];
+					console.log(this.cellsArr[squareB.y][squareB.x])
+					this.setPiece('change', this.cellsArr[squareB.y][squareB.x].html, this.cellsArr[squareA.y][squareA.x].piece)
+				}
+				else {
+					console.error("Error: squareA haven't piece!!!");
+				}
+			}
+			else {
+				return { squareA, squareB };
+			}
+		}
+
 	}
 	////////////////////////////////////////////
 
@@ -1549,7 +1633,39 @@ export default class ChessBoard {
 			chessboard.resetTheChessBoard();
 		}
 		document.querySelector('.get-fen').onclick = function () {
-			chessboard.getFEN();
+			var text = chessboard.getFEN();
+
+			navigator.clipboard.writeText(text)
+				.then(() => {
+					if (!document.querySelector('.ms-copy')) {
+						let message = document.createElement('div');
+						message.className = 'ms-copy invisible';
+						message.innerHTML = "Copied!";
+						document.querySelector('#right-player-layout').append(message);
+						setTimeout(
+							() => {
+								message.classList.remove('invisible');
+							},
+							100
+						);
+						setTimeout(
+							() => {
+								message.classList.add('invisible');
+							},
+							2 * 1000
+						);
+						setTimeout(
+							() => {
+								message.remove();
+							},
+							3 * 1000
+						);
+					}
+					console.log('Text copied to clipboard');
+				})
+				.catch(err => {
+					console.error('Error in copying text: ', err);
+				});
 		}
 
 		document.querySelector('#set-previous-fen').onclick = function () {
