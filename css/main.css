@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap');
 html,body{
 	min-height:300px;
 	height: 100vh;
+	font-family: 'Comfortaa', cursive;
 }
 body {
 	margin: 0;
@@ -72,7 +74,6 @@ option {
 
 .base-layout {
 	display:block;
-	font-family: 'Oswald', sans-serif;
 }
 
 .nav-component {
@@ -92,6 +93,8 @@ option {
 
 #top-nav-list,
 .footer-block {
+	display:block;
+	position:relative;
 	z-index: 150;
 	background-color: rgb(37, 88, 146);
 	width: 100%;
@@ -105,17 +108,25 @@ option {
 }
 
 .footer-block {
+	z-index: 0;
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	width: 100%;
-	line-height: 36px;
+	width: 50%;
+	height: 60px;
+	line-height: 60px;
 	margin-top: 30px;
-	border-bottom: 0;
-	border-top: 4px solid;
-	border-color: rgb(24, 43, 71);
+	border: 0;
+	background-color: transparent;
+	color: silver;
 }
-
+.footer-block>a{
+	position: relative;
+	color:rgba(192, 192, 192, 0.4);
+}
+.footer-block>a:hover{
+	color:silver;
+}
 img {
 	-webkit-user-drag: none;
 	user-select: none;
