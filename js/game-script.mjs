@@ -3,9 +3,8 @@ import ChessBoard from "./chessJS/ChessBoard.mjs";
 //Slider for chessboards
 let chessboardArray = [];
 addChessBoard();
-addChessBoard();
-addChessBoard();
-removeChessBoard();
+
+
 function addChessBoard(){
 	let chessboard = new ChessBoard('white',chessboardArray.length);
 	document.getElementById('game-block').prepend(chessboard.layout)
