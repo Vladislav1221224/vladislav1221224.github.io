@@ -3,11 +3,11 @@
 	position: relative;
 	float: left;
 	text-align: center;
-	margin: 0;
+	margin: 20px;
 	width: auto;
 	height: auto;
 
-	@media(max-width: 500px) {
+	@media(max-width: 80vh) {
 		margin: auto;
 		width: 100%;
 		height: calc(50vh - 88px);
@@ -21,10 +21,14 @@
 	}
 }
 
-#layout-chess-board {
-	margin: 20px;
-
-	@media(max-width: 500px) {
+.layout-chess-board {
+	display: block;
+	position: relative;
+	float: left;
+	margin: 0 0;
+	width: auto;
+	height: auto;
+	@media(max-width: 80vh) {
 		margin: 0;
 		margin-top: 5px;
 		width: auto;
@@ -44,10 +48,15 @@
 	float: left;
 	width: 5%;
 	height: 100%;
+	padding: 2px;
 
-	@media(min-width: 950px) {
+	@media(min-width: 1000px) {
 		display: block;
 	}
+}
+ul{
+	margin: 0;
+	padding: 0;
 }
 
 #footer-player-layout {
@@ -57,7 +66,7 @@
 	height: 5%;
 }
 
-.flip-chess-board {
+#flip-chess-board {
 	float: left;
 	display: inherit;
 	background-color: transparent;
@@ -68,11 +77,11 @@
 	cursor: pointer;
 }
 
-.flip-chess-board:hover {
+#flip-chess-board:hover {
 	opacity: 50%;
 }
 
-.reset-chess-board {
+#reset-chess-board {
 	float: left;
 	display: inherit;
 	font-weight: 900;
@@ -84,11 +93,11 @@
 	cursor: pointer;
 }
 
-.reset-chess-board:hover {
+#reset-chess-board:hover {
 	opacity: 50%;
 }
 
-.get-fen {
+#get-fen {
 	float: left;
 	display: none;
 	font-weight: 900;
@@ -104,7 +113,7 @@
 	}
 }
 
-.get-fen:hover {
+#get-fen:hover {
 	opacity: 50%;
 }
 
