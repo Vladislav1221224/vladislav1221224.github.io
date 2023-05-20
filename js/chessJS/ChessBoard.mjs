@@ -102,11 +102,11 @@ export default class ChessBoard {
 
 	//HTML DOM of layout
 	///////////////////////////////////////
-	get layout(){
+	get layout() {
 		return this._layout;
 	}
 	///////////////////////////////////////
-	
+
 	//HTML DOM of chessboard
 	///////////////////////////////////////
 	html;
@@ -299,7 +299,7 @@ export default class ChessBoard {
 			this.layout.innerHTML = `<ul id="right-player-layout"></ul>
 		<ul id="footer-player-layout">
 		</ul>`;
-		
+
 			this.html = document.createElement('div');
 			this.html.classList = "chess-board";
 			this.html.id = this._key;
@@ -377,85 +377,88 @@ export default class ChessBoard {
 
 		//For all elements on window
 		document.querySelectorAll('*').forEach((element) => {
-			element.onmousedown = function (mouse) {
-				//If User click "leftMouseButton" outside the DOM element --> ChessBoard <-- selectCell is cancelled
-				if (mouse.button == 0) {
-					if (!chessboard.isChessBoard(mouse.clientX, mouse.clientY) && chessboard.selectCell) {
-						let piece = chessboard.selectCell.piece;
-						document.onmousemove = null;
-						piece.html.onmouseup = null;
-						piece.html.classList.remove('drag');
-						piece.html.style.position = 'relative';
-						piece.html.style.width = 100 + '%';
-						piece.html.style.height = 100 + '%';
-						piece.html.style.left = 0 + 'px';
-						piece.html.style.top = 0 + 'px';
-						chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-						chessboard.clearSelectSquare();
-						$(chessboard.html).removeClass('dragging');
-						document.querySelectorAll('.square').forEach((element) => {
-							if (element.querySelector('.piece')) {
-								element.style.cursor = 'grab';
-							}
-							else if (!element.querySelector('.piece')) {
-								element.style.cursor = 'default';
-							}
-						})
-					}
-				}
-				////If User click "rightMouseButton" selectCell is cancelled
-				if (mouse.button == 2) {
-					if (chessboard.selectCell) {
-						let piece = chessboard.selectCell.piece;
-						if (chessboard.isDeveloper) {
-						}
-						document.onmousemove = null;
-						piece.html.onmouseup = null;
-						piece.html.classList.remove('drag');
-						piece.html.style.position = 'relative';
-						piece.html.style.width = 100 + '%';
-						piece.html.style.height = 100 + '%';
-						piece.html.style.left = 0 + 'px';
-						piece.html.style.top = 0 + 'px';
-						chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-						chessboard.clearSelectSquare();
-						$(chessboard.html).removeClass('dragging');
-						document.querySelectorAll('.square').forEach((element) => {
-							if (element.querySelector('.piece')) {
-								element.style.cursor = 'grab';
-							}
-							else if (!element.querySelector('.piece')) {
-								element.style.cursor = 'default';
-							}
-						})
-					}
-				}
-			}
-			//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
-			element.onmouseup = function (mouse) {
-				if (mouse.button == 0) {
-					if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
-						let piece = chessboard.selectCell.piece;
-						document.onmousemove = null;
-						piece.html.classList.remove('drag');
-						piece.html.style.position = 'relative';
-						piece.html.style.width = 100 + '%';
-						piece.html.style.height = 100 + '%';
-						piece.html.style.left = 0 + 'px';
-						piece.html.style.top = 0 + 'px';
-						if (!element.classList.contains('square')) {
+			if (!element.classList.contains('square') && !element.classList.contains('piece') && !element.classList.contains('chess-board')) {
+				element.onmousedown = function (mouse) {
+					//If User click "leftMouseButton" outside the DOM element --> ChessBoard <-- selectCell is cancelled
+					if (mouse.button == 0) {
+						console.log('is do')
+						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
+							let piece = chessboard.selectCell.piece;
+							document.onmousemove = null;
+							piece.html.onmouseup = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
 							chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
 							chessboard.clearSelectSquare();
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
 						}
-						$(chessboard.html).removeClass('dragging');
-						document.querySelectorAll('.square').forEach((element) => {
-							if (element.querySelector('.piece')) {
-								element.style.cursor = 'grab';
+					}
+					////If User click "rightMouseButton" selectCell is cancelled
+					if (mouse.button == 2) {
+						if (chessboard.selectCell) {
+							let piece = chessboard.selectCell.piece;
+							if (chessboard.isDeveloper) {
 							}
-							else if (!element.querySelector('.piece')) {
-								element.style.cursor = 'default';
+							document.onmousemove = null;
+							piece.html.onmouseup = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
+							chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+							chessboard.clearSelectSquare();
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
+						}
+					}
+				}
+				//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
+				element.onmouseup = function (mouse) {
+					if (mouse.button == 0) {
+						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
+							let piece = chessboard.selectCell.piece;
+							document.onmousemove = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
+							if (!element.classList.contains('square')) {
+								chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+								chessboard.clearSelectSquare();
 							}
-						})
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
+						}
 					}
 				}
 			}
@@ -1005,8 +1008,10 @@ export default class ChessBoard {
 	//return true if x and y is coordinates of DOM-element of this.html
 	isChessBoard(x, y) {
 		let chessboardInfo = this.html.getBoundingClientRect();
-		if (x >= chessboardInfo.left && x <= chessboardInfo.right && y >= chessboardInfo.top && y <= chessboardInfo.bottom) { return true }
-		else { return false }
+		if (x >= chessboardInfo.pageX && x <= (chessboardInfo.pageX - chessboardInfo.width) && y >= chessboardInfo.pageY && y <= chessboardInfo.pageY - chessboardInfo.height) {
+			console.log('is true'); return true
+		}
+		else { console.log('is true'); return false }
 	}
 
 
@@ -1305,10 +1310,10 @@ export default class ChessBoard {
 					side = this.isSideFen(fen[i]);
 				}
 			}
-
 			return flag;
 		}
 		else {
+			console.log("is flaGS");
 			return false;
 		}
 	}
@@ -1379,44 +1384,39 @@ export default class ChessBoard {
 
 	//Get info --> FEN <--
 	getInfoFen(fen) {
-		if (this.isFEN(fen)) {
-			let info = {
-				position: '',
-				side: '',
-				castling: '',
-				enPassant: ''
-			}
-
-			while (fen[0] != ' ') {
-				info.position += fen[0];
-				fen = fen.substring(1);
-			}
-			if (fen[0] == ' ') {
-				fen = fen.substring(1);
-			}
-			while (fen[0] != ' ') {
-				info.side = this.isSideFen(fen[0]);
-				fen = fen.substring(1);
-			}
-			if (fen[0] == ' ') {
-				fen = fen.substring(1);
-			}
-			while (fen[0] != ' ') {
-				info.castling += fen[0];
-				fen = fen.substring(1);
-			}
-			if (fen[0] == ' ') {
-				fen = fen.substring(1);
-			}
-			while (fen[0] && fen[0] != ' ') {
-				info.enPassant += fen[0];
-				fen = fen.substring(1);
-			}
-			return info;
-		} else {
-			console.error('Error: fen is not correct!')
-			return 0;
+		let info = {
+			position: '',
+			side: '',
+			castling: '',
+			enPassant: ''
 		}
+
+		while (fen[0] != ' ') {
+			info.position += fen[0];
+			fen = fen.substring(1);
+		}
+		if (fen[0] == ' ') {
+			fen = fen.substring(1);
+		}
+		while (fen[0] != ' ') {
+			info.side = this.isSideFen(fen[0]);
+			fen = fen.substring(1);
+		}
+		if (fen[0] == ' ') {
+			fen = fen.substring(1);
+		}
+		while (fen[0] != ' ') {
+			info.castling += fen[0];
+			fen = fen.substring(1);
+		}
+		if (fen[0] == ' ') {
+			fen = fen.substring(1);
+		}
+		while (fen[0] && fen[0] != ' ') {
+			info.enPassant += fen[0];
+			fen = fen.substring(1);
+		}
+		return info;
 	}
 
 	//Castling info for FEN
@@ -1812,8 +1812,14 @@ export default class ChessBoard {
 	//Destroy this
 	destroy() {
 		for (let j = 0; j < this.player.length; j++) {
-			this.player[j].destroy();
+			this.player[0].destroy();
 		}
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				this.cellsArr[i][j] = null;
+			}
+		}
+		this.layout.remove();
 		delete this;
 	}
 	///////////////////////////////////////

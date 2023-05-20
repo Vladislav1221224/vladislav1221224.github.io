@@ -21,7 +21,7 @@
 #rules-list li{
 	list-style-type: disc;
 }
-#footer-block{
+.footer-block{
 	float: left;
 	position: relative;
 }
