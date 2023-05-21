@@ -566,10 +566,11 @@ export default class ChessBoard {
 
 	//Piece dragging
 	dragging(piece) {
+		console.log(piece)
 		if (piece && piece.html) {
 			let chessboardInfo = this.html.getBoundingClientRect();
 			let posInfo = piece.html.getBoundingClientRect();
-
+			console.log(chessboardInfo);
 			let width = posInfo.width;	//<--for limit a dragging on the chessboard
 			let height = posInfo.height;	//<--for limit a dragging on the chessboard
 
@@ -598,12 +599,15 @@ export default class ChessBoard {
 
 			//Function which set a piece in position of 'e' element
 			function moveAt(e) {
-				if (chessboardInfo.left < e.pageX && chessboardInfo.right > e.pageX) {
+
+				if (chessboardInfo.left < e.clientX && chessboardInfo.right > e.clientX) {
 					piece.html.style.left = e.pageX - piece.html.offsetWidth / 2 + 'px';
 				}
-				if (chessboardInfo.top < e.pageY && chessboardInfo.bottom > e.pageY) {
+				if (chessboardInfo.top < e.clientY && chessboardInfo.bottom > e.clientY) {
+					console.log(piece);
 					piece.html.style.top = e.pageY - piece.html.offsetWidth / 2 + 'px';
 				}
+				console.log(piece.html.style.top + ' / ' + e.pageY + ' < ' + chessboardInfo.top);
 			}
 		}
 	}
@@ -1008,7 +1012,7 @@ export default class ChessBoard {
 	//return true if x and y is coordinates of DOM-element of this.html
 	isChessBoard(x, y) {
 		let chessboardInfo = this.html.getBoundingClientRect();
-		if (x >= chessboardInfo.pageX && x <= (chessboardInfo.pageX - chessboardInfo.width) && y >= chessboardInfo.pageY && y <= chessboardInfo.pageY - chessboardInfo.height) {
+		if (x >= chessboardInfo.x && x <= (chessboardInfo.x + chessboardInfo.width) && y >= chessboardInfo.y && y <= chessboardInfo.y + chessboardInfo.height) {
 			console.log('is true'); return true
 		}
 		else { console.log('is true'); return false }
@@ -1166,6 +1170,7 @@ export default class ChessBoard {
 			let count = 0;
 			let side;
 			let row = 1;
+			console.log(probels);
 			for (let i = 0; i < fen.length; i++) {
 				if (fen[i] == ' ') {
 					probels++;
@@ -1181,6 +1186,7 @@ export default class ChessBoard {
 					}
 				}
 				else if (probels == 0 && !parseInt(fen[i]) && !this.isPieceFen(fen[i]) && !fen[i] == '/') {
+					console.log("THIS FALSE!!!")
 					flag = false;
 					break;
 				}
@@ -1292,7 +1298,7 @@ export default class ChessBoard {
 										column += parseInt(fen[j]) - 2;
 									}
 									else if (fen[j] == '/') {
-										console.error('fen[' + j + '] = false: ' + fen[j])
+										console.error('fen[' + j + '] = false: ' + fen[j]);
 										flag = false;
 										break;
 									}
@@ -1310,6 +1316,7 @@ export default class ChessBoard {
 					side = this.isSideFen(fen[i]);
 				}
 			}
+			console.log('FLAG = ' + flag);
 			return flag;
 		}
 		else {
@@ -1390,31 +1397,32 @@ export default class ChessBoard {
 			castling: '',
 			enPassant: ''
 		}
-
-		while (fen[0] != ' ') {
-			info.position += fen[0];
-			fen = fen.substring(1);
-		}
-		if (fen[0] == ' ') {
-			fen = fen.substring(1);
-		}
-		while (fen[0] != ' ') {
-			info.side = this.isSideFen(fen[0]);
-			fen = fen.substring(1);
-		}
-		if (fen[0] == ' ') {
-			fen = fen.substring(1);
-		}
-		while (fen[0] != ' ') {
-			info.castling += fen[0];
-			fen = fen.substring(1);
-		}
-		if (fen[0] == ' ') {
-			fen = fen.substring(1);
-		}
-		while (fen[0] && fen[0] != ' ') {
-			info.enPassant += fen[0];
-			fen = fen.substring(1);
+		if (this.isFEN(fen)) {
+			while (fen[0] != ' ') {
+				info.position += fen[0];
+				fen = fen.substring(1);
+			}
+			if (fen[0] == ' ') {
+				fen = fen.substring(1);
+			}
+			while (fen[0] != ' ') {
+				info.side = this.isSideFen(fen[0]);
+				fen = fen.substring(1);
+			}
+			if (fen[0] == ' ') {
+				fen = fen.substring(1);
+			}
+			while (fen[0] != ' ') {
+				info.castling += fen[0];
+				fen = fen.substring(1);
+			}
+			if (fen[0] == ' ') {
+				fen = fen.substring(1);
+			}
+			while (fen[0] && fen[0] != ' ') {
+				info.enPassant += fen[0];
+				fen = fen.substring(1);
+			}
 		}
 		return info;
 	}
@@ -1768,16 +1776,20 @@ export default class ChessBoard {
 		reset.onclick = function () {
 			chessboard.resetTheChessBoard();
 		}
-		fen.onclick = function () {
+		fen.onclick = function (element) {
 			var text = chessboard.getFEN();
-
+			console.log(element)
+			let top = element.pageY + 20;
+			let left = element.pageX - 22;
 			navigator.clipboard.writeText(text)
 				.then(() => {
 					if (!document.querySelector('.ms-copy')) {
 						let message = document.createElement('div');
 						message.className = 'ms-copy invisible';
 						message.innerHTML = "Copied!";
-						document.querySelector('#right-player-layout').append(message);
+						message.style.top = top + 'px';
+						message.style.left = left + 'px';
+						document.querySelector('.base-layout').append(message);
 						setTimeout(
 							() => {
 								message.classList.remove('invisible');

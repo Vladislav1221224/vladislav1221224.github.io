@@ -20,7 +20,7 @@ if (document.querySelector('#add-chessboard') && document.querySelector('#remove
 function addChessBoard() {
 	if (chessboardArray.length <= 5) {
 		let chessboard = new ChessBoard('white', chessboardArray.length);
-		document.getElementById('game-block').prepend(chessboard.layout)
+		document.getElementById('game-block').append(chessboard.layout)
 		console.log(chessboard)
 		chessboardArray.push(chessboard);
 	}
