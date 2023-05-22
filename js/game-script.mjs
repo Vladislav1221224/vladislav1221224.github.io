@@ -2,24 +2,46 @@ import ChessBoard from "./chessJS/ChessBoard.mjs";
 
 //Slider for chessboards
 let chessboardArray = [];
+const max_chessboards_count = 5;
 addChessBoard();
-
-
-function addChessBoard(){
-	let chessboard = new ChessBoard('white',chessboardArray.length);
-	document.getElementById('game-block').prepend(chessboard.layout)
-	console.log(chessboard)
-	chessboardArray.push(chessboard);
+removeChessBoard();
+if (document.querySelector('#add-chessboard') && document.querySelector('#remove-chessboard')) {
+	document.querySelector('#add-chessboard').onclick = function (mouse) {
+		if (mouse.button == 0) {
+			addChessBoard();
+		}
+	};
+	document.querySelector('#remove-chessboard').onclick = function (mouse) {
+		if (mouse.button == 0) {
+			removeChessBoard();
+		}
+	};
 }
-function removeChessBoard(){
-	chessboardArray[chessboardArray.length].destroy();
-	chessboardArray.pop();
+function addChessBoard() {
+	if (chessboardArray.length <= max_chessboards_count) {
+		let chessboard = new ChessBoard('white', chessboardArray.length);
+		document.getElementById('game-block').append(chessboard.layout)
+		console.log(chessboard)
+		chessboardArray.push(chessboard);
+	}
 }
-
-// chessboard.doMove('e2e4');
-// chessboard.doMove('e4e5');
-// chessboard.doMove('Qd1h5');
-// console.log(chessboard.isMove('exf6++'));
+function removeChessBoard() {
+	if (chessboardArray.length > 1) {
+		console.log(chessboardArray[chessboardArray.length - 1]);
+		chessboardArray[chessboardArray.length - 1].destroy();
+		chessboardArray.pop();
+	}
+}
+document.querySelector('.layout-chess-board').onclick = function () {
+	console.log('is SCROLLED')
+	document.getElementById('.layout-chess-board').scrollTo({
+		top: 0,
+		left: 100,
+		behavior: 'smooth'
+	});
+	;
+}
+chessboardArray[0].isMove('Nc6#');
 
 let input;
 let buttonFen;
@@ -33,12 +55,19 @@ openFenWindow.onclick = function (mouse) {
 		layout.id = 'fen-window-background';
 		layout.innerHTML = `<div class="fen-layout"><button id="close-fen-window"><div class="close"></div></button>
 		<b>FEN:</b>
-		<textarea autofocus class="fen-input"type="text" placeholder="Insert FEN"></textarea>
+		<textarea autofocus class="fen-input" type="text" placeholder="Insert FEN"></textarea>
 		<button class="button"id="button-setFEN"><b class="">Set position</b></button>
+		<select id="select-chess-board">ID: 
+			<option selected>1</option>
+		</select>
 		<div id="fen-error-layout"></div>
 		</div>`
 		document.querySelector('.base-layout').append(layout);
+		let select = document.querySelector('#select-chess-board');
 
+		for (let i = 1; i < chessboardArray.length; i++) {
+			select.innerHTML += `<option value='${i + 1}'>${i + 1}</option>`;
+		}
 		input = document.querySelector('.fen-input');
 		buttonFen = document.querySelector('#button-setFEN');
 		errorFEN = document.querySelector('#fen-error-layout');
@@ -55,9 +84,9 @@ openFenWindow.onclick = function (mouse) {
 		};
 		buttonFen.onclick = function (mouse) {
 			if (mouse.button == 0) {
-				console.log('is set')
-				console.log(input);
-				if (!(setFenOfInput(input.value))) {
+				console.log();
+				let CB = chessboardArray[select.value - 1];
+				if (!(setFenOfInput(input.value, CB))) {
 					errorFEN.innerHTML = "Error: fen is not correct!";
 				}
 			}
@@ -66,7 +95,7 @@ openFenWindow.onclick = function (mouse) {
 }
 
 
-function setFenOfInput(fen) {
+function setFenOfInput(fen, chessboard) {
 	if (chessboard.isFEN(fen)) {
 		chessboard.setFEN(fen);
 		console.log("BUTTON = 1")

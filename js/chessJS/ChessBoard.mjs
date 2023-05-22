@@ -102,11 +102,11 @@ export default class ChessBoard {
 
 	//HTML DOM of layout
 	///////////////////////////////////////
-	get layout(){
+	get layout() {
 		return this._layout;
 	}
 	///////////////////////////////////////
-	
+
 	//HTML DOM of chessboard
 	///////////////////////////////////////
 	html;
@@ -299,7 +299,6 @@ export default class ChessBoard {
 			this.layout.innerHTML = `<ul id="right-player-layout"></ul>
 		<ul id="footer-player-layout">
 		</ul>`;
-		
 			this.html = document.createElement('div');
 			this.html.classList = "chess-board";
 			this.html.id = this._key;
@@ -334,6 +333,7 @@ export default class ChessBoard {
 			this.clearMoveDestination();
 		}
 	}
+
 	//Draw a cells and initialize cells events and logic of dragging by help cells events
 	drawCells(chessBoardSide) {
 
@@ -377,85 +377,88 @@ export default class ChessBoard {
 
 		//For all elements on window
 		document.querySelectorAll('*').forEach((element) => {
-			element.onmousedown = function (mouse) {
-				//If User click "leftMouseButton" outside the DOM element --> ChessBoard <-- selectCell is cancelled
-				if (mouse.button == 0) {
-					if (!chessboard.isChessBoard(mouse.clientX, mouse.clientY) && chessboard.selectCell) {
-						let piece = chessboard.selectCell.piece;
-						document.onmousemove = null;
-						piece.html.onmouseup = null;
-						piece.html.classList.remove('drag');
-						piece.html.style.position = 'relative';
-						piece.html.style.width = 100 + '%';
-						piece.html.style.height = 100 + '%';
-						piece.html.style.left = 0 + 'px';
-						piece.html.style.top = 0 + 'px';
-						chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-						chessboard.clearSelectSquare();
-						$(chessboard.html).removeClass('dragging');
-						document.querySelectorAll('.square').forEach((element) => {
-							if (element.querySelector('.piece')) {
-								element.style.cursor = 'grab';
-							}
-							else if (!element.querySelector('.piece')) {
-								element.style.cursor = 'default';
-							}
-						})
-					}
-				}
-				////If User click "rightMouseButton" selectCell is cancelled
-				if (mouse.button == 2) {
-					if (chessboard.selectCell) {
-						let piece = chessboard.selectCell.piece;
-						if (chessboard.isDeveloper) {
-						}
-						document.onmousemove = null;
-						piece.html.onmouseup = null;
-						piece.html.classList.remove('drag');
-						piece.html.style.position = 'relative';
-						piece.html.style.width = 100 + '%';
-						piece.html.style.height = 100 + '%';
-						piece.html.style.left = 0 + 'px';
-						piece.html.style.top = 0 + 'px';
-						chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-						chessboard.clearSelectSquare();
-						$(chessboard.html).removeClass('dragging');
-						document.querySelectorAll('.square').forEach((element) => {
-							if (element.querySelector('.piece')) {
-								element.style.cursor = 'grab';
-							}
-							else if (!element.querySelector('.piece')) {
-								element.style.cursor = 'default';
-							}
-						})
-					}
-				}
-			}
-			//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
-			element.onmouseup = function (mouse) {
-				if (mouse.button == 0) {
-					if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
-						let piece = chessboard.selectCell.piece;
-						document.onmousemove = null;
-						piece.html.classList.remove('drag');
-						piece.html.style.position = 'relative';
-						piece.html.style.width = 100 + '%';
-						piece.html.style.height = 100 + '%';
-						piece.html.style.left = 0 + 'px';
-						piece.html.style.top = 0 + 'px';
-						if (!element.classList.contains('square')) {
+			if (!element.classList.contains('square') && !element.classList.contains('piece') && !element.classList.contains('chess-board')) {
+				element.onmousedown = function (mouse) {
+					//If User click "leftMouseButton" outside the DOM element --> ChessBoard <-- selectCell is cancelled
+					if (mouse.button == 0) {
+						console.log('is do')
+						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
+							let piece = chessboard.selectCell.piece;
+							document.onmousemove = null;
+							piece.html.onmouseup = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
 							chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
 							chessboard.clearSelectSquare();
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
 						}
-						$(chessboard.html).removeClass('dragging');
-						document.querySelectorAll('.square').forEach((element) => {
-							if (element.querySelector('.piece')) {
-								element.style.cursor = 'grab';
+					}
+					////If User click "rightMouseButton" selectCell is cancelled
+					if (mouse.button == 2) {
+						if (chessboard.selectCell) {
+							let piece = chessboard.selectCell.piece;
+							if (chessboard.isDeveloper) {
 							}
-							else if (!element.querySelector('.piece')) {
-								element.style.cursor = 'default';
+							document.onmousemove = null;
+							piece.html.onmouseup = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
+							chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+							chessboard.clearSelectSquare();
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
+						}
+					}
+				}
+				//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
+				element.onmouseup = function (mouse) {
+					if (mouse.button == 0) {
+						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
+							let piece = chessboard.selectCell.piece;
+							document.onmousemove = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
+							if (!element.classList.contains('square')) {
+								chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+								chessboard.clearSelectSquare();
 							}
-						})
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
+						}
 					}
 				}
 			}
@@ -553,6 +556,7 @@ export default class ChessBoard {
 		///////////////////////////////////////////////////////////////////////
 		//////////////////////////////////
 	}
+
 	//Draw a players and figures
 	drawPlayers() {
 		let white = new Player('white', this);
@@ -564,22 +568,20 @@ export default class ChessBoard {
 	//Piece dragging
 	dragging(piece) {
 		if (piece && piece.html) {
-			let chessboardInfo = this.html.getBoundingClientRect();
+			let chessboardInfo = this.html.getBoundingClientRect();//<--for limit a dragging piece on the chessboard
 			let posInfo = piece.html.getBoundingClientRect();
-
-			let width = posInfo.width;	//<--for limit a dragging on the chessboard
-			let height = posInfo.height;	//<--for limit a dragging on the chessboard
+			let width = posInfo.width;
+			let height = posInfo.height;
 
 			piece.html.style.width = width + 'px';
 			piece.html.style.height = height + 'px';
 			piece.html.ondragstart = function () {
 				return false;
 			};
-
-			document.body.appendChild(piece.html);
-
+			piece.html.style.left = '0px';
+			piece.html.style.top = '0px';
 			piece.html.style.position = 'absolute';
-
+			document.body.appendChild(piece.html);
 			piece.html.style.zIndex = 1000;
 
 			//set a piece in mouse position
@@ -595,10 +597,10 @@ export default class ChessBoard {
 
 			//Function which set a piece in position of 'e' element
 			function moveAt(e) {
-				if (chessboardInfo.left < e.pageX && chessboardInfo.right > e.pageX) {
+				if (chessboardInfo.left < e.clientX && chessboardInfo.right > e.clientX) {
 					piece.html.style.left = e.pageX - piece.html.offsetWidth / 2 + 'px';
 				}
-				if (chessboardInfo.top < e.pageY && chessboardInfo.bottom > e.pageY) {
+				if (chessboardInfo.top < e.clientY && chessboardInfo.bottom > e.clientY) {
 					piece.html.style.top = e.pageY - piece.html.offsetWidth / 2 + 'px';
 				}
 			}
@@ -642,6 +644,7 @@ export default class ChessBoard {
 				else if (this.selectCell && element.html.querySelector('.move-destination')) {
 					let square = element;
 					element = square.html;
+					console.log(this.cellsArr)
 					if (square.piece && this.selectCell.piece.name == 'king' && square.piece.name == 'rook' && this.selectCell.piece.side == square.piece.side && this.selectCell.piece.canCastling == true && square.piece.canCastling == true) {
 						this.doCastling(element, this.selectCell.piece);
 					}
@@ -1005,8 +1008,10 @@ export default class ChessBoard {
 	//return true if x and y is coordinates of DOM-element of this.html
 	isChessBoard(x, y) {
 		let chessboardInfo = this.html.getBoundingClientRect();
-		if (x >= chessboardInfo.left && x <= chessboardInfo.right && y >= chessboardInfo.top && y <= chessboardInfo.bottom) { return true }
-		else { return false }
+		if (x >= chessboardInfo.x && x <= (chessboardInfo.x + chessboardInfo.width) && y >= chessboardInfo.y && y <= chessboardInfo.y + chessboardInfo.height) {
+			console.log('is true'); return true
+		}
+		else { console.log('is true'); return false }
 	}
 
 
@@ -1063,82 +1068,59 @@ export default class ChessBoard {
 	//Return info if >>move<< is move-notation
 	isMove(move) {
 		let info = { figure: null, capture: false, cell: { x: null, y: null }, destination: { x: null, y: null }, other: '' };
-		//figure
-		{
-			if (parseInt(move[1]) || (move[1] == 'x' && parseInt(move[3]))) {
-				info.figure = 'pawn';
-				info.cell.x = this.isHorizontalAxe(move[0]);
-				//capture
-				if (move[1] == 'x') {
-					info.capture = true;
-					let dest = '';
-					for (let i = 0; i < move.length; i++) {
-						if (i > 1 && i < 4) {
-							dest += move[i];
-						}
-						if (i >= 4) {
-							info.other += move[i];
-						}
-					}
-					info.destination = this.isID(dest);
-				}
-				else {
-					info.destination = this.isID(move[0] + move[1]);
-					for (let i = 0; i < move.length; i++) {
-						if (i > 1) {
-							info.other += move[i];
-						}
-					}
-				}
+		let notation = move;
+		let flag = false;
+		for (let i = notation.length - 1; i > 0; i--) {
+			console.log(notation[i]);
+			if (flag) {
+				break;
 			}
-			else if (parseInt(move[2])) {
-				let figures = {
-					'B': 'bishop',
-					'N': 'knight',
-					'K': 'king',
-					'Q': 'queen',
-					'R': 'rook'
-				}
-				for (const key in figures) {
-					if (figures.hasOwnProperty(key) && figures[key] === move[0]) {
-						info.figure = key;
-					}
-				}
-				//capture
-				if (move[1] == 'x') {
-					info.capture = true;
-				}
-				else if (move[2] == 'x') {
-					info.capture = true;
-					info.cell.x = this.isHorizontalAxe(move[1]);
-					if (!info.cell.x) {
-						info.cell.y = this.isVerticalAxe(move[1]);
-					}
-				}
+			else if (notation[i] == '+' || notation[i] == '#' || !parseInt(notation[i])) {
+				console.log('is slice[' + i + ']: ' + notation[i]);
+				notation.slice(0, -1);
+				flag = true;
+			}
+			else if (this.isID(notation[i - 1] + notation[i])) {
+				flag = true;
+			}
+			else {
+				return false;
 			}
 		}
-		//exd5
-		// if (info.capture) {
-		// 	if (parseInt(move[2])) {
-		// 		if (convertIDtoXY(move[0] + move[1]) && (!move[2] || move[2] + move[3] == '+' || move[2] + move[3] == '++' || move[2] == '#')) {
-		// 			info.destination = this.isID(move[0] + move[1]);
-		// 		}
-		// 	}
-		// 	else if (parseInt(move[3]) && move[0] == move[0].toUpperCase) {
-		// 		info.destination = this.isID(move[1] + move[2]);
-		// 	}
-		// }
-		// else {
-		// 	if (parseInt(move[2])) {
-		// 		if (convertIDtoXY(move[0] + move[1])) {
-		// 			info.destination = this.isID(move[0] + move[1]);
-		// 		}
-		// 	}
-		// 	//(!move[] || move[2] + move[3] == '+' || move[2] + move[3] == '++' || move[2] == '#')
-		// 	else if (parseInt(move[3]) && move[0] == move[0].toUpperCase) {
-		// 		info.destination = this.isID(move[1] + move[2]);
-		// 	}
-		// }
+		console.log(notation);
+		//figure
+		{
+			let figures = {
+				'B': 'bishop',
+				'N': 'knight',
+				'K': 'king',
+				'Q': 'queen',
+				'R': 'rook'
+			}
+			for (const key in figures) {
+				console.log(move[0] + ' / ' + key);
+				if (figures.hasOwnProperty(key) && key == move[0].toUpperCase()) {
+					info.figure = figures[key];
+					console.log(info.figure);
+				}
+				else if (move[move.length - 1] + move[move.length]) {
+
+				}
+			}
+			for (let i = 0; i < move.length; i++) {
+				if (move[i] == 'x' && i <= move.length - 2) {
+					info.capture = true;
+				}
+			}
+			if (move[2] == 'x') {
+				info.capture = true;
+				info.cell.x = this.isHorizontalAxe(move[1]);
+				if (!info.cell.x) {
+					info.cell.y = this.isVerticalAxe(move[1]);
+				}
+			}
+			console.log(info);
+		}
 		return info;
 	}
 	//Return true if this string is FEN
@@ -1162,6 +1144,10 @@ export default class ChessBoard {
 			let side;
 			let row = 1;
 			for (let i = 0; i < fen.length; i++) {
+				if (probels == 1 && row < 8) {
+					flag = false;
+					break;
+				}
 				if (fen[i] == ' ') {
 					probels++;
 					continue;
@@ -1176,6 +1162,7 @@ export default class ChessBoard {
 					}
 				}
 				else if (probels == 0 && !parseInt(fen[i]) && !this.isPieceFen(fen[i]) && !fen[i] == '/') {
+					console.log("THIS FALSE!!!")
 					flag = false;
 					break;
 				}
@@ -1240,8 +1227,6 @@ export default class ChessBoard {
 						let position = { x: null, y: null };
 
 						if (this.isHorizontalAxe(itFen[0])) {
-							console.log(side);
-							console.log("ItFen[1] = " + this.isVerticalAxe(itFen[1]) + ' / ' + itFen[1]);
 							if (side == 'white' && parseInt(itFen[1]) == 6) {
 								console.log(itFen[1])
 								position.y = parseInt(itFen[1]) - 1;
@@ -1249,7 +1234,6 @@ export default class ChessBoard {
 								console.log(true);
 							}
 							else if (side == 'black' && parseInt(itFen[1]) == 3) {
-								console.log(itFen[1])
 								position.y = parseInt(itFen[1]) + 1;
 								position.x = this.isHorizontalAxe(itFen[0]);
 								console.log(true);
@@ -1287,7 +1271,7 @@ export default class ChessBoard {
 										column += parseInt(fen[j]) - 2;
 									}
 									else if (fen[j] == '/') {
-										console.error('fen[' + j + '] = false: ' + fen[j])
+										console.error('fen[' + j + '] = false: ' + fen[j]);
 										flag = false;
 										break;
 									}
@@ -1305,42 +1289,41 @@ export default class ChessBoard {
 					side = this.isSideFen(fen[i]);
 				}
 			}
-
+			if (probels < 3) {
+				flag = false;
+			}
+			console.log('FLAG = ' + flag);
 			return flag;
 		}
 		else {
+			console.log("is flaGS");
 			return false;
 		}
 	}
 	//Return true if variable fen is ID of cell
 	isHorizontalAxe(id) {
-		let bool = false;
-		console.log(id);
+		let bool;
 		for (const key in Cell.IDLETTER) {
-			if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] === id.toLowerCase()) {
-				bool = key;
+			if (Cell.IDLETTER.hasOwnProperty(key) && Cell.IDLETTER[key] == id.toLowerCase()) {
+				bool = parseInt(key);
 			}
 		}
-		return parseInt(bool);
+		return bool;
 	}
 	isVerticalAxe(id) {
-		let bool = false;
-		console.log(id);
+		let bool;
 		for (const key in Cell.IDNUMBER) {
-			if (Cell.IDNUMBER.hasOwnProperty(key) && Cell.IDNUMBER[key] === id.toLowerCase()) {
-				bool = key;
+			if (Cell.IDNUMBER.hasOwnProperty(key) && Cell.IDNUMBER[key] == id.toLowerCase()) {
+				bool = parseInt(key);
 			}
 		}
-		return parseInt(bool);
+		return bool;
 	}
 	isID(fen) {
 		if (fen && typeof fen == "string" && fen.length == 2) {
-			let pos = { x: null, y: null };
+			let pos = { x: undefined, y: undefined };
 			pos.x = this.isHorizontalAxe(fen[0]);
-			if (pos.x) {
-				pos.y = this.isVerticalAxe(fen[1]);
-			}
-			else { return false }
+			pos.y = this.isVerticalAxe(fen[1]);
 			return pos;
 		}
 	}
@@ -1379,14 +1362,13 @@ export default class ChessBoard {
 
 	//Get info --> FEN <--
 	getInfoFen(fen) {
+		let info = {
+			position: '',
+			side: '',
+			castling: '',
+			enPassant: ''
+		}
 		if (this.isFEN(fen)) {
-			let info = {
-				position: '',
-				side: '',
-				castling: '',
-				enPassant: ''
-			}
-
 			while (fen[0] != ' ') {
 				info.position += fen[0];
 				fen = fen.substring(1);
@@ -1412,11 +1394,8 @@ export default class ChessBoard {
 				info.enPassant += fen[0];
 				fen = fen.substring(1);
 			}
-			return info;
-		} else {
-			console.error('Error: fen is not correct!')
-			return 0;
 		}
+		return info;
 	}
 
 	//Castling info for FEN
@@ -1665,7 +1644,6 @@ export default class ChessBoard {
 	}
 
 
-
 	doMove(move, option) {
 		let change = true;
 		if (option) {
@@ -1737,7 +1715,6 @@ export default class ChessBoard {
 	//Buttons
 	setButtons() {
 		let chessboard = this;
-		console.log(this.layout);
 		let rightNav = this.layout.querySelector('#right-player-layout');
 		let flip = document.createElement('li');
 		flip.id = "flip-chess-board";
@@ -1761,7 +1738,6 @@ export default class ChessBoard {
 		next.id = 'set-next-fen';
 		next.innerHTML = '>';
 		footerNav.append(next);
-		console.log(this.layout);
 		flip.onclick = function () {
 			chessboard.flipTheChessBoard();
 		}
@@ -1770,14 +1746,18 @@ export default class ChessBoard {
 		}
 		fen.onclick = function () {
 			var text = chessboard.getFEN();
-
+			console.log(fen);
+			let top = fen.getBoundingClientRect().top + 25;
+			let left = fen.getBoundingClientRect().left;
 			navigator.clipboard.writeText(text)
 				.then(() => {
 					if (!document.querySelector('.ms-copy')) {
 						let message = document.createElement('div');
 						message.className = 'ms-copy invisible';
 						message.innerHTML = "Copied!";
-						document.querySelector('#right-player-layout').append(message);
+						message.style.top = top + 'px';
+						message.style.left = left + 'px';
+						document.querySelector('.base-layout').append(message);
 						setTimeout(
 							() => {
 								message.classList.remove('invisible');
@@ -1812,8 +1792,14 @@ export default class ChessBoard {
 	//Destroy this
 	destroy() {
 		for (let j = 0; j < this.player.length; j++) {
-			this.player[j].destroy();
+			this.player[0].destroy();
 		}
+		for (let i = 0; i < 8; i++) {
+			for (let j = 0; j < 8; j++) {
+				this.cellsArr[i][j] = null;
+			}
+		}
+		this.layout.remove();
 		delete this;
 	}
 	///////////////////////////////////////

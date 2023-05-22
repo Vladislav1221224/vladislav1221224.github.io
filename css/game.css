@@ -2,16 +2,25 @@
 	display: block;
 	position: relative;
 	float: left;
-	text-align: center;
 	margin: 20px;
-	width: auto;
-	height: auto;
+	max-width: 100vw;
+	max-height: 83vh;
+	width: 59%;
+	height: 83%;
+	display: flex;
+	background-color: transparent;
+	min-width: 200px;
+	margin: 5px;
+	scroll-behavior: smooth;
+	overflow: visible;
+	overflow-x: visible;
+	overflow-y: hidden;
 
-	@media(max-width: 80vh) {
+	@media(max-height:450px) {
+		width: calc(100vh - 44px);
+		height: calc(100vh - 44px);
 		margin: auto;
-		width: 100%;
-		height: calc(50vh - 88px);
-		padding: 0;
+		padding: auto;
 	}
 
 	@media(max-height:450px) {
@@ -21,13 +30,39 @@
 	}
 }
 
+#game-block::-webkit-scrollbar {
+	width: 10px;
+}
+
+#game-block::-webkit-scrollbar-track {
+	background-color: transparent;
+	border-radius: 100px;
+	width: 10px;
+}
+
+#game-block::-webkit-scrollbar-thumb {
+	border-radius: 100px;
+	background-color: rgba(192, 192, 192, 0.4);
+	-webkit-transition: all 0.1s;
+	-o-transition: all 0.1s;
+	transition: all 0.1s;
+}
+
+#game-block::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(192, 192, 192, 0.7);
+}
+
+#game-block::-webkit-scrollbar-thumb:active {
+	background-color: rgba(192, 192, 192, 0.507);
+}
 .layout-chess-board {
-	display: block;
+	display:flex;
+	flex-flow:wrap;
 	position: relative;
 	float: left;
 	margin: 0 0;
-	width: auto;
-	height: auto;
+	min-width: 100%;
+	height: 100%;
 	@media(max-width: 80vh) {
 		margin: 0;
 		margin-top: 5px;
@@ -43,35 +78,37 @@
 }
 
 #right-player-layout {
-	display: none;
+	display: flex;
+	flex-flow: column;
+	position: relative;
+	top: 2%;
+	float: right;
 	background-color: transparent;
-	float: left;
-	width: 5%;
-	height: 100%;
-	padding: 2px;
-
-	@media(min-width: 1000px) {
-		display: block;
-	}
+	width: 10%;
+	height: 10%;
+	padding: 5px;
 }
-ul{
+
+ul {
 	margin: 0;
 	padding: 0;
 }
 
 #footer-player-layout {
+	display: flex;
+	position: absolute;
+	left: 1%;
+	bottom: 0;
 	background-color: transparent;
-	float: left;
-	width: 100%;
-	height: 5%;
+	width: auto;
+	height: 7%;
 }
 
 #flip-chess-board {
 	float: left;
-	display: inherit;
 	background-color: transparent;
-	height: 100%;
-	padding: 0pt 5pt;
+	width: 20px;
+	height: 20px;
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
@@ -83,11 +120,9 @@ ul{
 
 #reset-chess-board {
 	float: left;
-	display: inherit;
 	font-weight: 900;
 	background-color: transparent;
 	height: 100%;
-	padding: 0pt 5pt;
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
@@ -99,7 +134,6 @@ ul{
 
 #get-fen {
 	float: left;
-	display: none;
 	font-weight: 900;
 	background-color: transparent;
 	height: 100%;
@@ -107,10 +141,6 @@ ul{
 	border-width: 0px;
 	border-radius: 50%;
 	cursor: pointer;
-
-	@media(min-width: 950px) {
-		display: block;
-	}
 }
 
 #get-fen:hover {
@@ -118,8 +148,10 @@ ul{
 }
 
 #right-block {
+	display: block;
 	z-index: 1;
-	right: 0%;
+	top: 0;
+	right: 0;
 	width: 40%;
 	height: 100%;
 	max-width: 100vw;
@@ -206,9 +238,10 @@ ul{
 
 #fen-window-background {
 	position: fixed;
-	z-index: 3;
+	z-index: 100;
 	width: 100%;
 	height: 100%;
+	margin: 0;
 	background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -221,17 +254,23 @@ ul{
 	box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, .5);
 	background-color: rgb(44, 80, 128);
 	padding: 0.5%;
+	min-width: 250px;
 	width: 30%;
 	height: 30%;
 	border-radius: 1rem;
 	transform: translate(-50%, -50%);
+
+	@media(max-width:250px) {
+		min-width: 200px;
+		width: 100%;
+	}
 }
 
 .fen-input {
 	color: silver;
 	background-color: rgba(0, 0, 0, 0.3);
 	outline: none;
-	margin: auto;
+	margin: 0 auto;
 	width: 60%;
 	height: 80%;
 	resize: none;
@@ -248,18 +287,37 @@ ul{
 	transition: all 0.1s;
 }
 
-#right-block[hidden] {
-	display: none;
-
-	@media (min-width: 920px) {
-		display: block;
+#chessboard-array-menu {
+	display: flex;
+	position: absolute;
+	background-color: rgba(0, 36, 72, .6);
+	left: 0;
+	bottom: 0;
+	float:left;
+	max-width: 100vw;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	justify-content: center;
+	align-items: center;
+	padding: 15px;
+	padding-left: 5%;
+	padding-bottom: 1%;
+	border-top-right-radius: 25px;
+	@media (max-width: 220px){
+		padding-left: 0;
+		padding-right: 0;
+		border-radius: 0;
+		width: 100%;
+	}
+	@media (max-width: 180px){
+		display: none;
 	}
 }
-.ms-copy{
-	display:block;
+
+.ms-copy {
+	display: block;
 	position: absolute;
-	top: 13%;
-	padding: 3px;
 	border-radius: 3px;
 	width: 0;
 	height: 50px;
@@ -270,7 +328,125 @@ ul{
 	-o-transition: all 0.7s;
 	transition: all 0.7s;
 }
-.invisible{
+
+.invisible {
 	background-color: rgba(255, 255, 255, 0);
-	color:rgba(255, 255, 255, 0);
+	color: rgba(255, 255, 255, 0);
 }
+#lng-chessboards{
+	position: relative;
+	float: left;
+	margin: 5px;
+	max-width: auto;
+	/* font-size:2.5vmin; */
+}
+#add-chessboard{
+	display:block;
+	position: relative;
+	float: left;
+	width: 30px;
+	height: 30px;
+	margin: 3px;
+	color: rgba(255, 255, 255, 0.3);
+	font-weight: 900;
+	max-width: 50%;
+}
+#remove-chessboard{
+	display:block;
+	position: relative;
+	float: left;
+	width: 30px;
+	height: 30px;
+	margin: 3px;
+	color: rgba(255, 255, 255, 0.3);
+	font-weight: 900;
+	max-width: 50%;
+}
+@media (min-width: 1000px){
+	#game-block{
+		height: 83%;
+	}
+}
+@media (max-width: 1000px) {
+	#right-block {
+		display: none;
+	}
+
+	#right-player-layout {
+		display: block;
+		position: absolute;
+		top:unset;
+		left: 400px;
+		bottom: 1%;
+		width: 35vw;
+		height: 20px;
+		padding: 15px;
+	}
+	#footer-player-layout {
+		margin: 0;
+		padding: 0;
+	}
+
+	#game-block {
+		margin: 0;
+		margin-bottom: 10px;
+		width: 100vw;
+		height: 120vw;
+		padding: 0;
+	}
+
+	.layout-chess-board {
+		min-width: 100%;
+		max-height: 110%;
+	}
+
+}
+@media (max-width: 74vh){
+	.chess-board{
+		max-width: 100vw;
+		max-height: 100vw;
+		box-shadow: none;
+		border-radius: 5px;
+		box-shadow: none;
+		margin: auto;
+		margin-top: 0;
+		width: calc(100vw - 8px);
+		height: calc(100vw - 8px);
+		border-radius: 5px;
+	}
+	#right-player-layout {
+		left: unset;
+		right: 5px;
+		padding: 2%;
+		padding-bottom: 0;
+		margin: 0;
+		float: right;
+	}
+	#flip-chess-board {
+		display:block;
+		max-width: 20px;
+		max-height: 20px;
+		width: 5vw;
+		height: 5vw;
+		margin-right: 5px;
+	}
+	#flip-chess-board>img {
+		display:block;
+		max-width: 20px;
+		width: 5vw;
+		height: 5vw;
+	}
+	
+	#reset-chess-board {
+		display:block;
+		height: 5vw;
+		font-size: 4vw;
+		line-height: normal;
+	}
+	
+	#get-fen {
+		display:block;
+		height: 5vw;
+		font-size: 4vw;
+		line-height: normal;
+	}
