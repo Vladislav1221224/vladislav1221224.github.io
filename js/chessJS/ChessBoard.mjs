@@ -299,7 +299,6 @@ export default class ChessBoard {
 			this.layout.innerHTML = `<ul id="right-player-layout"></ul>
 		<ul id="footer-player-layout">
 		</ul>`;
-
 			this.html = document.createElement('div');
 			this.html.classList = "chess-board";
 			this.html.id = this._key;
@@ -1643,7 +1642,6 @@ export default class ChessBoard {
 			console.error("Error: num is not number");
 		}
 	}
-
 
 
 	doMove(move, option) {
