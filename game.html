@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,14 +17,16 @@
 	<link rel="mask-icon" href="/images/favicons/safari-pinned-tab.svg" color="#5bbad5">
 	<meta name="msapplication-TileColor" content="#da532c">
 	<meta name="theme-color" content="#ffffff">
-	
+
 	<title class="lng-title-game">Chess</title>
 </head>
+
 <body>
 	<div class="base-layout">
 		<div id="top-nav-list">
 			<ul>
-				<li><a href="index.html" class="nav-component"><img width="18px" src="images/Home.png" alt="NoImage"><b class="lng-home">Home</b></a></li>
+				<li><a href="index.html" class="nav-component"><img width="18px" src="images/Home.png" alt="NoImage"><b
+							class="lng-home">Home</b></a></li>
 				<li><a href="game.html" class="nav-component"><b class="lng-play">Play</b></a></li>
 				<li id="change-lang-component"><b class="lng-language">Language</b>
 					<select class="change-language">
@@ -35,23 +38,13 @@
 			</ul>
 		</div>
 		<div id="game-block">
-			
-			<div id="layout-chess-board">
-				<div id="right-player-layout">
-					<ul>
-						<li><button class="flip-chess-board"><img width="18px" src="images\flip.png" alt="no image"></button></li>
-						<li><button class="reset-chess-board">reset</button></li>
-						<li><button class="get-fen">FEN</button></li>
-					</ul>
-				</div>
-				<div id="footer-player-layout">
-					<ul id="footer-game-layout">
-						<li><button class="nav-component" id="set-previous-fen"><</button></li>
-						<li><button class="nav-component" id="set-next-fen">></button></li>
-					</ul>
-					<div class="nav-component" id="moves-info-layout"></div>
-				</div>
-			</div>
+		</div>
+		<div id="chessboard-array-menu">
+			<b id="lng-chessboards">ChessBoards: </b>
+			<button id="add-chessboard" class="button">+
+			</button>
+			<button id="remove-chessboard" class="button">-
+			</button>
 		</div>
 		<div hidden id="right-block" class="block">
 			<div id="players-info-layout">
@@ -59,16 +52,11 @@
 			</div>
 			<button id="open-fen-window"><b>FEN</b></button>
 		</div>
-		<div class="footer-block" class="block">
-			|<a href="developinfo.html" class="lng-developers">Developers</a>|
-			<a href="help.html" class="lng-help">Help</a>|
-			<a href="rules.html" class="lng-rules">Rules</a>|
-			<!--<a href="">Community</a>|
-			<a href="">Instagram(ForView)</a>|-->
-		</div>
+
+		<script type="module" src="js\game-script.mjs"></script>
+		<script src="js\lng.js"></script>
+		<script src="js\set-language.js"></script>
 	</div>
-	<script type="module" src="js\game-script.mjs"></script>
-	<script src="js\lng.js"></script>
-	<script src="js\set-language.js"></script>
 </body>
+
 </html>

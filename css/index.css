@@ -1,8 +1,8 @@
-#main-block{
+#main-block {
 	display: block;
 	box-sizing: border-box;
 	float: left;
-	width: 100%;
+	width: 60%;
 	height: 60%;
 	border-right: 4px;
 	border-bottom: 4px;
@@ -11,21 +11,21 @@
 	border-bottom-right-radius: 5pt;
 	text-decoration: none;
 	padding: 20px;
-	@media (min-width: 700px) {
-		width: 60%;
-	}
 }
+
 #main-block::first-letter {
 	font-size: 250%;
 }
-#game-info-block{
+
+#game-info-block {
 	float: left;
 	border-radius: 0pt;
 	border-bottom-left-radius: 5pt;
 	text-decoration: none;
 	padding: 20px;
 }
-#right-nav-block{
+
+#right-nav-block {
 	z-index: 2;
 	display: none;
 	top: 0;
@@ -38,33 +38,112 @@
 	border-radius: 0pt;
 	text-align: center;
 	text-decoration: none;
-	@media(max-width: 600px){
+
+	@media(max-width: 600px) {
 		width: 100vw;
 	}
 }
-#right-nav-component{
-	display: block;
+
+#right-nav-component {
 	margin-top: 5px;
 	width: 100%;
 	text-align: center;
 	border: 0;
 	border-radius: 0;
 }
-#players-info-layout{
-	width:100%;
-	height:20%;
+
+#players-info-layout {
+	width: 100%;
+	height: 50px;
 }
-#top-nav-list, .footer-block{
+
+#top-nav-list,
+.footer-block {
 	width: 100%;
 }
-#vertical-text{
+
+#vertical-text {
 	writing-mode: vertical-rl;
-	width:100%;
-	height:100%;
+	width: 100%;
+	height: 100%;
 	text-align: justify;
-	font-size:100%;
+	font-size: 100%;
 }
-#short-players-info{
+
+#short-players-info {
 	position: relative;
-	float:left;
+	float: left;
+}
+
+#select-game-mode-layout {
+	width: 100%;
+	height: 100px;
+}
+
+#select-game-mode-layout {
+	display: flex;
+	flex-flow: row;
+	width: 100%;
+	height: auto;
+	overflow: auto;
+	overflow-y: hidden;
+	margin: auto;
+	align-items: center;
+	justify-content: center;
+}
+
+.nav-game-mode-layout {
+	display: block;
+	position: relative;
+	overflow: hidden;
+	background-color: rgba(0, 0, 0, 0.3);
+	border-radius: 10px;
+	color: silver;
+	width: 200px;
+	height: 250px;
+	margin: 10px;
+	cursor: pointer;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+}
+.nav-game-mode-layout:hover {
+	background-color: rgba(121, 121, 121, 0.3);
+}
+
+#background-board {
+	width: 100%;
+}
+
+#default-game {}
+
+#analyze-game {}
+
+#puzzle-game {}
+
+@media (max-width: 1000px) {
+	#main-block {
+		width: 100%;
+		border-radius: 0;
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	#select-game-mode-layout {
+		margin: 0;
+		margin-top: 20px;
+		width: 100%;
+	}
+
+}
+
+@media(max-width: 700px) {
+	#select-game-mode-layout {
+		align-items:flex-start;
+		justify-content:flex-start;
+	}
+	.nav-game-mode-layout {
+		margin-left: calc(75vw - 200px);
+		margin-right: 25vw;
+	}
 }

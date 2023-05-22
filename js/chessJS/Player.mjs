@@ -54,6 +54,9 @@ export default class Player {
 		return price;
 	}
 	drawPiece() {
+		for (let i = 0; 0 != this.figures.length;) {
+			this.figures[i].destroy();
+		}
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
 				let pos = { x: j, y: i };
