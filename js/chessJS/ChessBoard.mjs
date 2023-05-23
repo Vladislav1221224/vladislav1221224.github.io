@@ -112,7 +112,7 @@ export default class ChessBoard {
 	///////////////////////////////////////
 	//HTML DOM of layout
 	///////////////////////////////////////
-	get boardLayout(){
+	get boardLayout() {
 		return this._boardLayout;
 	}
 	///////////////////////////////////////
@@ -179,11 +179,23 @@ export default class ChessBoard {
 						}
 					}
 				}
+				else if(isCheckMate == 1){
+					winner = 2;
+				}
 			}
 			//set a Winner to variable checkMate
 			if (winner) {
-				this._checkMate = winner;
-				return true;
+				if (winner == 0) {
+					this._checkMate = 'white';
+					return 'white';
+				}
+				else if (winner == 1) {
+					this._checkMate = 'black';
+					return 'black';
+				}
+				else if(winner == 2){
+					return 1;
+				}
 			}
 			else {
 				return false;
@@ -739,6 +751,12 @@ export default class ChessBoard {
 		console.log(element);
 		if (element) {
 			if (valueChangeSide && (valueChangeSide == 'change' || valueChangeSide == 'nochange')) {
+
+				//For move-notation
+				let notation = '';
+				let checkMate;
+				let side;
+
 				let square = this.getSquareFromArr(element);
 				if (valueChangeSide == 'change') {
 					this.clearSquareEffects();
@@ -751,6 +769,7 @@ export default class ChessBoard {
 				}
 				//EatPiece logic
 				if (square.piece && ((JSON.stringify(square.position) === JSON.stringify(square.piece.position)) || (this.selectCell.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position))))) {
+					notation += 'x';
 					this.eatPiece(element);
 				}
 				else if (square.piece && this.selectCell.name !== 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position))) {
@@ -766,13 +785,18 @@ export default class ChessBoard {
 					else if (thisPiece) {
 						piece = thisPiece;
 					}
+					console.log("PIECECECECEE")
+					console.log(piece);
+					if (piece.name == 'pawn') { if (notation == 'x') { notation = piece.square.ID[0].toLowerCase().concat(notation) } }
+					else if (piece.name == 'knight') { notation = 'n'.concat(notation); }
+					else { notation = piece.name[0].concat(notation) }
 
-					let side = piece.side;
+					side = piece.side;
 
-					if (valueChangeSide == 'change') {
-						let squareB = square;
-						console.log(this.moves);
-					}
+					// if (valueChangeSide == 'change') {
+					// 	let squareB = square;
+					// 	console.log(this.moves);
+					// }
 					square.piece = piece;
 					piece.position = square.position;
 					piece.square.piece = undefined;
@@ -803,7 +827,8 @@ export default class ChessBoard {
 					this.clearCheck();
 
 					//Checks for mate
-					this.isCheckMate(player);
+					checkMate = this.isCheckMate(player);
+					console.log("CHECKMATE = " + checkMate);
 					if (!player.isHasMoves()) {
 						console.log('Is StaleMate!!!');
 						this._checkMate = 2;
@@ -819,12 +844,35 @@ export default class ChessBoard {
 					this.clearSelectSquare();
 					element.classList.add('last-move');
 					this._moveNumber++;
+					let move = document.createElement('b');
+					move.className = 'move-notation active';
+
+					notation += square.ID.toLowerCase();
+
+					if (checkMate && checkMate == 1) { notation += '+' }
+					else if (checkMate && checkMate == 'white' || checkMate == 'black') {
+						notation += '#';
+					}
+
+					move.innerHTML = `${this.moveNumber}. ${notation}`;
+					document.querySelectorAll('.moves-player-layout').forEach((element) => {
+
+						if (element.querySelector('.active')) {
+							element.querySelector('.active').classList.remove('active');
+						}
+						if (side == 'white' && element.id == 'white') {
+							element.prepend(move);
+						}
+						else if (side == 'black' && element.id == 'black') {
+							element.prepend(move);
+						}
+					});
 					if (this.moves[this.moveNumber]) {
 						this.boardLayout.style.display = 'none';
 						this.sliceMoves(this.moveNumber);
 						console.log(this.moves);
 					}
-					this._moves.push({ name: undefined, fen: this.getFEN() });
+					this._moves.push({ name: undefined, fen: this.getFEN(), html: move });
 					console.log('MoveNum = ' + this.moveNumber);
 				}
 			}
@@ -1051,7 +1099,7 @@ export default class ChessBoard {
 	}
 
 	//Remove all classes, except "square" and "(white) or (black)-square"
-	clearSquareEffects(){
+	clearSquareEffects() {
 		this.clearCheck();
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
@@ -1271,11 +1319,7 @@ export default class ChessBoard {
 								console.log(true);
 							}
 							else if (side == 'black' && parseInt(itFen[1]) == 3) {
-<<<<<<< Updated upstream
 								position.y = (parseInt(itFen[1]) + 1) - 1;
-=======
-								position.y = parseInt(itFen[1]) + 1;
->>>>>>> Stashed changes
 								position.x = this.isHorizontalAxe(itFen[0]);
 								console.log(true);
 							}
@@ -1369,16 +1413,12 @@ export default class ChessBoard {
 			let pos = { x: undefined, y: undefined };
 			pos.x = this.isHorizontalAxe(fen[0]);
 			pos.y = this.isVerticalAxe(fen[1]);
-<<<<<<< Updated upstream
 			console.log(pos);
 			if (!pos.x || !pos.y) {
 				return false;
 			} else {
 				return pos;
 			}
-=======
-			return pos;
->>>>>>> Stashed changes
 		}
 	}
 
@@ -1745,7 +1785,10 @@ export default class ChessBoard {
 	}
 	sliceMoves(i) {
 		console.log('is SLICE: ' + i + ' to ' + this.moves.length - 1);
-		let arr = this._moves.slice(0, i);
+		for (let j = i; j < this.moves.length; j++) {
+			this.moves[j].html.remove();
+		}
+		let arr = this.moves.slice(0, i);
 		this._moves = arr;
 	}
 	////////////////////////////////////////////
@@ -1809,12 +1852,7 @@ export default class ChessBoard {
 			chessboard.resetTheChessBoard();
 		}
 		fen.onclick = function () {
-<<<<<<< Updated upstream
 			var text = chessboard.moves[chessboard.moveNumber].fen;
-=======
-			var text = chessboard.getFEN();
-			console.log(fen);
->>>>>>> Stashed changes
 			let top = fen.getBoundingClientRect().top + 25;
 			let left = fen.getBoundingClientRect().left;
 			navigator.clipboard.writeText(text)
@@ -1851,23 +1889,27 @@ export default class ChessBoard {
 					console.error('Error in copying text: ', err);
 				});
 		}
-
 		previus.onclick = function () {
 			if (chessboard.moveNumber - 1 >= 0) {
 				chessboard.clearSelectSquare();
+				chessboard.moves[chessboard.moveNumber].html.classList.remove('active');
 				console.log(chessboard.moves[chessboard.moveNumber - 1].fen);
 				chessboard.setFEN(chessboard.moves[chessboard.moveNumber - 1].fen);
 				chessboard._moveNumber--;
 				chessboard.boardLayout.style.display = 'block';
-				console.log(chessboard.html);
+				chessboard.moves[chessboard.moveNumber].html.classList.add('active');
 			}
 		}
 		next.onclick = function () {
 			if (chessboard.moveNumber + 1 < chessboard.moves.length) {
 				chessboard.clearSelectSquare();
+				if (chessboard.moves[chessboard.moveNumber].html) {
+					chessboard.moves[chessboard.moveNumber].html.classList.remove('active');
+				}
 				console.log(chessboard.moves[chessboard.moveNumber + 1].fen);
 				chessboard.setFEN(chessboard.moves[chessboard.moveNumber + 1].fen);
 				chessboard._moveNumber++;
+				chessboard.moves[chessboard.moveNumber].html.classList.add('active');
 				if (chessboard.moveNumber == chessboard.moves.length - 1) {
 					chessboard.boardLayout.style.display = 'none';
 				}
