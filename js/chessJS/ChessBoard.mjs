@@ -1742,7 +1742,6 @@ export default class ChessBoard {
 	}
 
 
-
 	doMove(move, option) {
 		let change = true;
 		if (option) {
