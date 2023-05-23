@@ -32,6 +32,18 @@ function removeChessBoard() {
 		chessboardArray.pop();
 	}
 }
+<<<<<<< Updated upstream
+=======
+document.querySelector('.layout-chess-board').onclick = function () {
+	console.log('is SCROLLED')
+	document.getElementById('.layout-chess-board').scrollTo({
+		top: 0,
+		left: 100,
+		behavior: 'smooth'
+	});
+	;
+}
+>>>>>>> Stashed changes
 chessboardArray[0].isMove('Nc6#');
 
 let input;

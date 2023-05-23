@@ -371,9 +371,15 @@ ul {
 		display: block;
 		position: absolute;
 		top:unset;
+<<<<<<< Updated upstream
 		left: 360px;
 		bottom: 0;
 		width: 120px;
+=======
+		left: 400px;
+		bottom: 1%;
+		width: 35vw;
+>>>>>>> Stashed changes
 		height: 20px;
 		padding: 15px;
 	}
@@ -410,6 +416,7 @@ ul {
 		height: calc(100vw - 8px);
 		border-radius: 5px;
 	}
+<<<<<<< Updated upstream
 	.layout-chess-board {
 		display: block;
 	}
@@ -420,31 +427,63 @@ ul {
 		bottom: 1%;
 		padding: 0;
 		margin: 0;
+=======
+	#right-player-layout {
+		left: unset;
+		right: 5px;
+		padding: 2%;
+		padding-bottom: 0;
+		margin: 0;
+		float: right;
+>>>>>>> Stashed changes
 	}
 	#flip-chess-board {
 		display:block;
 		max-width: 20px;
 		max-height: 20px;
+<<<<<<< Updated upstream
 		width: 4vw;
 		height: 4vw;
 		margin-right: 10px;
+=======
+		width: 5vw;
+		height: 5vw;
+		margin-right: 5px;
+>>>>>>> Stashed changes
 	}
 	#flip-chess-board>img {
 		display:block;
 		max-width: 20px;
+<<<<<<< Updated upstream
+=======
+		width: 5vw;
+		height: 5vw;
+>>>>>>> Stashed changes
 	}
 	
 	#reset-chess-board {
 		display:block;
+<<<<<<< Updated upstream
 		height: 4vw;
 		font-size: 3vw;
 		line-height: 200%;
+=======
+		height: 5vw;
+		font-size: 4vw;
+		line-height: normal;
+>>>>>>> Stashed changes
 	}
 	
 	#get-fen {
 		display:block;
+<<<<<<< Updated upstream
 		height: 4vw;
 		font-size: 3vw;
 		line-height: 200%;
+=======
+		height: 5vw;
+		font-size: 4vw;
+		line-height: normal;
+>>>>>>> Stashed changes
 	}
 }

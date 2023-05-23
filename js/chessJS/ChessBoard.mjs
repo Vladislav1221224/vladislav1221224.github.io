@@ -1271,7 +1271,11 @@ export default class ChessBoard {
 								console.log(true);
 							}
 							else if (side == 'black' && parseInt(itFen[1]) == 3) {
+<<<<<<< Updated upstream
 								position.y = (parseInt(itFen[1]) + 1) - 1;
+=======
+								position.y = parseInt(itFen[1]) + 1;
+>>>>>>> Stashed changes
 								position.x = this.isHorizontalAxe(itFen[0]);
 								console.log(true);
 							}
@@ -1365,12 +1369,16 @@ export default class ChessBoard {
 			let pos = { x: undefined, y: undefined };
 			pos.x = this.isHorizontalAxe(fen[0]);
 			pos.y = this.isVerticalAxe(fen[1]);
+<<<<<<< Updated upstream
 			console.log(pos);
 			if (!pos.x || !pos.y) {
 				return false;
 			} else {
 				return pos;
 			}
+=======
+			return pos;
+>>>>>>> Stashed changes
 		}
 	}
 
@@ -1801,7 +1809,12 @@ export default class ChessBoard {
 			chessboard.resetTheChessBoard();
 		}
 		fen.onclick = function () {
+<<<<<<< Updated upstream
 			var text = chessboard.moves[chessboard.moveNumber].fen;
+=======
+			var text = chessboard.getFEN();
+			console.log(fen);
+>>>>>>> Stashed changes
 			let top = fen.getBoundingClientRect().top + 25;
 			let left = fen.getBoundingClientRect().left;
 			navigator.clipboard.writeText(text)
