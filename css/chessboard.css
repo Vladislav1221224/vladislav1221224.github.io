@@ -12,7 +12,18 @@
 	margin: 5px;
 	box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4);
 }
-
+.analyze>.black-square{
+	background-color: rgb(88, 117, 162);
+}
+.board-layout{
+	display:none;
+	position:absolute;
+	z-index: 100;
+	background-color: rgba(180, 180, 180, 0.2);
+	width:inherit;
+	height:inherit;
+	pointer-events: none;
+}
 .square {
 	display: block;
 	position: relative;
@@ -45,7 +56,12 @@
 .white-square {
 	background-color: rgb(192, 221, 255);
 }
-
+.white-square.last-move{
+	background-color: bisque;
+}
+.black-square.last-move{
+	background-color: rgb(255, 203, 140);
+}
 .piece {
 	pointer-events: none;
 	position: relative;

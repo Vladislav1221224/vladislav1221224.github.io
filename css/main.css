@@ -128,6 +128,9 @@ option {
 	border: 0;
 	background-color: transparent;
 	color: silver;
+	@media(max-width: 900px){
+		width: 100%;
+	}
 }
 .footer-block>a{
 	position: relative;

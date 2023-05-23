@@ -2,7 +2,7 @@ import ChessBoard from "./chessJS/ChessBoard.mjs";
 
 //Slider for chessboards
 let chessboardArray = [];
-const max = 5;
+const max_chessboards_count = 5;
 addChessBoard();
 removeChessBoard();
 if (document.querySelector('#add-chessboard') && document.querySelector('#remove-chessboard')) {
@@ -18,7 +18,7 @@ if (document.querySelector('#add-chessboard') && document.querySelector('#remove
 	};
 }
 function addChessBoard() {
-	if (chessboardArray.length <= 5) {
+	if (chessboardArray.length <= max_chessboards_count) {
 		let chessboard = new ChessBoard('white', chessboardArray.length);
 		document.getElementById('game-block').append(chessboard.layout)
 		console.log(chessboard)
@@ -32,6 +32,7 @@ function removeChessBoard() {
 		chessboardArray.pop();
 	}
 }
+chessboardArray[0].isMove('Nc6#');
 
 let input;
 let buttonFen;
@@ -87,6 +88,9 @@ openFenWindow.onclick = function (mouse) {
 
 function setFenOfInput(fen, chessboard) {
 	if (chessboard.isFEN(fen)) {
+		chessboard.sliceMoves(0);
+		chessboard._moves.push({name:undefined,fen:fen});
+		chessboard._moveNumber = 0;
 		chessboard.setFEN(fen);
 		console.log("BUTTON = 1")
 		return true;

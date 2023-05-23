@@ -3,7 +3,7 @@
 	margin: auto;
 	padding: 5px;
 	color: rgb(150, 197, 255);
-	@media (min-width: 900px) {
+	@media (min-width: 1000px) {
 		margin: 20px;
 		width: 60%;
 	}
