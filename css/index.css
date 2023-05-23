@@ -136,7 +136,7 @@
 		justify-content:flex-start;
 	}
 	.nav-game-mode-layout {
-		margin-left: calc(75vw - 200px);
+/* 		margin-left: calc(75vw - 200px); */
 		margin-right: 25vw;
 	}
 }
