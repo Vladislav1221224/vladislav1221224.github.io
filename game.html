@@ -48,7 +48,34 @@
 		</div>
 		<div hidden id="right-block" class="block">
 			<div id="players-info-layout">
-				<b class="lng-rating">Рейтинг</b>: <b id="rating">Ти бот</b>
+				<div id="players-info">
+					<div class="player-layout" id="white">
+						<div class="player-info" id="white">
+							<div class="players-avatar" id="white">
+								<img src="images\piecesPNG\wp.png">
+							</div>
+							<b class="player-name" id="white">White
+								<b id="rating">Ти бот</b>
+							</b>
+						</div>
+						<div class="capture-pieces-score" id="white">+0</div>
+					</div>
+					<div class="player-layout" id="black">
+						<div class="player-info" id="black">
+							<div class="players-avatar" id="black">
+								<img src="images\piecesPNG\bp.png">
+							</div>
+							<b class="player-name" id="black">Black
+								<b id="rating">Бот</b>
+							</b>
+						</div>
+						<div class="capture-pieces-score" id="black">+0</div>
+					</div>
+				</div>
+				<div id="moves-info-layout">
+					<div class="moves-player-layout" id="white"></div>
+					<div class="moves-player-layout" id="black"></div>
+				</div>
 			</div>
 			<button id="open-fen-window"><b>FEN</b></button>
 		</div>
@@ -56,6 +83,11 @@
 		<script type="module" src="js\game-script.mjs"></script>
 		<script src="js\lng.js"></script>
 		<script src="js\set-language.js"></script>
+	</div>
+
+	<script type="module" src="js\game-script.mjs"></script>
+	<script src="js\lng.js"></script>
+	<script src="js\set-language.js"></script>
 	</div>
 </body>
 

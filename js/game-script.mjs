@@ -32,15 +32,6 @@ function removeChessBoard() {
 		chessboardArray.pop();
 	}
 }
-document.querySelector('.layout-chess-board').onclick = function () {
-	console.log('is SCROLLED')
-	document.getElementById('.layout-chess-board').scrollTo({
-		top: 0,
-		left: 100,
-		behavior: 'smooth'
-	});
-	;
-}
 chessboardArray[0].isMove('Nc6#');
 
 let input;
@@ -97,6 +88,9 @@ openFenWindow.onclick = function (mouse) {
 
 function setFenOfInput(fen, chessboard) {
 	if (chessboard.isFEN(fen)) {
+		chessboard.sliceMoves(0);
+		chessboard._moves.push({name:undefined,fen:fen});
+		chessboard._moveNumber = 0;
 		chessboard.setFEN(fen);
 		console.log("BUTTON = 1")
 		return true;
