@@ -8,7 +8,7 @@
 	<script type="text/javascript" src="js\jquery-3.6.3.min.js"></script>
 	<link rel="stylesheet" href="css\main.css">
 	<link rel="stylesheet" href="css\chessboard.css">
-	<link rel="stylesheet" href="css\game.css">
+	<link rel="stylesheet" href="css\game-analyze.css">
 
 	<link rel="apple-touch-icon" sizes="144x144" href="/images/favicons/apple-touch-icon.png">
 	<link rel="icon" type="image/png" sizes="32x32" href="/images/favicons/favicon-32x32.png">
@@ -40,7 +40,14 @@
 		</div>
 		<div id="game-block">
 		</div>
-		<div hidden id="right-block" class="block">
+		<div id="chessboard-array-menu">
+			<b id="lng-chessboards">ChessBoards: </b>
+			<button id="add-chessboard" class="button">+
+			</button>
+			<button id="remove-chessboard" class="button">-
+			</button>
+		</div>
+		<!-- <div hidden id="right-block" class="block">
 			<div id="players-info-layout">
 				<div id="players-info">
 					<div class="player-layout" id="white">
@@ -71,10 +78,11 @@
 					<div class="moves-player-layout" id="black"></div>
 				</div>
 			</div>
-		</div>
+			<button id="open-fen-window"><b>FEN</b></button>
+		</div> -->
 	</div>
 
-	<script type="module" src="js\game.mjs"></script>
+	<script type="module" src="js\game-analyze.mjs"></script>
 	<script src="js\lng.js"></script>
 	<script src="js\set-language.js"></script>
 	</div>

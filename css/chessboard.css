@@ -1,4 +1,5 @@
 .chess-board {
+	z-index: 1;
 	display: block;
 	float: left;
 	max-width: 80vh;
@@ -12,18 +13,24 @@
 	margin: 5px;
 	box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4);
 }
-.analyze>.black-square{
+
+.analyze>.black-square {
 	background-color: rgb(88, 117, 162);
 }
-.board-layout{
-	display:none;
-	position:absolute;
-	z-index: 100;
+
+.board-layout {
+	display: block;
+	position: absolute;
+	z-index: 10;
 	background-color: rgba(180, 180, 180, 0.2);
-	width:inherit;
-	height:inherit;
+	width: inherit;
+	height: inherit;
 	pointer-events: none;
+	-webkit-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	transition: all 0.5s;
 }
+
 .square {
 	display: block;
 	position: relative;
@@ -54,14 +61,17 @@
 }
 
 .white-square {
-	background-color: rgb(192, 221, 255);
+	background-color: rgb(233, 243, 255);
 }
-.white-square.last-move{
+
+.white-square.last-move {
 	background-color: bisque;
 }
-.black-square.last-move{
+
+.black-square.last-move {
 	background-color: rgb(255, 203, 140);
 }
+
 .piece {
 	pointer-events: none;
 	position: relative;
@@ -175,4 +185,105 @@
 
 .nav-component-pawn-promotion img {
 	width: 100%;
+}
+
+.moves-layout {
+	background-color: rgba(0, 0, 0, 0.2);
+	width: 260px;
+	height: 40px;
+	display:flex;
+	flex-flow: row-reverse;
+	overflow-x: auto;
+	overflow-y:hidden;
+	align-items: center;
+	justify-content: first baseline;
+	position: relative;
+	float: left;
+	top: 0;
+	margin: 0 auto;
+	padding-right: 10px;
+	border-radius: 10px;
+}
+
+#footer-player-layout {
+	display: flex;
+	position: absolute;
+	left: 1%;
+	bottom: 0;
+	background-color: transparent;
+	width: auto;
+	height: 7%;
+}
+
+#flip-chess-board {
+	float: left;
+	background-color: transparent;
+	width: 20px;
+	height: 20px;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#flip-chess-board:hover {
+	opacity: 50%;
+}
+
+#reset-chess-board {
+	float: left;
+	font-weight: 900;
+	background-color: transparent;
+	height: 100%;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#reset-chess-board:hover {
+	opacity: 50%;
+}
+
+#get-fen {
+	float: left;
+	font-weight: 900;
+	background-color: transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#get-fen:hover {
+	opacity: 50%;
+}
+
+#set-previous-fen {
+	float: left;
+	font-weight: 900;
+	background-color: transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#set-previous-fen:hover {
+	opacity: 50%;
+}
+
+#set-next-fen {
+	float: left;
+	font-weight: 900;
+	background-color: transparent;
+	height: 100%;
+	padding: 0pt 5pt;
+	border-width: 0px;
+	border-radius: 50%;
+	cursor: pointer;
+}
+
+#set-next-fen:hover {
+	opacity: 50%;
 }

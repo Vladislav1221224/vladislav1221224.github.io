@@ -92,6 +92,9 @@ export default class ChessBoard {
 	get moveNumber() {
 		return this._moveNumber;
 	}
+	get movesLayout() {
+		return this._movesLayout;
+	}
 	///////////////////////////////////////
 
 	//Keeps the figure, which was selected
@@ -179,7 +182,7 @@ export default class ChessBoard {
 						}
 					}
 				}
-				else if(isCheckMate == 1){
+				else if (isCheckMate == 1) {
 					winner = 2;
 				}
 			}
@@ -193,7 +196,7 @@ export default class ChessBoard {
 					this._checkMate = 'black';
 					return 'black';
 				}
-				else if(winner == 2){
+				else if (winner == 2) {
 					return 1;
 				}
 			}
@@ -316,13 +319,13 @@ export default class ChessBoard {
 
 		if (!this.html || !(this.html.classList.contains('chess-board'))) {
 			this._layout = document.createElement('div');
-			this.layout.classList = 'layout-chess-board';
+			this.layout.classList = 'layout-chess-board invisible';
 			this.layout.id = this.key;
 			this.layout.innerHTML = `<ul id="right-player-layout"></ul>
 		<ul id="footer-player-layout">
 		</ul>`;
 			this._boardLayout = document.createElement('div');
-			this._boardLayout.classList = "board-layout";
+			this._boardLayout.classList = "board-layout invisible";
 			this._boardLayout.id = this._key;
 
 			this.html = document.createElement('div');
@@ -330,6 +333,10 @@ export default class ChessBoard {
 			this.html.id = this._key;
 			this.html.append(this._boardLayout);
 			this.layout.prepend(this.html);
+			this._movesLayout = document.createElement('div');
+			this.movesLayout.classList = "moves-layout";
+			this.movesLayout.id = `${this.key}`;
+			this.layout.querySelector('#footer-player-layout').append(this.movesLayout);
 		}
 		this.chessBoardSide = side;
 		this.drawCells(side);
@@ -747,8 +754,6 @@ export default class ChessBoard {
 
 	//Set a piece and destroy a enemy piece by help a method "eatPiece"
 	setPiece(valueChangeSide, element, thisPiece) {
-		console.log(thisPiece);
-		console.log(element);
 		if (element) {
 			if (valueChangeSide && (valueChangeSide == 'change' || valueChangeSide == 'nochange')) {
 
@@ -764,7 +769,6 @@ export default class ChessBoard {
 					const soundMove = new Audio('sounds/move.mp3');
 					soundMove.play();
 					this.changePlayerSide();
-					console.log(this.selectCell.html);
 					this.selectCell.html.classList.add('last-move');
 				}
 				//EatPiece logic
@@ -785,18 +789,11 @@ export default class ChessBoard {
 					else if (thisPiece) {
 						piece = thisPiece;
 					}
-					console.log("PIECECECECEE")
-					console.log(piece);
 					if (piece.name == 'pawn') { if (notation == 'x') { notation = piece.square.ID[0].toLowerCase().concat(notation) } }
 					else if (piece.name == 'knight') { notation = 'n'.concat(notation); }
 					else { notation = piece.name[0].concat(notation) }
 
 					side = piece.side;
-
-					// if (valueChangeSide == 'change') {
-					// 	let squareB = square;
-					// 	console.log(this.moves);
-					// }
 					square.piece = piece;
 					piece.position = square.position;
 					piece.square.piece = undefined;
@@ -844,36 +841,74 @@ export default class ChessBoard {
 					this.clearSelectSquare();
 					element.classList.add('last-move');
 					this._moveNumber++;
-					let move = document.createElement('b');
-					move.className = 'move-notation active';
+					let move = undefined;
+					if (this.layout.querySelector('.moves-layout')) {
 
-					notation += square.ID.toLowerCase();
+						let idMove = document.createElement('b');
+						idMove.className = 'move-notation';
+						idMove.id = 'id';
 
-					if (checkMate && checkMate == 1) { notation += '+' }
-					else if (checkMate && checkMate == 'white' || checkMate == 'black') {
-						notation += '#';
+						move = document.createElement('b');
+						move.className = 'move-notation';
+
+						notation += square.ID.toLowerCase();
+
+						if (checkMate && checkMate == 1) { notation += '+' }
+						else if (checkMate && (checkMate == 'white' || checkMate == 'black')) {
+							notation += '# ';
+							if (checkMate == 'white') {
+								notation += '1-0';
+							}
+							else if (checkMate == 'black') {
+								notation += '0-1';
+							}
+						}
+						console.log(side);
+						if (side == 'white') {
+							idMove.innerHTML = `${(this.moveNumber + 1) / 2}.`;
+						}
+						else {
+						}
+						move.innerHTML = `${notation}`;
+						let movesLayout = this.layout.querySelector('.moves-layout');
+						this.moves.forEach((element) => {
+							console.log(element);
+							if (element.html && element.html.classList.contains('active')) {
+								element.html.classList.remove('active');
+							}
+						});
+						if (this.moves[this.moveNumber]) {
+							this.boardLayout.classList.add('invisible');
+							console.log("moveNumber = " + this.moveNumber);
+							this.sliceMoves(this.moveNumber);
+						}
+						movesLayout.prepend(idMove);
+						movesLayout.prepend(move);
+						move.classList.add('active');
 					}
-
-					move.innerHTML = `${this.moveNumber}. ${notation}`;
-					document.querySelectorAll('.moves-player-layout').forEach((element) => {
-
-						if (element.querySelector('.active')) {
-							element.querySelector('.active').classList.remove('active');
+					let elem = { name: notation, fen: this.getFEN(), html: move };
+					this._moves.push(elem);
+					let chessboard = this;
+					console.log(this.moves[this.moves.length - 1].html);
+					let num = this.moves.length - 1;
+					elem.html.onclick = (function () {
+						chessboard.clearSelectSquare();
+						chessboard.moves.forEach((elem) => {
+							if (elem.html) {
+								elem.html.classList.remove('active');
+							}
 						}
-						if (side == 'white' && element.id == 'white') {
-							element.prepend(move);
+						);
+						chessboard.setFEN(chessboard.moves[num].fen);
+						chessboard._moveNumber = num;
+						chessboard.boardLayout.classList.remove('invisible');
+						if (chessboard.moves[num].html) {
+							chessboard.moves[num].html.classList.add('active');
 						}
-						else if (side == 'black' && element.id == 'black') {
-							element.prepend(move);
+						if (chessboard.moveNumber == chessboard.moves.length - 1) {
+							chessboard.boardLayout.classList.add('invisible');
 						}
 					});
-					if (this.moves[this.moveNumber]) {
-						this.boardLayout.style.display = 'none';
-						this.sliceMoves(this.moveNumber);
-						console.log(this.moves);
-					}
-					this._moves.push({ name: undefined, fen: this.getFEN(), html: move });
-					console.log('MoveNum = ' + this.moveNumber);
 				}
 			}
 		}
@@ -927,6 +962,7 @@ export default class ChessBoard {
 	doCastling(element, king) {
 		let lastFEN = this.getFEN();
 		if (element.querySelector('.move-destination')) {
+			let notation = (this.moveNumber + 1) + '. ';
 			let square = this.getSquareFromArr(element);
 			if (king.side == 'white') {
 				if (square.ID == 'g1' || square.ID == 'h1') {
@@ -935,6 +971,8 @@ export default class ChessBoard {
 					this.setPiece('nochange', element, king);
 					element = this.getSquareFromArr('f1').html;
 					this.setPiece('change', element, rook);
+					notation += 'o-o';
+					this._moves[this.moveNumber].name = notation;
 				}
 				else if (square.ID == 'c1' || square.ID == 'a1') {
 					let rook = this.getSquareFromArr('a1').piece;
@@ -942,6 +980,7 @@ export default class ChessBoard {
 					this.setPiece('nochange', element, king);
 					element = this.getSquareFromArr('d1').html;
 					this.setPiece('change', element, rook);
+					notation += 'o-o-o';
 				}
 			}
 			else if (king.side == 'black') {
@@ -951,6 +990,7 @@ export default class ChessBoard {
 					this.setPiece('nochange', element, king);
 					element = this.getSquareFromArr('f8').html;
 					this.setPiece('change', element, rook);
+					notation += 'o-o';
 				}
 				else if (square.ID == 'c8' || square.ID == 'a8') {
 					let rook = this.getSquareFromArr('a8').piece;
@@ -958,7 +998,12 @@ export default class ChessBoard {
 					this.setPiece('nochange', element, king);
 					element = this.getSquareFromArr('d8').html;
 					this.setPiece('change', element, rook);
+					notation += 'o-o-o';
 				}
+			}
+			this._moves[this.moveNumber].name = notation;
+			if (document.querySelector('.moves-player-layout')) {
+				this._moves[this.moveNumber].html.innerHTML = `${notation}`;
 			}
 			this.clearSelectSquare();
 		}
@@ -1068,6 +1113,7 @@ export default class ChessBoard {
 				for (let j = 0; j < 8; j++) {
 					if (this.cellsArr[i][j].ID == element) {
 						cell = this.cellsArr[i][j];
+						console.log(cell);
 					}
 				}
 			}
@@ -1075,6 +1121,7 @@ export default class ChessBoard {
 		else {
 			return 0;
 		}
+		console.log(cell);
 		return cell;
 	}
 
@@ -1409,16 +1456,19 @@ export default class ChessBoard {
 		return bool;
 	}
 	isID(fen) {
-		if (fen && typeof fen == "string" && fen.length == 2) {
+		if (fen && fen != '' && fen != '-' && typeof fen == "string" && fen.length == 2) {
 			let pos = { x: undefined, y: undefined };
 			pos.x = this.isHorizontalAxe(fen[0]);
 			pos.y = this.isVerticalAxe(fen[1]);
-			console.log(pos);
+			console.error(pos);
 			if (!pos.x || !pos.y) {
 				return false;
 			} else {
 				return pos;
 			}
+		}
+		else {
+			return false;
 		}
 	}
 
@@ -1627,7 +1677,6 @@ export default class ChessBoard {
 						if (this.isID(fen)) {
 							console.log(fen);
 							let square = this.getSquareFromArr(fen);
-							console.log(square.ID);
 							if (square.ID[1] == '3') {
 								this.setEnPassant(this.cellsArr[square.position.y - 1][square.position.x].piece, square);
 								break;
@@ -1741,7 +1790,6 @@ export default class ChessBoard {
 		}
 	}
 
-
 	doMove(move, option) {
 		let change = true;
 		if (option) {
@@ -1782,11 +1830,17 @@ export default class ChessBoard {
 		}
 
 	}
+
 	sliceMoves(i) {
-		console.log('is SLICE: ' + i + ' to ' + this.moves.length - 1);
-		for (let j = i; j < this.moves.length; j++) {
-			this.moves[j].html.remove();
-		}
+			let size = this.layout.querySelector('.moves-layout').childNodes.length;
+			for (let j = 0; j < size; j++) {
+				if (this.moves[i-1].html.innerHTML == this.layout.querySelector('.moves-layout').childNodes[0].innerHTML) {
+					break;
+				}
+				else {
+					this.layout.querySelector('.moves-layout').childNodes[0].remove();
+				}
+			}
 		let arr = this.moves.slice(0, i);
 		this._moves = arr;
 	}
@@ -1836,14 +1890,14 @@ export default class ChessBoard {
 		rightNav.append(fen);
 
 		let footerNav = this.layout.querySelector('#footer-player-layout');
-		let previus = document.createElement('li');
-		previus.id = 'set-previous-fen';
-		previus.innerHTML = '<';
-		footerNav.append(previus);
 		let next = document.createElement('li');
 		next.id = 'set-next-fen';
 		next.innerHTML = '>';
-		footerNav.append(next);
+		footerNav.prepend(next);
+		let previus = document.createElement('li');
+		previus.id = 'set-previous-fen';
+		previus.innerHTML = '<';
+		footerNav.prepend(previus);
 		flip.onclick = function () {
 			chessboard.flipTheChessBoard();
 		}
@@ -1889,17 +1943,22 @@ export default class ChessBoard {
 				});
 		}
 		previus.onclick = function () {
-			if (chessboard.moveNumber - 1 >= 0) {
+			console.log("MoveNUM = " + chessboard.moveNumber);
+			if (chessboard.moveNumber > 0) {
 				chessboard.clearSelectSquare();
 				chessboard.moves[chessboard.moveNumber].html.classList.remove('active');
 				console.log(chessboard.moves[chessboard.moveNumber - 1].fen);
 				chessboard.setFEN(chessboard.moves[chessboard.moveNumber - 1].fen);
 				chessboard._moveNumber--;
-				chessboard.boardLayout.style.display = 'block';
-				chessboard.moves[chessboard.moveNumber].html.classList.add('active');
+				chessboard.boardLayout.classList.remove('invisible');
+				if (chessboard.moves[chessboard.moveNumber].html) {
+					chessboard.moves[chessboard.moveNumber].html.classList.add('active');
+				}
 			}
+
 		}
 		next.onclick = function () {
+			console.log("MoveNUM = " + chessboard.moveNumber);
 			if (chessboard.moveNumber + 1 < chessboard.moves.length) {
 				chessboard.clearSelectSquare();
 				if (chessboard.moves[chessboard.moveNumber].html) {
@@ -1910,7 +1969,7 @@ export default class ChessBoard {
 				chessboard._moveNumber++;
 				chessboard.moves[chessboard.moveNumber].html.classList.add('active');
 				if (chessboard.moveNumber == chessboard.moves.length - 1) {
-					chessboard.boardLayout.style.display = 'none';
+					chessboard.boardLayout.classList.add('invisible');
 				}
 				console.log(chessboard.html);
 			}
