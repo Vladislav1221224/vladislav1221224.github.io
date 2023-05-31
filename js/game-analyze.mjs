@@ -37,7 +37,7 @@ let input;
 let buttonFen;
 let errorFEN;
 
-let openFenWindow = document.querySelector('#open-fen-window');
+/*let openFenWindow = document.querySelector('#open-fen-window');
 openFenWindow.onclick = function (mouse) {
 	if (mouse.button == 0) {
 		console.log('is open')
@@ -82,7 +82,7 @@ openFenWindow.onclick = function (mouse) {
 			}
 		}
 	}
-}
+}*/
 
 
 function setFenOfInput(fen, chessboard) {
