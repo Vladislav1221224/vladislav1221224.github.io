@@ -102,12 +102,22 @@ ul {
 	height: 100%;
 	max-width: 100vw;
 	position: fixed;
-	background-color: rgb(70, 94, 181);
+	background-color: rgba(70, 94, 181, 1);
 	border-radius: 0pt;
 	justify-content: center;
 	align-items: center;
 	text-align: center;
 	text-decoration: none;
+	-webkit-transition: all 0.3s;
+	-o-transition: all 0.3s;
+	transition: all 0.3s;
+}
+#right-block.invisible {
+	background-color: rgba(70, 94, 181, 0);
+	pointer-events: none;
+}
+.invisible>#open-fen-window{
+	color: rgba(0,0,0,0);
 }
 
 #players-info-layout {
@@ -218,6 +228,7 @@ ul {
 	left: 1%;
 	bottom: 5%;
 	background: rgba(0, 0, 0, 0);
+	color: rgba(0,0,0,1);
 	cursor: pointer;
 	border-width: 0;
 }
@@ -371,9 +382,6 @@ ul {
 }
 
 @media (max-width: 1200px) {
-	#right-block {
-		display: none;
-	}
 
 	#right-player-layout {
 		display: block;
@@ -417,7 +425,9 @@ ul {
 		height: calc(100vw - 8px);
 		border-radius: 5px;
 	}
-
+	#right-block {
+		width: 100vw;
+	}
 	.layout-chess-board {
 		display: block;
 	}

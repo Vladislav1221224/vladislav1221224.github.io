@@ -1041,7 +1041,6 @@ export default class ChessBoard {
 
 	//Pawn promotion method
 	pawnPromotion(square, piece) {
-		console.log('is Pawn promotion');
 		console.log(square)
 		console.log(piece)
 		//draw a div layout with figures for select
@@ -1056,9 +1055,7 @@ export default class ChessBoard {
 			innerElements += `<div class="nav-component-pawn-promotion" value=${i + 1}>${pieceHTML}</div>`;
 		}
 		block.innerHTML = innerElements;
-		console.log(square.html);
 		let posInfo = square.html.getBoundingClientRect();
-		console.log(posInfo);
 		let top = posInfo.top - 44;
 		let left = posInfo.left;
 		if (side != this.chessBoardSide) {

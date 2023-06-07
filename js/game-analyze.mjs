@@ -35,64 +35,78 @@ function removeChessBoard() {
 		chessboardArray.pop();
 	}
 }
-chessboardArray[0].isMove('Nc6#');
-
 let input;
 let buttonFen;
 let errorFEN;
 
-// let openFenWindow = document.querySelector('#open-fen-window');
-// openFenWindow.onclick = function (mouse) {
-// 	if (mouse.button == 0) {
-// 		console.log('is open')
-// 		let layout = document.createElement('div');
-// 		layout.id = 'fen-window-background';
-// 		layout.innerHTML = `<div class="fen-layout"><button id="close-fen-window"><div class="close"></div></button>
-// 		<b>FEN:</b>
-// 		<textarea autofocus class="fen-input" type="text" placeholder="Insert FEN"></textarea>
-// 		<button class="button"id="button-setFEN"><b class="">Set position</b></button>
-// 		<select id="select-chess-board">ID: 
-// 			<option selected>1</option>
-// 		</select>
-// 		<div id="fen-error-layout"></div>
-// 		</div>`
-// 		document.querySelector('.base-layout').append(layout);
-// 		let select = document.querySelector('#select-chess-board');
+let buttonRightMenu = document.getElementById('btn-navbar');
+let rightMenu = document.querySelector('#right-block');
+console.log(rightMenu);
+console.log(buttonRightMenu);
+	buttonRightMenu.onclick = function () {
+		console.log('is DODODO111')
+		if (rightMenu.classList.contains('invisible')) {
+			console.log('1')
+			rightMenu.classList.remove('invisible');
+		}
+		else{
+			console.log('2')
+			rightMenu.classList.add('invisible');
+		}
+	}
 
-// 		for (let i = 1; i < chessboardArray.length; i++) {
-// 			select.innerHTML += `<option value='${i + 1}'>${i + 1}</option>`;
-// 		}
-// 		input = document.querySelector('.fen-input');
-// 		buttonFen = document.querySelector('#button-setFEN');
-// 		errorFEN = document.querySelector('#fen-error-layout');
+let openFenWindow = document.querySelector('#open-fen-window');
+openFenWindow.onclick = function (mouse) {
+	if (mouse.button == 0) {
+		console.log('is open')
+		let layout = document.createElement('div');
+		layout.id = 'fen-window-background';
+		layout.innerHTML = `<div class="fen-layout"><button id="close-fen-window"><div class="close"></div></button>
+		<b>FEN:</b>
+		<textarea autofocus class="fen-input" type="text" placeholder="Insert FEN"></textarea>
+		<button class="button"id="button-setFEN"><b class="">Set position</b></button>
+		<select id="select-chess-board">ID: 
+			<option selected>1</option>
+		</select>
+		<div id="fen-error-layout"></div>
+		</div>`
+		document.querySelector('.base-layout').append(layout);
+		let select = document.querySelector('#select-chess-board');
 
-// 		document.querySelector('#close-fen-window').onclick = function (mouse) {
-// 			if (mouse.button == 0) {
-// 				document.querySelector('#fen-window-background').remove();
-// 			}
-// 		};
-// 		input.onclick = function () {
-// 			if (mouse.button == 0) {
-// 				errorFEN.innerHTML = "";
-// 			}
-// 		};
-// 		buttonFen.onclick = function (mouse) {
-// 			if (mouse.button == 0) {
-// 				console.log();
-// 				let CB = chessboardArray[select.value - 1];
-// 				if (!(setFenOfInput(input.value, CB))) {
-// 					errorFEN.innerHTML = "Error: fen is not correct!";
-// 				}
-// 			}
-// 		}
-// 	}
-// }
+		for (let i = 1; i < chessboardArray.length; i++) {
+			select.innerHTML += `<option value='${i + 1}'>${i + 1}</option>`;
+		}
+		input = document.querySelector('.fen-input');
+		buttonFen = document.querySelector('#button-setFEN');
+		errorFEN = document.querySelector('#fen-error-layout');
+
+		document.querySelector('#close-fen-window').onclick = function (mouse) {
+			if (mouse.button == 0) {
+				document.querySelector('#fen-window-background').remove();
+			}
+		};
+		input.onclick = function () {
+			if (mouse.button == 0) {
+				errorFEN.innerHTML = "";
+			}
+		};
+		buttonFen.onclick = function (mouse) {
+			if (mouse.button == 0) {
+				console.log();
+				let CB = chessboardArray[select.value - 1];
+				if (!(setFenOfInput(input.value, CB))) {
+					errorFEN.innerHTML = "Error: fen is not correct!";
+				}
+			}
+		}
+	}
+}
 
 
 function setFenOfInput(fen, chessboard) {
 	if (chessboard.isFEN(fen)) {
-		chessboard.sliceMoves(0);
-		chessboard._moves.push({name:undefined,fen:fen});
+		chessboard.sliceMoves(chessboard.moves.length);
+		chessboard._moves.push({ name: undefined, fen: fen });
 		chessboard._moveNumber = 0;
 		chessboard.setFEN(fen);
 		console.log("BUTTON = 1")
