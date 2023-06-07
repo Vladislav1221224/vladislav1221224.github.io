@@ -429,6 +429,38 @@ class Bishop extends Piece {
 				let pos = destination(i, j);
 				if (pos.xx >= 0 && pos.xx < 8 && pos.yy >= 0 && pos.yy < 8) {
 					let square = this.chessboard.cellsArr[pos.yy][pos.xx];
+					// switch (value,destin) {
+					// 	case "hasDestinations":
+					// 		if (this.hasDestination(square)) {
+					// 			return true;
+					// 		}
+					// 		else {
+					// 			return false;
+					// 		}
+					// 		case "move",destin:
+					// 			if (!square.piece) {
+					// 				arr.push([pos.xx, pos.yy]);
+					// 				if (pos.xx == destin.xx && pos.yy == destin.yy) {
+					// 					return arr;
+					// 				}
+					// 			}
+					// 			else if (square.piece) {
+					// 				if (pos.xx == destin.xx && pos.yy == destin.yy) {
+					// 					return arr;
+					// 				}
+					// 				else {
+					// 					break;
+					// 				}
+					// 			}
+					// 			else if (pos.xx == destin.xx && pos.yy == destin.yy) {
+					// 				return arr;
+					// 			}
+					// 			break;
+					
+					// 	default:
+					// 		break;
+					// }
+
 					if (value == "hasDestinations") {
 						if (this.hasDestination(square)) {
 							return true;

@@ -83,4 +83,8 @@ const langArr = {
 	"en": "<li>All of your moves must be your own.</li><li>Do not cheat in any way.</li><li>Do not get help from any other person, including parents, friends, coaches or another player.</li><li>Do not use chess engines, software of any kind, bots, plugins or any tools that analyze positions during play.</li><li>Do not perform any automated analysis or “blunder checking” of your games in progress.</li><li>Do not allow anyone else to use your account</li><li>Do not use anyone else's account.</li><li>Do not artificially manipulate ratings, matches, or game outcomes.</li><li>Do not interfere with the gameplay of other members.</li><li>Suspecting your opponent of using outside help is not an excuse to do the same If you suspect someone is cheating, report the player to Chess.</li>",
 	"ua": "<li>Усі ваші рухи мають бути вашими власними.</li><li>У жодному разі не обманюйте.</li><li>Не звертайтеся за допомогою від будь-якої іншої особи, включаючи батьків, друзів, тренерів чи іншого гравця.</li><li>Не використовуйте шахові механізми, будь-яке програмне забезпечення, ботів, плагіни чи будь-які інструменти, які аналізують позиції під час гри.</li><li>Не виконуйте жодного автоматичного аналізу чи «перевірки помилок» ваших ігор, що виконуються.</li><li>Не дозволяйте іншим використовувати ваш обліковий запис.</li><li>Не використовуйте чужий обліковий запис.</li><li>Не маніпулюйте штучно рейтингами, матчами чи результатами гри.</li><li>Не втручайтеся в гру інших учасників</li><li>Підозра вашого опонента у використанні сторонньої допомоги не є приводом робити те саме Якщо ви підозрюєте, що хтось обманює, повідомте про гравця на Chess.</li>"
 	},
+	"analyze": {"ru":"Анализ",
+	"en":"Analyze",
+	"ua": "Аналіз"
+	}
 }
