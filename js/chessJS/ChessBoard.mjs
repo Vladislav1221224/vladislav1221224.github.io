@@ -1727,6 +1727,7 @@ export default class ChessBoard {
 				}
 			}
 			this.isCheckMate(player);
+			this.clearSquareEffects();
 		}
 
 	}
