@@ -452,14 +452,38 @@ export default class ChessBoard {
 		//For all elements on window
 		document.querySelectorAll('*').forEach((element) => {
 			if (!element.classList.contains('square') && !element.classList.contains('piece') && !element.classList.contains('chess-board')) {
-				element.onmousedown = null;
-				element.onmouseup = null;
 				element.onmousedown = function (mouse) {
 					//If User click "leftMouseButton" outside the DOM element --> ChessBoard <-- selectCell is cancelled
 					if (mouse.button == 0) {
 						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
-							console.log(element);
 							let piece = chessboard.selectCell.piece;
+							document.onmousemove = null;
+							piece.html.onmouseup = null;
+							piece.html.classList.remove('drag');
+							piece.html.style.position = 'relative';
+							piece.html.style.width = 100 + '%';
+							piece.html.style.height = 100 + '%';
+							piece.html.style.left = 0 + 'px';
+							piece.html.style.top = 0 + 'px';
+							chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+							chessboard.clearSelectSquare();
+							$(chessboard.html).removeClass('dragging');
+							document.querySelectorAll('.square').forEach((element) => {
+								if (element.querySelector('.piece')) {
+									element.style.cursor = 'grab';
+								}
+								else if (!element.querySelector('.piece')) {
+									element.style.cursor = 'default';
+								}
+							})
+						}
+					}
+					////If User click "rightMouseButton" selectCell is cancelled
+					if (mouse.button == 2) {
+						if (chessboard.selectCell) {
+							let piece = chessboard.selectCell.piece;
+							if (chessboard.isDeveloper) {
+							}
 							document.onmousemove = null;
 							piece.html.onmouseup = null;
 							piece.html.classList.remove('drag');
@@ -484,7 +508,6 @@ export default class ChessBoard {
 				}
 				//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
 				element.onmouseup = function (mouse) {
-					console.log("IS DO: ")
 					if (mouse.button == 0) {
 						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
 							let piece = chessboard.selectCell.piece;
@@ -519,14 +542,12 @@ export default class ChessBoard {
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
 				let square = this.cellsArr[j][i].html;
-				square.onmousedown = null;
-				square.onmouseup = null;
+
 				square.onmousedown = function (mouse) {
 					if (mouse.button == 0) {
 						//If User window has DOM element with id "pawn-promotion-layout" User must select a piece on this element or click on any element for cancel this move
 						if (document.querySelector('#pawn-promotion-layout')) {
 							if (chessboard.selectCell) {
-								console.log('is cancelled')
 								let piece = chessboard.selectCell.piece;
 								document.onmousemove = null;
 								piece.html.onmouseup = null;
