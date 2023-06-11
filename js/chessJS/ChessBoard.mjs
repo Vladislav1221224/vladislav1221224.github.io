@@ -444,10 +444,12 @@ export default class ChessBoard {
 			}
 		}
 		this.setMouseEvents();
+		this.setMouseEventsForChessBoard();
 	}
+
+	//SELECT A SQUARE EVENTS
+	//////////////////////////////////
 	setMouseEvents() {
-		//SELECT A SQUARE EVENTS
-		//////////////////////////////////
 		let chessboard = this;
 		//For all elements on window
 		document.querySelectorAll('*').forEach((element) => {
@@ -456,6 +458,7 @@ export default class ChessBoard {
 					//If User click "leftMouseButton" outside the DOM element --> ChessBoard <-- selectCell is cancelled
 					if (mouse.button == 0) {
 						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
+							console.log('IS CANCEL')
 							let piece = chessboard.selectCell.piece;
 							document.onmousemove = null;
 							piece.html.onmouseup = null;
@@ -477,70 +480,86 @@ export default class ChessBoard {
 								}
 							})
 						}
-					}
-					////If User click "rightMouseButton" selectCell is cancelled
-					if (mouse.button == 2) {
-						if (chessboard.selectCell) {
-							let piece = chessboard.selectCell.piece;
-							if (chessboard.isDeveloper) {
-							}
-							document.onmousemove = null;
-							piece.html.onmouseup = null;
-							piece.html.classList.remove('drag');
-							piece.html.style.position = 'relative';
-							piece.html.style.width = 100 + '%';
-							piece.html.style.height = 100 + '%';
-							piece.html.style.left = 0 + 'px';
-							piece.html.style.top = 0 + 'px';
-							chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-							chessboard.clearSelectSquare();
-							$(chessboard.html).removeClass('dragging');
-							document.querySelectorAll('.square').forEach((element) => {
-								if (element.querySelector('.piece')) {
-									element.style.cursor = 'grab';
-								}
-								else if (!element.querySelector('.piece')) {
-									element.style.cursor = 'default';
-								}
-							})
-						}
-					}
-				}
-				//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
-				element.onmouseup = function (mouse) {
-					if (mouse.button == 0) {
-						if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
-							let piece = chessboard.selectCell.piece;
-							document.onmousemove = null;
-							piece.html.classList.remove('drag');
-							piece.html.style.position = 'relative';
-							piece.html.style.width = 100 + '%';
-							piece.html.style.height = 100 + '%';
-							piece.html.style.left = 0 + 'px';
-							piece.html.style.top = 0 + 'px';
-							if (!element.classList.contains('square')) {
-								chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-								chessboard.clearSelectSquare();
-							}
-							$(chessboard.html).removeClass('dragging');
-							document.querySelectorAll('.square').forEach((element) => {
-								if (element.querySelector('.piece')) {
-									element.style.cursor = 'grab';
-								}
-								else if (!element.querySelector('.piece')) {
-									element.style.cursor = 'default';
-								}
-							})
+						else {
+							console.log('else')
 						}
 					}
 				}
 			}
 		})
+		//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
+		document.addEventListener('mouseup',function (mouse) {
 
+			if (mouse.button == 0) {
+				console.log('isChessboard = ' + !chessboard.isChessBoard(mouse.clientX, mouse.clientY));
+				if (chessboard.selectCell && !chessboard.isChessBoard(mouse.clientX, mouse.clientY)) {
+					console.log('IS CANCEL')
+					let piece = chessboard.selectCell.piece;
+					document.onmousemove = null;
+					piece.html.classList.remove('drag');
+					piece.html.style.position = 'relative';
+					piece.html.style.width = 100 + '%';
+					piece.html.style.height = 100 + '%';
+					piece.html.style.left = 0 + 'px';
+					piece.html.style.top = 0 + 'px';
+						chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+						chessboard.clearSelectSquare();
+					$(chessboard.html).removeClass('dragging');
+					document.querySelectorAll('.square').forEach((element) => {
+						if (element.querySelector('.piece')) {
+							element.style.cursor = 'grab';
+						}
+						else if (!element.querySelector('.piece')) {
+							element.style.cursor = 'default';
+						}
+					})
+				}
+				else {
+					console.log('else')
+					console.log('is not cancell')
+					console.log(!chessboard.isChessBoard(mouse.clientX, mouse.clientY));
+				}
+			}
+			////If User click "rightMouseButton" selectCell is cancelled
+			else if (mouse.button == 2) {
+				console.log(chessboard.selectCell);
+				if (chessboard.selectCell) {
+					let piece = chessboard.selectCell.piece;
+					if (chessboard.isDeveloper) {
+					}
+					document.onmousemove = null;
+					piece.html.onmouseup = null;
+					piece.html.classList.remove('drag');
+					piece.html.style.position = 'relative';
+					piece.html.style.width = 100 + '%';
+					piece.html.style.height = 100 + '%';
+					piece.html.style.left = 0 + 'px';
+					piece.html.style.top = 0 + 'px';
+					chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+					chessboard.clearSelectSquare();
+					$(chessboard.html).removeClass('dragging');
+					document.querySelectorAll('.square').forEach((element) => {
+						if (element.querySelector('.piece')) {
+							element.style.cursor = 'grab';
+						}
+						else if (!element.querySelector('.piece')) {
+							element.style.cursor = 'default';
+						}
+					})
+				}
+				else {
+					console.log('else')
+				}
+			}
+		})
+	}
+	setMouseEventsForChessBoard() {
+		let chessboard = this;
 		//Mouse logic for each Cell
 		///////////////////////////////////////////////////////////////////////
 		for (let i = 0; i < 8; i++) {
 			for (let j = 0; j < 8; j++) {
+
 				let square = this.cellsArr[j][i].html;
 
 				square.onmousedown = function (mouse) {
@@ -628,6 +647,8 @@ export default class ChessBoard {
 		}
 		///////////////////////////////////////////////////////////////////////
 	}
+	//////////////////////////////////
+
 	//Draw a players and figures
 	drawPlayers() {
 		let white = new Player('white', this);
@@ -886,7 +907,7 @@ export default class ChessBoard {
 					let move = undefined;
 					console.log(this.moveNumber);
 					//ADD RULE IF FIGURES CAN MOVE ON ANALYZE MODE
-					if ((this.mode == this.modeList.analyze || this.moveNumber == this.moves.length) && this.movesLayout) {
+					if (((this.mode == this.modeList.analyze || this.mode == this.modeList.game) || this.moveNumber == this.moves.length) && this.movesLayout) {
 
 						let idMove = document.createElement('b');
 						idMove.className = 'move-notation';
@@ -1120,7 +1141,7 @@ export default class ChessBoard {
 					else if (value == 4) {
 						newPiece = new Bishop(piece.side, piece.position, chessboard, piece.player, chessboard.cellsArr[piece.position.y][piece.position.x]);
 					}
-					if(square.piece){
+					if (square.piece) {
 						chessboard.eatPiece(square);
 					}
 					piece.player._figures.push(newPiece);
@@ -1171,7 +1192,7 @@ export default class ChessBoard {
 	//return true if x and y is coordinates of DOM-element of this.html
 	isChessBoard(x, y) {
 		let chessboardInfo = this.html.getBoundingClientRect();
-		if (x >= chessboardInfo.x && x <= (chessboardInfo.x + chessboardInfo.width) && y >= chessboardInfo.y && y <= chessboardInfo.y + chessboardInfo.height) {
+		if (x >= chessboardInfo.left && x <= chessboardInfo.right && y >= chessboardInfo.top && y <= chessboardInfo.bottom) {
 			console.log('is true'); return true
 		}
 		else { console.log('is true'); return false }
@@ -1748,7 +1769,6 @@ export default class ChessBoard {
 				}
 			}
 			this.isCheckMate(player);
-			this.clearSquareEffects();
 		}
 
 	}

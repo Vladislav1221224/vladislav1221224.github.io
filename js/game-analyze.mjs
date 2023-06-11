@@ -23,9 +23,6 @@ function addChessBoard() {
 		chessboard.layout.classList.remove('invisible');
 		document.getElementById('game-block').append(chessboard.layout)
 		chessboardArray.push(chessboard);
-		for (let i = 0; i < chessboardArray.length; i++) {
-			chessboardArray[i].setMouseEvents();
-		}
 	}
 }
 function removeChessBoard() {
