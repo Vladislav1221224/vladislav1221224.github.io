@@ -1,4 +1,40 @@
 import ChessBoard from "./chessJS/ChessBoard.mjs";
+import PortableGameNotation from "./chessJS/pgn-parser/PGN.mjs";
+
+// [Event "Live Chess"]
+// [Site "Chess.com"]
+// [Date "2023.06.09"]
+// [Round "?"]
+// [White "Vladislav12122"]
+// [Black "vor666tex666"]
+// [Result "1-0"]
+// [ECO "C50"]
+// [WhiteElo "944"]
+// [BlackElo "903"]
+// [TimeControl "180+2"]
+// [EndTime "5:10:16 PDT"]
+// [Termination "Vladislav12122 won by resignation"]
+
+// 1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. d3 d6 5. Be3 Bxe3 6. fxe3 Nf6 7. O-O O-O 8.
+// Ng5 Bd7 9. Nc3 h6 10. Nd5 Nxd5 11. Nxf7 Rxf7 12. Bxd5 Kf8 13. Rxf7+ Ke8 14. Rxg7
+// Kf8 15. Rg8+ 1-0
+let PGN = new PortableGameNotation(`[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.06.09"]
+[Round "?"]
+[White "Vladislav12122"]
+[Black "vor666tex666"]
+[Result "1-0"]
+[ECO "C50"]
+[WhiteElo "944"]
+[BlackElo "903"]
+[TimeControl "180+2"]
+[EndTime "5:10:16 PDT"]
+[Termination "Vladislav12122 won by resignation"]
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. d3 d6 5. Be3 Bxe3 6. fxe3 Nf6 7. O-O O-O 8.
+Ng5 Bd7 9. Nc3 h6 10. Nd5 Nxd5 11. Nxf7 Rxf7 12. Bxd5 Kf8 13. Rxf7+ Ke8 14. Rxg7
+Kf8 15. Rg8+ 1-0`);
+console.log(PGN);
 
 //Slider for chessboards
 let chessboardArray = [];
@@ -38,19 +74,17 @@ let errorFEN;
 
 let buttonRightMenu = document.getElementById('btn-navbar');
 let rightMenu = document.querySelector('#right-block');
-console.log(rightMenu);
-console.log(buttonRightMenu);
-	buttonRightMenu.onclick = function () {
-		console.log('is DODODO111')
-		if (rightMenu.classList.contains('invisible')) {
-			console.log('1')
-			rightMenu.classList.remove('invisible');
-		}
-		else{
-			console.log('2')
-			rightMenu.classList.add('invisible');
-		}
+buttonRightMenu.onclick = function () {
+	console.log('is DODODO111')
+	if (rightMenu.classList.contains('invisible')) {
+		console.log('1')
+		rightMenu.classList.remove('invisible');
 	}
+	else {
+		console.log('2')
+		rightMenu.classList.add('invisible');
+	}
+}
 
 let openFenWindow = document.querySelector('#open-fen-window');
 openFenWindow.onclick = function (mouse) {
@@ -89,7 +123,8 @@ openFenWindow.onclick = function (mouse) {
 		};
 		buttonFen.onclick = function (mouse) {
 			if (mouse.button == 0) {
-				console.log();
+				let pgn2 = new PortableGameNotation(chessboardArray[0]);
+				console.log(pgn2);
 				let CB = chessboardArray[select.value - 1];
 				if (!(setFenOfInput(input.value, CB))) {
 					errorFEN.innerHTML = "Error: fen is not correct!";
@@ -103,6 +138,8 @@ openFenWindow.onclick = function (mouse) {
 function setFenOfInput(fen, chessboard) {
 	if (chessboard.isFEN(fen)) {
 		chessboard.sliceMoves(chessboard.moves.length);
+		chessboard.clearSquareEffects();
+		chessboard.boardLayout.classList.add('invisible');
 		chessboard._moves.push({ name: undefined, fen: fen });
 		chessboard._moveNumber = 0;
 		chessboard.setFEN(fen);

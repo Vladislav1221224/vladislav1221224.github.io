@@ -2,6 +2,7 @@ import ChessBoard from "./chessJS/ChessBoard.mjs";
 
 let chessboard = new ChessBoard('white', 0);
 chessboard.mode = "game";
+console.log(chessboard.moves.length - 1 + ' = ' + chessboard.moveNumber);
 document.getElementById('game-block').append(chessboard.layout)
 document.querySelector('#moves-info-layout').append(chessboard.movesLayout);
 chessboard.layout.querySelector('#reset-chess-board').remove();

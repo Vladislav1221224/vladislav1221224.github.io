@@ -1,5 +1,6 @@
 import Cell from "./Cell.mjs";
 import Player from "./Player.mjs";
+import Move from "./Move.mjs";
 import { Pawn, King, Knight, Bishop, Rook, Queen, Piece } from "./Piece.mjs";
 		//Constant that holds the names of the sides
 /*--->*/const SIDENAME = ['white', 'black'];/*<---*/
@@ -325,6 +326,8 @@ export default class ChessBoard {
 		if (this.selectCell) {
 			this.clearSelectSquare();
 		}
+		this.sliceMoves(1);
+		this._moveNumber = 0;
 		this.drawChessBoard('white');
 	}
 
@@ -488,7 +491,7 @@ export default class ChessBoard {
 			}
 		})
 		//If player select a Cell and release a leftMouseButton outside the DOM element --> ChessBoard <-- selectCell is cancelled
-		document.addEventListener('mouseup',function (mouse) {
+		document.addEventListener('mouseup', function (mouse) {
 
 			if (mouse.button == 0) {
 				console.log('isChessboard = ' + !chessboard.isChessBoard(mouse.clientX, mouse.clientY));
@@ -502,8 +505,8 @@ export default class ChessBoard {
 					piece.html.style.height = 100 + '%';
 					piece.html.style.left = 0 + 'px';
 					piece.html.style.top = 0 + 'px';
-						chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
-						chessboard.clearSelectSquare();
+					chessboard.selectCell.html.append(chessboard.selectCell.piece.html);
+					chessboard.clearSelectSquare();
 					$(chessboard.html).removeClass('dragging');
 					document.querySelectorAll('.square').forEach((element) => {
 						if (element.querySelector('.piece')) {
@@ -731,7 +734,9 @@ export default class ChessBoard {
 			//Select a square with your piece
 			if (element.piece && (JSON.stringify(element.position) === JSON.stringify(element.piece.position))) {
 				if (!this.selectCell) {
-					selectSquare(element);
+					if (this.mode != this.modeList.game || (this.mode == this.modeList.game && this.moveNumber == this.moves.length - 1)) {
+						selectSquare(element);
+					}
 				}
 				else if (this.selectCell && element.html.querySelector('.move-destination')) {
 					let square = element;
@@ -818,12 +823,20 @@ export default class ChessBoard {
 	}
 
 	//Set a piece and destroy a enemy piece by help a method "eatPiece"
-	setPiece(valueChangeSide, element, thisPiece) {
+	setPiece(valueChangeSide, element, thisPiece, pawnPromotion) {
 		if (element) {
 			if (valueChangeSide && (valueChangeSide == 'change' || valueChangeSide == 'nochange')) {
 
 				//For move-notation
 				let notation = '';
+				let capture = false;
+				let pawnProm = false;
+				let figure;
+				let start;
+				let end;
+				if(pawnPromotion){
+					pawnProm = pawnPromotion;
+				}
 				let checkMate;
 				let side;
 
@@ -838,6 +851,7 @@ export default class ChessBoard {
 				}
 				//EatPiece logic
 				if (square.piece && ((JSON.stringify(square.position) === JSON.stringify(square.piece.position)) || (this.selectCell.piece.name == 'pawn' && (JSON.stringify(square.position) !== JSON.stringify(square.piece.position))))) {
+					capture = true;
 					notation += 'x';
 					this.eatPiece(element);
 				}
@@ -854,6 +868,9 @@ export default class ChessBoard {
 					else if (thisPiece) {
 						piece = thisPiece;
 					}
+					figure = piece;
+					start = piece.square.position;
+					end = square.position;
 					if (piece.name == 'pawn') { if (notation == 'x') { notation = piece.square.ID[0].toLowerCase().concat(notation) } }
 					else if (piece.name == 'knight') { notation = 'n'.concat(notation); }
 					else { notation = piece.name[0].concat(notation) }
@@ -934,13 +951,14 @@ export default class ChessBoard {
 						else {
 							idMove.innerHTML = '';
 						}
-						move.innerHTML = `${notation}`;
+
 						this.moves.forEach((element) => {
 							console.log(element);
 							if (element.html && element.html.classList.contains('active')) {
 								element.html.classList.remove('active');
 							}
 						});
+
 						if (this.mode == this.modeList.analyze && this.moves[this.moveNumber]) {
 							console.log("SLICEMOVES");
 							this.boardLayout.classList.add('invisible');
@@ -949,12 +967,20 @@ export default class ChessBoard {
 						if (side == 'white') {
 							this.movesLayout.append(idMove);
 						}
+
 						this.movesLayout.append(move);
+						move.classList.add('active');
+						let node = new Move(figure, start, end,this,capture, pawnProm);
+
+						move.innerHTML = `${node.notation}`;
+
 						this.movesLayout.scrollLeft = this.movesLayout.scrollWidth;
 						this.movesLayout.scrollTop = this.movesLayout.scrollHeight;
-						move.classList.add('active');
-						let elem = { name: notation, fen: this.getFEN(), html: move };
+
+						let elem = { info: node, fen: this.getFEN(), html: move};
+
 						this._moves.push(elem);
+
 						let chessboard = this;
 						let num = this.moves.length - 1;
 						elem.html.onclick = (function () {
@@ -1083,8 +1109,6 @@ export default class ChessBoard {
 
 	//Pawn promotion method
 	pawnPromotion(square, piece) {
-		console.log(square)
-		console.log(piece)
 		//draw a div layout with figures for select
 		//////////////////////////////////////////
 		let block = document.createElement('div');
@@ -1146,7 +1170,7 @@ export default class ChessBoard {
 					}
 					piece.player._figures.push(newPiece);
 					chessboard.clearPawnPromotionLayout();
-					chessboard.setPiece('change', square.html, newPiece);
+					chessboard.setPiece('change', square.html, newPiece, true);
 				}
 				else if (mouse.button == 2) {
 					chessboard.clearSelectSquare();
@@ -1898,7 +1922,7 @@ export default class ChessBoard {
 	sliceMoves(i) {
 		let size = this.movesLayout.childNodes.length;
 		for (let j = 0; j < size; j++) {
-			if (this.moves[i - 1].html.innerHTML == this.movesLayout.childNodes[this.movesLayout.childNodes.length - 1].innerHTML) {
+			if (this.moves[i - 1].html && this.moves[i - 1].html.innerHTML == this.movesLayout.childNodes[this.movesLayout.childNodes.length - 1].innerHTML) {
 				break;
 			}
 			else {
@@ -1954,14 +1978,17 @@ export default class ChessBoard {
 		rightNav.append(fen);
 
 		let footerNav = this.layout.querySelector('#footer-player-layout');
-		let next = document.createElement('li');
+		let arrowsLayout = document.createElement('li');
+		arrowsLayout.id = 'n-p-layout';
+		footerNav.prepend(arrowsLayout);
+		let next = document.createElement('div');
 		next.id = 'set-next-fen';
 		next.innerHTML = '>';
-		footerNav.prepend(next);
-		let previus = document.createElement('li');
+		arrowsLayout.prepend(next);
+		let previus = document.createElement('div');
 		previus.id = 'set-previous-fen';
 		previus.innerHTML = '<';
-		footerNav.prepend(previus);
+		arrowsLayout.prepend(previus);
 		flip.onclick = function () {
 			chessboard.flipTheChessBoard();
 		}
