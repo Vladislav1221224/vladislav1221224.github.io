@@ -9,7 +9,6 @@ export default function(pgn) {
 
 	// returns an array containing an STR object and a string containing the movetext
 	function getStrAndStringifyMoves(pgn) {
-		console.log(pgn);
 		var str = {};
 		for (let i = 0; i < pgn.length; i++) {
 			var line = pgn[i];

@@ -1,6 +1,18 @@
 import ChessBoard from "./chessJS/ChessBoard.mjs";
 import PortableGameNotation from "./chessJS/pgn-parser/PGN.mjs";
-
+import Move from "./chessJS/Move.mjs";
+import FEN from "./chessJS/Fen.mjs";
+let brd = [
+	['r', 'b', 'n', 'q', 'k', 'n', 'b', 'r'],
+	['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+	['', '', '', '', '', '', '', ''],
+	['', '', '', '', '', '', '', ''],
+	['', '', '', '', '', '', '', ''],
+	['', '', '', '', '', '', '', ''],
+	['P', 'P', 'P', 'P', '[', 'P', 'P', 'P'],
+	['R', 'B', 'N', 'Q', 'K', 'N', 'B', 'R']
+];
+let move = new Move('e4', 'white', 1, brd);
 // [Event "Live Chess"]
 // [Site "Chess.com"]
 // [Date "2023.06.09"]
@@ -31,15 +43,16 @@ let PGN = new PortableGameNotation(`[Event "Live Chess"]
 [TimeControl "180+2"]
 [EndTime "5:10:16 PDT"]
 [Termination "Vladislav12122 won by resignation"]
-1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. d3 d6 5. Be3 Bxe3 6. fxe3 Nf6 7. O-O O-O 8.
+1. e4 e5 2. Nf3 `/*Nc6 3. Bc4 Bc5 4. d3 d6 5. Be3 Bxe3 6. fxe3 Nf6 7. O-O O-O 8.
 Ng5 Bd7 9. Nc3 h6 10. Nd5 Nxd5 11. Nxf7 Rxf7 12. Bxd5 Kf8 13. Rxf7+ Ke8 14. Rxg7
-Kf8 15. Rg8+ 1-0`);
+Kf8 15. Rg8+ 1-0*/);
 console.log(PGN);
 
 //Slider for chessboards
 let chessboardArray = [];
 const max_chessboards_count = 5;
 addChessBoard();
+chessboardArray[0].setGame(PGN.moves.coordinates);
 if (document.querySelector('#add-chessboard') && document.querySelector('#remove-chessboard')) {
 	document.querySelector('#add-chessboard').onclick = function (mouse) {
 		if (mouse.button == 0) {
@@ -91,10 +104,10 @@ openFenWindow.onclick = function (mouse) {
 	if (mouse.button == 0) {
 		console.log('is open')
 		let layout = document.createElement('div');
-		layout.id = 'fen-window-background';
-		layout.innerHTML = `<div class="fen-layout"><button id="close-fen-window"><div class="close"></div></button>
-		<b>FEN:</b>
-		<textarea autofocus class="fen-input" type="text" placeholder="Insert FEN"></textarea>
+		layout.id = 'window-background';
+		layout.innerHTML = `<div class="fen-layout"><button id="close-window"><div class="close"></div></button>
+		<b id="fen-header">FEN:</b>
+		<textarea autofocus class="input" id="fen-input" type="text" placeholder="Insert FEN"></textarea>
 		<button class="button"id="button-setFEN"><b class="">Set position</b></button>
 		<select id="select-chess-board">ID: 
 			<option selected>1</option>
@@ -107,13 +120,13 @@ openFenWindow.onclick = function (mouse) {
 		for (let i = 1; i < chessboardArray.length; i++) {
 			select.innerHTML += `<option value='${i + 1}'>${i + 1}</option>`;
 		}
-		input = document.querySelector('.fen-input');
+		input = document.querySelector('#fen-input');
 		buttonFen = document.querySelector('#button-setFEN');
 		errorFEN = document.querySelector('#fen-error-layout');
 
-		document.querySelector('#close-fen-window').onclick = function (mouse) {
+		document.querySelector('.close').onclick = function (mouse) {
 			if (mouse.button == 0) {
-				document.querySelector('#fen-window-background').remove();
+				document.querySelector('#window-background').remove();
 			}
 		};
 		input.onclick = function () {
@@ -123,8 +136,8 @@ openFenWindow.onclick = function (mouse) {
 		};
 		buttonFen.onclick = function (mouse) {
 			if (mouse.button == 0) {
-				let pgn2 = new PortableGameNotation(chessboardArray[0]);
-				console.log(pgn2);
+				// let pgn2 = new PortableGameNotation(chessboardArray[0]);
+				// console.log(pgn2);
 				let CB = chessboardArray[select.value - 1];
 				if (!(setFenOfInput(input.value, CB))) {
 					errorFEN.innerHTML = "Error: fen is not correct!";
@@ -136,13 +149,13 @@ openFenWindow.onclick = function (mouse) {
 
 
 function setFenOfInput(fen, chessboard) {
-	if (chessboard.isFEN(fen)) {
+	if (FEN.isFEN(fen)) {
 		chessboard.sliceMoves(chessboard.moves.length);
 		chessboard.clearSquareEffects();
 		chessboard.boardLayout.classList.add('invisible');
 		chessboard._moves.push({ name: undefined, fen: fen });
 		chessboard._moveNumber = 0;
-		chessboard.setFEN(fen);
+		new FEN(chessboard).setFEN(fen);
 		console.log("BUTTON = 1")
 		return true;
 	}

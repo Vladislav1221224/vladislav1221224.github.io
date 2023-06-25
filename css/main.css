@@ -2,12 +2,14 @@
 html,body{
 	min-height:300px;
 	font-family: 'Comfortaa', cursive;
-	overflow-x:hidden;
 	min-width:100%;
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	/* overflow: hidden; */
+	overflow-x: auto;
+}
+html{
+	overflow: auto;
 }
 body {
 	display: block;
@@ -18,10 +20,7 @@ body {
 	-khtml-user-select: none;
 	-webkit-user-select: none;
 	user-select: none;
-	-webkit-transition: all 0.1s;
-	-o-transition: all 0.1s;
-	transition: all 0.1s;
-
+	overflow-x:hidden;
 	@media (max-width: 600px) {
 		body {
 			font-size: 14px;
@@ -39,7 +38,7 @@ div {
 
 .scrollbar-obtrusive ::-webkit-scrollbar {
 	height: .5rem;
-	width: .5rem
+	width: .5rem;
 }
 
 .scrollbar-obtrusive ::-webkit-scrollbar-track {
@@ -108,7 +107,7 @@ option {
 	flex-flow: column;
 	width: initial;
 	height:initial;
-	min-width: 100%;
+	min-width:300px;
 	min-height: 100%;
 }
 
@@ -230,10 +229,27 @@ form {
 }
 
 .close {
-	width: 1em;
-	height: 1em;
-	background-color: rgba(24, 43, 71, 0.5);
+	width: 1.2em;
+	height: 1.2em;
+	background-color: rgba(24, 43, 71, 1);
 	clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
+}
+#close-window {
+	position: absolute;
+	right: 3px;
+	top: 5px;
+	margin: auto;
+	width: auto;
+	height: auto;
+	background-color: transparent;
+	cursor: pointer;
+	border-radius: 50%;
+	border-width: 0;
+	z-index: 100;
+}
+
+#close-window:hover>.close {
+	background-color: rgba(88, 129, 190, 0.5);
 }
 
 #btn-navbar {
@@ -251,6 +267,27 @@ form {
 
 #btn-navbar:hover>.icon-bar {
 	background-color: rgb(106, 152, 211);
+}
+
+#window-background {
+	position: fixed;
+	z-index: 100;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	background-color: rgba(0, 0, 0, 0.3);
+
+}
+
+.input {
+	color: silver;
+	background-color: rgba(0, 0, 0, 0.3);
+	outline: none;
+	margin: 0 auto;
+	width: 20%;
+	height: 30%;
+	resize: none;
+	border: 1px solid silver;
 }
 
 .icon-bar {

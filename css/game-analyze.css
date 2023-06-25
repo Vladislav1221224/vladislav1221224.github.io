@@ -29,6 +29,7 @@
 	background-color: rgba(255, 255, 255, 0);
 	color: rgba(255, 255, 255, 0);
 }
+
 #game-block::-webkit-scrollbar {
 	width: 10px;
 }
@@ -183,32 +184,6 @@ ul {
 	color: silver;
 }
 
-#close-fen-window {
-	position: relative;
-	float: right;
-	margin: auto;
-	width: auto;
-	height: auto;
-	background-color: rgb(44, 80, 128);
-	cursor: pointer;
-	border-radius: 50%;
-	border-width: 0;
-	z-index: 100;
-}
-
-#close-fen-window:hover>.close {
-	background-color: rgba(88, 129, 190, 0.5);
-}
-
-#fen-window-background {
-	position: fixed;
-	z-index: 100;
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	background-color: rgba(0, 0, 0, 0.3);
-}
-
 .fen-layout {
 	display: block;
 	position: absolute;
@@ -229,17 +204,21 @@ ul {
 		width: 100%;
 	}
 }
-
-.fen-input {
-	color: silver;
-	background-color: rgba(0, 0, 0, 0.3);
-	outline: none;
-	margin: 0 auto;
-	width: 60%;
-	height: 80%;
-	resize: none;
+#fen-header{
+	float:left;
+	display: block;
+	margin: 5px;
 }
-
+#fen-input{
+	width: 80%;
+	height: 60%;
+	padding: 5px 2px;
+	margin: 5px;
+	border-radius: 5px;
+	cursor: default;
+	float:left;
+	display: block;
+}
 #button-setFEN {
 	cursor: pointer;
 }
@@ -254,6 +233,7 @@ ul {
 #chessboard-array-menu {
 	display: flex;
 	position: absolute;
+	z-index: 0;
 	background-color: rgba(0, 36, 72, .6);
 	left: 0;
 	bottom: 0;
@@ -279,20 +259,6 @@ ul {
 	@media (max-width: 180px) {
 		display: none;
 	}
-}
-
-.ms-copy {
-	display: block;
-	position: absolute;
-	border-radius: 3px;
-	width: 0;
-	height: 50px;
-	background-color: transparent;
-	font-size: small;
-	color: rgba(192, 192, 192, 0.5);
-	-webkit-transition: all 0.7s;
-	-o-transition: all 0.7s;
-	transition: all 0.7s;
 }
 
 #lng-chessboards {
@@ -357,7 +323,7 @@ ul {
 		transition: none;
 	}
 }
-@media (max-width: 74vh) {
+@media (max-width: 80vh) {
 	.chess-board {
 		max-width: 100vw;
 		max-height: 100vw;
